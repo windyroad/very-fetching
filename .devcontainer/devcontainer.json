@@ -1,0 +1,27 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+	"features": {
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"dbaeumer.vscode-eslint",
+				"esbenp.prettier-vscode",
+				"streetsidesoftware.code-spell-checker",
+				"adam-bender.commit-message-editor",
+				"hashicorp.terraform",
+				"svelte.svelte-vscode",
+				"ms-azuretools.vscode-docker",
+				"herrmannplatz.npm-dependency-links",
+				"christian-kohler.npm-intellisense",
+				"idered.npm",
+				"GitHub.copilot",
+				"1YiB.svelte-bundle",
+				"GitHub.copilot-chat"
+			]
+		}
+	}}

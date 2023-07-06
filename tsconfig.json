@@ -1,0 +1,17 @@
+{
+    "extends": "./tsconfig.build.json",
+    "compilerOptions": {
+      "paths": {
+        "@windyroad/*": ["./packages/*/src"]
+      },
+    },
+    "include": [
+      "./*.ts",
+      "./*.tsx"
+    ],
+    "exclude": [
+      "apps",
+      "packages"
+    ]  
+}
+  

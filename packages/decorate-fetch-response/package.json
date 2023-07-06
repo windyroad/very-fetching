@@ -1,0 +1,45 @@
+{
+    "name": "@windyroad/decorate-fetch-response",
+    "version": "1.0.0",
+    "description": "A small library that provides a function to decorate the response of a fetch request.",
+    "type": "module",
+    "main": "dist/decorate-fetch-response",
+    "types": "dist/decorate-fetch-response",
+    "files": [
+        "dist"
+    ],
+    "scripts": {
+        "build": "npm run compile",
+        "clean": "rimraf -rf ./dist",
+        "compile": "tsc -p tsconfig.build.json",
+        "prepublishOnly": "npm run build",
+        "test": "vitest --run",
+        "ci:test": "vitest run --config vite.config.ci.ts --coverage",
+        "lint": "xo --fix --prettier"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/windyroad/very-fetching.git"
+    },
+    "keywords": [
+        "fetch",
+        "link",
+        "rfc8288",
+        "web linking",
+        "http",
+        "hypermedia",
+        "typescript"
+    ],
+    "author": "Tom Howard <tom@windyroad.com.au>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/windyroad/very-fetching/issues"
+    },
+    "homepage": "https://github.com/windyroad/very-fetching#readme",
+    "dependencies": {
+    },
+    "devDependencies": {
+        "fast-check": "^3.10.0",
+        "vitest": "^0.32.4"
+    }
+}

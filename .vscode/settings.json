@@ -1,0 +1,27 @@
+{
+    "files.eol": "\n",
+    "editor.formatOnSave": false,
+    "editor.formatOnSaveMode": "modifications",
+
+    "json.schemaDownload.enable": true,
+
+    "xo.enable": true,
+    "xo.format.enable": true,
+    "xo.statusBar": "Relevant",
+
+    "npm.fetchOnlinePackageInfo": true,
+    "npm.exclude": ["**/dist"],
+    "npm.scriptExplorerExclude": ["postinstall", "start"],
+
+    "[javascript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "samverschueren.linter-xo"
+    },
+
+    "[typescript]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "samverschueren.linter-xo"
+    },
+
+    "typescript.format.semicolons": "insert"
+}
