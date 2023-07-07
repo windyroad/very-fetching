@@ -1,0 +1,64 @@
+{
+    "name": "@windyroad/xo-config",
+    "version": "1.0.0",
+    "description": "XO config for the Windy Road style guide",
+    "type": "commonjs",
+    "main": "src/xo-config.cjs",
+    "files": [
+        "src/xo-config.cjs"
+    ],
+    "scripts": {
+        "test": "ava",
+        "//build": "npm run compile",
+        "//clean": "rimraf -rf ./dist",
+        "//compile": "tsc -p tsconfig.build.json",
+        "//prepublishOnly": "npm run build",
+        "//test": "vitest --run",
+        "//ci:test": "vitest run --config vite.config.ci.ts --coverage",
+        "//lint": "xo --fix --prettier"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/windyroad/very-fetching.git"
+    },
+    "keywords": [
+        "eslint",
+        "eslintconfig",
+        "xo",
+        "config",
+        "typescript",
+        "styleguide"
+    ],
+    "author": {
+        "name": "Windy Road Technology",
+        "url": "https://windyroad.com.au"
+    },
+    "contributors": [
+        "Tom Howard <tom@windyroad.com.au>"
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/windyroad/very-fetching/issues"
+    },
+    "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/eslint-config#readme",
+    "devDependencies": {
+        "ava": "^5.3.1",
+        "eslint": "^8.44.0",
+        "eslint-plugin-jsdoc": "^46.4.3",
+        "eslint-plugin-jsonc": "^2.9.0",
+        "eslint-plugin-markdownlint": "^0.4.1",
+        "eslint-plugin-no-secrets": "^0.8.9",
+        "@typescript-eslint/eslint-plugin": "^5.61.0" ,
+        "fast-check": "^3.11.0",
+        "is-plain-obj": "^4.1.0",
+        "vitest": "^0.33.0"
+    },
+    "peerDependencies": {
+        "eslint": ">=8.44.0",
+        "eslint-plugin-jsdoc": ">=46.4.3",
+        "eslint-plugin-jsonc": ">=2.9.0",
+        "eslint-plugin-no-secrets": ">=0.8.9",
+        "eslint-plugin-markdownlint": ">=0.4.1",
+        "@typescript-eslint/eslint-plugin": ">=5.61.0" 
+    }
+}

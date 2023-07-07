@@ -14,7 +14,7 @@
     "noEmit": false,
     "downlevelIteration": true,
     "lib": [ "es2020", "DOM" ],
-    "strict": true
+    "strict": true,
   },
   "exclude": [
     "**/test/**/*.test.ts",

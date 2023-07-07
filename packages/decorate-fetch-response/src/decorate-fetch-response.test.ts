@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import {test} from 'vitest';
-import {decorateFetchResponse} from './decorate-fetch-response';
+import {decorateFetchResponse} from './decorate-fetch-response.js';
 
 test('decorateFetch', () => {
 	test('returns an ExtendedResponse object', () => {
@@ -13,6 +13,7 @@ test('decorateFetch', () => {
 				input: RequestInfo | URL,
 				init?: RequestInit | undefined,
 			) => Promise<Response>;
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 			const decoratedFetch = decorateFetchResponse(fetchImpl as any, decorator);
 			return decoratedFetch('https://example.com').then((result) => {
 				return (
