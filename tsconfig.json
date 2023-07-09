@@ -1,9 +1,13 @@
 {
     "extends": "./tsconfig.build.json",
     "compilerOptions": {
+      "baseUrl": ".",
       "paths": {
-        "@windyroad/*": ["./packages/*/src"]
+        "@windyroad/*": [
+          "packages/*/src"
+        ]
       },
+      "noEmit": true
     },
     "include": [
       "./*.ts",
@@ -11,7 +15,8 @@
     ],
     "exclude": [
       "apps",
-      "packages"
+      "packages",
+      "dist"
     ]  
 }
   

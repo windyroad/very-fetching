@@ -1,67 +1,52 @@
-# @windyroad/decorate-fetch-response
+# @windyroad/xo-config
 
-A small library that provides a function to decorate the response of a fetch request.
+This package provides a shareable configuration for [XO](https://github.com/xojs/xo), which is a wrapper around [ESLint](https://eslint.org/) that provides a consistent and opinionated set of rules for JavaScript and TypeScript projects.
 
 ## Installation
 
-You can install this library via npm:
+To use this configuration in your project, you can install it via npm:
 
-```bash
-npm install @windyroad/decorate-fetch-response
+```sh
+npm install --save-dev @windyroad/xo-config
 ```
 
 ## Usage
 
-The library exports a single function, `decorateFetchResponse`, which takes two arguments:
+To use this configuration in your project, you can add it to your `package.json` file:
 
-1. `fetchImpl`: A function that implements the `fetch` API. This can be the built-in `fetch` function, a custom implementation or an already decorated implementation.
-2. `decorator`: A function that takes a `Response` object and returns an object that extends it.
-
-Here's an example of how to use the library:
-
-```typescript
-import decorateFetchResponse from '@windyroad/decorate-fetch-response';
-
-const decorator = async (response: Response) => {
-  return {
-    status: response.status,
-    headers: response.headers,
-    body: await response.text(),
-  };
-};
-
-const decoratedFetch = decorateFetchResponse(fetch, decorator);
-
-const response = await decoratedFetch('https://example.com');
-console.log(response);
+```json
+{
+  "xo": "@windyroad/xo-config"
+}
 ```
 
-In this example, the `decorator` function extends the `Response` object with additional properties (`headers` and `body`). The `decoratedFetch` function can then be used to make a fetch request and return the decorated response.
+Alternatively, you can create an `.xo-config.js` file in the root of your project and export the configuration:
 
-## API
+```javascript
+'use strict';
+const config = require("@windyroad/xo-config")
+module.exports = config
+```
 
-### `decorateFetchResponse(fetchImpl, decorator)`
+## Configuration
 
-A function that takes two arguments:
+This configuration extends the [recommended TypeScript flavour error configuration](https://github.com/xojs/eslint-config-xo-typescript/blob/main/index.js) from the [eslint-config-xo-typescript](https://github.com/xojs/eslint-config-xo-typescript) package. It also includes the following plugins:
 
-1. `fetchImpl`: A function that implements the `fetch` API. This can be the built-in `fetch` function or a custom implementation.
-2. `decorator`: A function that takes a `Response` object and returns an object that extends it.
+- [eslint-plugin-no-secrets](https://github.com/nickdeis/eslint-plugin-no-secrets)
+- [eslint-plugin-jsdoc](https://github.com/gajus/eslint-plugin-jsdoc)
+- [eslint-plugin-jsonc](https://github.com/zigomir/eslint-plugin-jsonc)
 
-Returns a new function that implements the `fetch` API and returns a decorated response.
+The configuration also includes the following rules:
 
-### `ExtendedResponse<P, T extends Response = Response>`
-
-A type that extends the `Response` object with additional properties.
-
-### `EnhancedFetch<T extends Response = Response>`
-
-A type that defines a function that implements the `fetch` API.
+- `no-secrets/no-secrets`: Enforces the use of `detect-secrets` to prevent secrets from being committed to version control.
+- `jsdoc/no-undefined-types`: Disables the requirement to define types for JSDoc comments.
+- `jsdoc/require-param-type`: Disables the requirement to define types for JSDoc parameters.
+- `jsdoc/require-returns-type`: Disables the requirement to define a return type for JSDoc comments.
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or pull request on GitHub.
+Contributions are welcome! Please read the [contributing guidelines](../../CONTRIBUTING.md) for more information.
 
 ## License
 
-This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
+`@windyroad/xo-config` is lovingly licensed under the [MIT License](../../LICENSE). ❤️

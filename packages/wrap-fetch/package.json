@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "wrapFetch is a function that wraps the global fetch function with a custom wrapper function in TypeScript, allowing requests and responses to be modified",
   "type": "module",
-  "main": "dist/wrap-fetch",
-  "types": "dist/wrap-fetch",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],

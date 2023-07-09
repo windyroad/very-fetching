@@ -1,67 +1,110 @@
 # @windyroad/decorate-fetch-response
 
-A small library that provides a function to decorate the response of a fetch request.
+This package provides a function for decorating the response of a `fetch` request with additional properties. It uses the `wrapFetch` function from the `@windyroad/wrap-fetch` package to wrap the `fetch` implementation with a decorator function.
 
 ## Installation
 
-You can install this library via npm:
+To use this package in your project, you can install it via npm:
 
-```bash
-npm install @windyroad/decorate-fetch-response
+```sh
+npm install --save @windyroad/decorate-fetch-response
 ```
 
 ## Usage
 
-The library exports a single function, `decorateFetchResponse`, which takes two arguments:
-
-1. `fetchImpl`: A function that implements the `fetch` API. This can be the built-in `fetch` function, a custom implementation or an already decorated implementation.
-2. `decorator`: A function that takes a `Response` object and returns an object that extends it.
-
-Here's an example of how to use the library:
+To use this package in your project, you can import the `decorateFetchResponse` function and use it to decorate the response of a `fetch` request:
 
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
 
-const decorator = async (response: Response) => {
-  return {
-    status: response.status,
-    headers: response.headers,
-    body: await response.text(),
-  };
-};
+const fetchWithCustomHeader = decorateFetchResponse(fetch, (response) => {
+  return response.headers.set('X-Custom-Header', 'custom-value');
+});
 
-const decoratedFetch = decorateFetchResponse(fetch, decorator);
-
-const response = await decoratedFetch('https://example.com');
-console.log(response);
+fetchWithCustomHeader('https://example.com').then((response) => {
+  console.log(response.headers.get('X-Custom-Header')); // 'custom-value'
+});
 ```
 
-In this example, the `decorator` function extends the `Response` object with additional properties (`headers` and `body`). The `decoratedFetch` function can then be used to make a fetch request and return the decorated response.
+In this example, the `decorateFetchResponse` function is used to add a custom header to the response of a `fetch` request. The `fetchWithCustomHeader` function is a decorated version of the `fetch` implementation that adds the `X-Custom-Header` header to the response.
 
 ## API
 
 ### `decorateFetchResponse(fetchImpl, decorator)`
 
-A function that takes two arguments:
+Decorates the response of a `fetch` request with additional properties.
 
-1. `fetchImpl`: A function that implements the `fetch` API. This can be the built-in `fetch` function or a custom implementation.
-2. `decorator`: A function that takes a `Response` object and returns an object that extends it.
+- `fetchImpl`: The `fetch` implementation to use.
+- `decorator`: The decorator function to apply to the response.
 
-Returns a new function that implements the `fetch` API and returns a decorated response.
+Returns a decorated version of the `fetch` implementation.
 
-### `ExtendedResponse<P, T extends Response = Response>`
+## Examples
 
-A type that extends the `Response` object with additional properties.
+Here are a few examples of how you can use the `decorateFetchResponse` function:
 
-### `EnhancedFetch<T extends Response = Response>`
+### Adding custom headers to the response
 
-A type that defines a function that implements the `fetch` API.
+```typescript
+import decorateFetchResponse from '@windyroad/decorate-fetch-response';
+
+const fetchWithCustomHeader = decorateFetchResponse(fetch, (response) => {
+  return response.headers.set('X-Custom-Header', 'custom-value');
+});
+
+fetchWithCustomHeader('https://example.com').then((response) => {
+  console.log(response.headers.get('X-Custom-Header')); // 'custom-value'
+});
+```
+
+### Modifying the response body
+
+```typescript
+import decorateFetchResponse from '@windyroad/decorate-fetch-response';
+
+const fetchWithCustomBody = decorateFetchResponse(fetch, async (response) => {
+  const body = await response.text();
+  return new Response('custom-body', {
+    status: response.status,
+    statusText: response.statusText,
+    headers: response.headers,
+  });
+});
+
+fetchWithCustomBody('https://example.com').then((response) => {
+  response.text().then((body) => {
+    console.log(body); // 'custom-body'
+  });
+});
+```
+
+### Handling errors
+
+```typescript
+import decorateFetchResponse from '@windyroad/decorate-fetch-response';
+
+const fetchWithCustomError = decorateFetchResponse(fetch, async (response) => {
+  if (response.status === 404) {
+    return new Response('custom-error', {
+      status: 404,
+      statusText: 'Not Found',
+    });
+  }
+  return response;
+});
+
+fetchWithCustomError('https://example.com/not-found').then((response) => {
+  response.text().then((body) => {
+    console.log(response.status); // 404
+    console.log(body); // 'custom-error'
+  });
+});
+```
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or pull request on GitHub.
+Contributions are welcome! Please read the [contributing guidelines](../../CONTRIBUTING.md) for more information.
 
 ## License
 
-This library is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
+`@windyroad/xo-config` is lovingly licensed under the [MIT License](../../LICENSE). ❤️

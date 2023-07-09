@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "A small library that provides a function to decorate the response of a fetch request.",
   "type": "module",
-  "main": "dist/decorate-fetch-response",
-  "types": "dist/decorate-fetch-response",
+  "main": "dist/index.js",
+  "types": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -42,7 +42,9 @@
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
   "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/decorate-fetch-response#readme",
-  "dependencies": {},
+  "dependencies": {
+    "@windyroad/wrap-fetch": "*"
+  },
   "devDependencies": {
     "fast-check": "^3.10.0",
     "vitest": "^0.32.4"
