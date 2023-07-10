@@ -21,7 +21,8 @@
 				"idered.npm",
 				"GitHub.copilot",
 				"1YiB.svelte-bundle",
-				"GitHub.copilot-chat"
+				"GitHub.copilot-chat",
+				"github.vscode-github-actions"
 			]
 		}
 	}}

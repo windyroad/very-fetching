@@ -10,14 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.x"
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.20"
+      - name: Dev Container Build and Run
+        uses: devcontainers/ci@v0.3
       - name: Install dependencies
         run: npm ci
       - name: Lint code
@@ -27,14 +21,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.x"
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.20"
+      - name: Dev Container Build and Run
+        uses: devcontainers/ci@v0.3
       - name: Install dependencies
         run: npm ci
       - name: Build code
@@ -44,14 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.x"
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.20"
+      - name: Dev Container Build and Run
+        uses: devcontainers/ci@v0.3
       - name: Install dependencies
         run: npm ci
       - name: Test code
@@ -62,14 +44,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.x"
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.20"
+      - name: Dev Container Build and Run
+        uses: devcontainers/ci@v0.3
       - name: Install dependencies
         run: npm ci
       - name: Release
@@ -77,23 +53,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npx semantic-release
-
-  cache:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18.x"
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: "1.20"
-      - uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        id: cache-node-modules
-      - run: npm ci
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
