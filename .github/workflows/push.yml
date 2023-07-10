@@ -18,7 +18,7 @@ jobs:
         with:
           runCmd: |
             npm ci
-            npm run lint:ci
+            npm run ci:lint
 
   build:
     runs-on: ubuntu-latest
@@ -29,7 +29,7 @@ jobs:
         with:
           runCmd: |
             npm ci
-            npm run build
+            npm run ci:build
 
   test:
     runs-on: ubuntu-latest
@@ -40,7 +40,7 @@ jobs:
         with:
           runCmd: |
             npm ci
-            npm run test:ci
+            npm run ci:test
 
   release:
     needs: [lint, build, test]
@@ -48,14 +48,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Dev Container Build and Run
+        uses: devcontainers/ci@v0.3
         with:
-          node-version: "18.x"
-      - name: Install dependencies
-        run: npm ci
-      - name: Release
+          runCmd: |
+            npm ci
+            npm run ci:release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+          CI: "1"

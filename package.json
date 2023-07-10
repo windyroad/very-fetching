@@ -5,11 +5,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "turbo run build",
     "lint": "xo --fix",
-    "lint:ci": "xo",
     "test": "vitest",
-    "test:ci": "vitest --config vite.config.ci.ts --run --coverage"
+    "build": "turbo run build",
+    "turbo:lint": "turbo run lint",
+    "turbo:test": "turbo run test -- --run",
+    "turbo:build": "turbo run build",
+    "ci:lint": "xo",
+    "ci:test": "vitest --config vite.config.ci.ts --run --coverage",
+    "ci:build": "turbo run build",
+    "ci:release": "turbo run release"
   },
   "engines": {
     "node": "18"

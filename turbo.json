@@ -1,20 +1,21 @@
 {
-    "$schema": "https://turbo.build/schema.json",
-    "pipeline": {
-        "build": {
-            "dependsOn": [
-                "^build"
-            ],
-            "inputs": [
-                "src/**/*"
-            ],
-            "outputs": [
-                "dist/**"
-            ]
-        },
-        "lint": {}
+  "$schema": "https://turbo.build/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "inputs": ["src/**/*"],
+      "outputs": ["dist/**"]
     },
-    "globalEnv": [
-        "FORCE_COLOR"
-    ]
+    "release": {
+      "dependsOn": ["^release"],
+      "cache": false
+    },
+    "//#lint": {
+      "dependsOn": []
+    },
+    "//#test": {
+      "dependsOn": []
+    }
+  },
+  "globalDependencies": ["tsconfig.json", "vite.config.ts"]
 }

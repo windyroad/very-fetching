@@ -15,7 +15,8 @@
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
-    "lint": "xo --fix --prettier"
+    "lint": "xo --fix --prettier",
+    "release": "semantic-release"
   },
   "repository": {
     "type": "git",

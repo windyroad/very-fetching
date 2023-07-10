@@ -12,9 +12,9 @@ const config = {
 	...jsdoc.configs['recommended-typescript-flavor-error'],
 	plugins: ['no-secrets', 'jsdoc', 'jsonc'],
 	extends: [
-		// 'plugin:jsdoc/recommended-typescript-flavor-error',
 		'plugin:jsonc/recommended-with-json',
-		'plugin:jsonc/all',
+		'plugin:jsonc/recommended-with-json',
+		'plugin:jsonc/prettier',
 	],
 	rules: {
 		'no-secrets/no-secrets': 'error',

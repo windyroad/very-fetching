@@ -15,7 +15,8 @@
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
-    "lint": "xo --fix --prettier"
+    "lint": "xo --fix --prettier",
+    "release": "semantic-release"
   },
   "repository": {
     "type": "git",
@@ -43,9 +44,10 @@
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
   "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/wrap-fetch#readme",
-  "dependencies": {},
   "devDependencies": {
     "fast-check": "^3.10.0",
+    "semantic-release": "^21.0.7",
+    "semantic-release-monorepo": "^7.0.5",
     "vitest": "^0.32.4"
   }
 }
