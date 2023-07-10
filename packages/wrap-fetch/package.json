@@ -44,6 +44,9 @@
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
   "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/wrap-fetch#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "devDependencies": {
     "fast-check": "^3.10.0",
     "semantic-release": "^21.0.7",

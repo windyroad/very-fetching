@@ -43,6 +43,9 @@
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
   "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/decorate-fetch-response#readme",
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@windyroad/wrap-fetch": "*"
   },
