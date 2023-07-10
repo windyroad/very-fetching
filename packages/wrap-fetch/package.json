@@ -1,7 +1,7 @@
 {
   "name": "@windyroad/wrap-fetch",
   "version": "1.0.0",
-  "description": "wrapFetch is a function that wraps the global fetch function with a custom wrapper function in TypeScript, allowing requests and responses to be modified",
+  "description": "A library for wrapping fetch, so requests and responses to be modified.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
