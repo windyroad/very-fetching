@@ -6,6 +6,30 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
 	"features": {
 	},
+	"runArgs": [
+		"-e",
+		"GITHUB_TOKEN=${localEnv:GITHUB_TOKEN}",
+		"-e",
+		"NPM_TOKEN=${localEnv:NPM_TOKEN}",
+		"-e",
+		"CI=${localEnv:CI}",
+		"-e",
+		"GITHUB_ACTIONS=${localEnv:GITHUB_ACTIONS}",
+		"-e",
+		"GITHUB_EVENT_NAME=${localEnv:GITHUB_EVENT_NAME}",
+		"-e",
+		"GITHUB_REF=${localEnv:GITHUB_REF}",
+		"-e",
+		"GITHUB_SHA=${localEnv:GITHUB_SHA}",
+		"-e",
+		"GITHUB_RUN_ID=${localEnv:GITHUB_RUN_ID}",
+		"-e",
+		"GITHUB_REPOSITORY=${localEnv:GITHUB_REPOSITORY}",
+		"-e",
+		"GITHUB_WORKSPACE=${localEnv:GITHUB_WORKSPACE}",
+		"-e",
+		"GITHUB_EVENT_PATH=${localEnv:GITHUB_EVENT_PATH}"
+	],
 	"customizations": {
 		"vscode": {
 			"extensions": [
