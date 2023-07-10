@@ -53,6 +53,7 @@ jobs:
         with:
           runCmd: |
             npm ci
+            env
             npm run ci:release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
