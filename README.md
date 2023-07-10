@@ -4,8 +4,9 @@ A set of very fetching Typescript utility libraries for fetch.
 
 ## Packages
 
-- [`packages/decorate-fetch-response`](./packages/decorate-fetch-response/README.md): A small library that provides a function to decorate the response of a fetch request.
-- [`packages/wrap-fetch`](./packages/wrap-fetch/README.md): wrapFetch is a function that wraps the global fetch function with a custom wrapper function in TypeScript, allowing requests and responses to be modified.
+- [`packages/adapt-fetch-input](./packages/adapt-fetch-inputs/README.md) A library for adapting fetch inputs
+- [`packages/decorate-fetch-response`](./packages/decorate-fetch-response/README.md): A library for decorating fetch responses.
+- [`packages/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so requests and responses to be modified.
 - [`packages/x-config`](./packages/wrap-fetch/README.md): XO config for the Windy Road style guide.
 
 <p align="center">
