@@ -48,23 +48,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Dev Container Build and Run
-        uses: devcontainers/ci@v0.3
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          runCmd: |
-            npm ci
-            env
-            npm run ci:release
+          node-version: "18.x"
+      - name: Install dependencies
+        run: npm ci
+      - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          CI: ${{ env.CI }},
-          GITHUB_ACTIONS: ${{ env.GITHUB_ACTIONS }}
-          GITHUB_EVENT_NAME: ${{ env.GITHUB_EVENT_NAME }}
-          GITHUB_REF: ${{ env.GITHUB_REF }}
-          GITHUB_SHA: ${{ env.GITHUB_SHA }}
-          GITHUB_RUN_ID: ${{ env.GITHUB_RUN_ID }}
-          GITHUB_REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
-          GITHUB_WORKSPACE: ${{ env.GITHUB_WORKSPACE }}
-          GITHUB_EVENT_PATH: ${{ env.GITHUB_EVENT_PATH }}
+        run: npm run ci:release
 
