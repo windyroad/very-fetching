@@ -1,7 +1,7 @@
 {
   "name": "@windyroad/decorate-fetch-response",
   "version": "1.0.0",
-  "description": "A small library that provides a function to decorate the response of a fetch request.",
+  "description": "A library for decorating fetch responses.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.js",
