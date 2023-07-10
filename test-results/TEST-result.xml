@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="@windyroad/very-fetching" tests="14" failures="0" errors="0" time="3.823">
+    <testsuite name="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" timestamp="2023-07-10T08:14:10.727Z" hostname="48cadb7e2752" tests="4" failures="0" errors="0" skipped="0" time="0.032">
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; returns an ExtendedResponse object" time="0.003">
+        </testcase>
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; adds custom header to response" time="0.017">
+        </testcase>
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; replaces response body with custom string" time="0.005">
+        </testcase>
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; handles 404 error and returns custom error message" time="0.005">
+            <system-out>
+Response {
+  [[32mSymbol(realm)[39m]: { settingsObject: {} },
+  [[32mSymbol(state)[39m]: {
+    aborted: [33mfalse[39m,
+    rangeRequested: [33mfalse[39m,
+    timingAllowPassed: [33mfalse[39m,
+    requestIncludesCredentials: [33mfalse[39m,
+    type: [32m&apos;default&apos;[39m,
+    status: [33m404[39m,
+    timingInfo: [1mnull[22m,
+    cacheState: [32m&apos;&apos;[39m,
+    statusText: [32m&apos;Not Found&apos;[39m,
+    headersList: HeadersList {
+      [[32mSymbol(headers map)[39m]: [36m[Map][39m,
+      [[32mSymbol(headers map sorted)[39m]: [1mnull[22m
+    },
+    urlList: [],
+    body: { stream: [90mundefined[39m, source: [32m&apos;custom-error&apos;[39m, length: [33m12[39m }
+  },
+  [[32mSymbol(headers)[39m]: HeadersList {
+    [[32mSymbol(headers map)[39m]: Map(1) { [32m&apos;content-type&apos;[39m =&gt; [32m&apos;text/plain;charset=UTF-8&apos;[39m },
+    [[32mSymbol(headers map sorted)[39m]: [1mnull[22m
+  }
+}
+
+            </system-out>
+        </testcase>
+    </testsuite>
+    <testsuite name="packages/wrap-fetch/src/wrap-fetch.test.ts" timestamp="2023-07-10T08:14:10.737Z" hostname="48cadb7e2752" tests="7" failures="0" errors="0" skipped="0" time="0.106">
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; wraps fetch with a custom wrapper function" time="0.013">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; passes all arguments to the wrapper function" time="0.069">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; adds custom headers to requests" time="0.006">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; caches responses" time="0.001">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; logs requests and responses" time="0.001">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; transforms responses" time="0.003">
+        </testcase>
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; handles errors" time="0.002">
+        </testcase>
+    </testsuite>
+    <testsuite name="packages/xo-config/src/xo-config.test.ts" timestamp="2023-07-10T08:14:10.750Z" hostname="48cadb7e2752" tests="3" failures="0" errors="0" skipped="0" time="0.086">
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; should be a valid ESLint configuration" time="0.074">
+            <system-out>
+[
+  {
+    filePath: [32m&apos;&lt;text&gt;&apos;[39m,
+    messages: [],
+    suppressedMessages: [],
+    errorCount: [33m0[39m,
+    fatalErrorCount: [33m0[39m,
+    warningCount: [33m0[39m,
+    fixableErrorCount: [33m0[39m,
+    fixableWarningCount: [33m0[39m,
+    usedDeprecatedRules: [36m[Getter][39m
+  }
+]
+
+            </system-out>
+        </testcase>
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; secret should cause error" time="0.005">
+        </testcase>
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; ignored secret should not cause error" time="0.006">
+        </testcase>
+    </testsuite>
+</testsuites>

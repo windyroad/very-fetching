@@ -17,8 +17,8 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           runCmd: |
-            npm install
-            npm run lint
+            npm ci
+            npm run lint:ci
 
   build:
     runs-on: ubuntu-latest
@@ -28,7 +28,7 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           runCmd: |
-            npm install
+            npm ci
             npm run build
 
   test:
@@ -39,8 +39,8 @@ jobs:
         uses: devcontainers/ci@v0.3
         with:
           runCmd: |
-            npm install
-            npm run test
+            npm ci
+            npm run test:ci
 
   release:
     needs: [lint, build, test]
@@ -55,5 +55,5 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         with:
           runCmd: |
-            npm install
+            npm ci
             npx semantic-release

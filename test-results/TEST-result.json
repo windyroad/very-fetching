@@ -1,0 +1,196 @@
+{
+  "numTotalTestSuites": 6,
+  "numPassedTestSuites": 6,
+  "numFailedTestSuites": 0,
+  "numPendingTestSuites": 0,
+  "numTotalTests": 14,
+  "numPassedTests": 14,
+  "numFailedTests": 0,
+  "numPendingTests": 0,
+  "numTodoTests": 0,
+  "startTime": 1688976846883,
+  "success": true,
+  "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "",
+            "decorateFetch"
+          ],
+          "fullName": " decorateFetch returns an ExtendedResponse object",
+          "status": "passed",
+          "title": "returns an ExtendedResponse object",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "decorateFetch"
+          ],
+          "fullName": " decorateFetch adds custom header to response",
+          "status": "passed",
+          "title": "adds custom header to response",
+          "duration": 17,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "decorateFetch"
+          ],
+          "fullName": " decorateFetch replaces response body with custom string",
+          "status": "passed",
+          "title": "replaces response body with custom string",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "decorateFetch"
+          ],
+          "fullName": " decorateFetch handles 404 error and returns custom error message",
+          "status": "passed",
+          "title": "handles 404 error and returns custom error message",
+          "duration": 5,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1688976848353,
+      "endTime": 1688976848383,
+      "status": "passed",
+      "message": "",
+      "name": "/workspaces/very-fetching/packages/decorate-fetch-response/src/decorate-fetch-response.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch wraps fetch with a custom wrapper function",
+          "status": "passed",
+          "title": "wraps fetch with a custom wrapper function",
+          "duration": 13,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch passes all arguments to the wrapper function",
+          "status": "passed",
+          "title": "passes all arguments to the wrapper function",
+          "duration": 69,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch adds custom headers to requests",
+          "status": "passed",
+          "title": "adds custom headers to requests",
+          "duration": 6,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch caches responses",
+          "status": "passed",
+          "title": "caches responses",
+          "duration": 1,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch logs requests and responses",
+          "status": "passed",
+          "title": "logs requests and responses",
+          "duration": 1,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch transforms responses",
+          "status": "passed",
+          "title": "transforms responses",
+          "duration": 3,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "wrapFetch"
+          ],
+          "fullName": " wrapFetch handles errors",
+          "status": "passed",
+          "title": "handles errors",
+          "duration": 2,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1688976848345,
+      "endTime": 1688976848440,
+      "status": "passed",
+      "message": "",
+      "name": "/workspaces/very-fetching/packages/wrap-fetch/src/wrap-fetch.test.ts"
+    },
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "",
+            "xo-config"
+          ],
+          "fullName": " xo-config should be a valid ESLint configuration",
+          "status": "passed",
+          "title": "should be a valid ESLint configuration",
+          "duration": 74,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "xo-config"
+          ],
+          "fullName": " xo-config secret should cause error",
+          "status": "passed",
+          "title": "secret should cause error",
+          "duration": 5,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "xo-config"
+          ],
+          "fullName": " xo-config ignored secret should not cause error",
+          "status": "passed",
+          "title": "ignored secret should not cause error",
+          "duration": 6,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1688976850553,
+      "endTime": 1688976850638,
+      "status": "passed",
+      "message": "",
+      "name": "/workspaces/very-fetching/packages/xo-config/src/xo-config.test.ts"
+    }
+  ]
+}

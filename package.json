@@ -7,7 +7,9 @@
   "scripts": {
     "build": "turbo run build",
     "lint": "xo --fix",
-    "test": "vitest"
+    "lint:ci": "xo",
+    "test": "vitest",
+    "test:ci": "vitest --config vite.config.ci.ts --run --coverage"
   },
   "engines": {
     "node": "18"
