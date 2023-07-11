@@ -8,14 +8,13 @@
     "lint": "xo --fix",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
-    "turbo:lint": "turbo run lint",
-    "turbo:test": "turbo run test",
-    "turbo:build": "turbo run build",
+    "process:build": "turbo run build",
     "ci:lint": "xo",
     "ci:test": "vitest --config vite.config.ci.ts --run --coverage",
-    "ci:build": "turbo run ci:build",
-    "ci:publish": "changeset version && changeset publish",
-    "ci:release": "turbo run ci:publish && git push --follow-tags origin main"
+    "ci:publish": "[ \"$CI\" = true ] && changeset version && changeset publish || echo \"Dry run: changeset version && changeset publish\"",
+    "ci:process:build": "turbo run ci:build",
+    "ci:process:publish": "turbo run ci:publish",
+    "release": "changeset publish "
   },
   "engines": {
     "node": "18"

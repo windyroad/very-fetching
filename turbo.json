@@ -22,9 +22,15 @@
       "dependsOn": []
     },
     "ci:build": {
-      "dependsOn": ["^build", "//#ci:lint", "//#ci:test"],
+      "dependsOn": ["build"],
       "inputs": ["src/**/*"],
       "outputs": ["dist/**"]
+    },
+    "//#ci:build": {
+      "dependsOn": ["//#ci:lint", "//#ci:test"]
+    },
+    "ci:publish": {
+      "dependsOn": ["build"]
     },
     "//#ci:publish": {
       "dependsOn": ["ci:build"]

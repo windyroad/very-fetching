@@ -1,7 +1,7 @@
 ---
 # Based on https://raw.githubusercontent.com/adr/madr/3.0.0/docs/decisions/adr-template.md
-title: 4. Use changesets for managing releases
-status: accepted # { proposed | rejected | accepted | deprecated | …
+title: 5. use turbo-repo for pipelines
+status: proposed # { proposed | rejected | accepted | deprecated | …
               #   | superseded by [ADR-0005](0005-example.md) }
 date: 2023-07-11
 deciders: # {list of people who made the decision}
@@ -11,25 +11,30 @@ deciders: # {list of people who made the decision}
 # informed: { list everyone who is kept up-to-date on progress; and with whom there is a one-way
 #             communication}
 ---
-# 4. Use changesets for managing releases
+# 5. use turbo-repo for pipelines
 
 ## Context and Problem Statement
 
-In this monorepo, how do we manage releases
+Pipelines need to be defined for CI/CD
 
 <!-- This is an optional element. Feel free to remove it. -->
 ## Decision Drivers
 
-* The release process should be automated and support Continuous Delivery pipelines
+* <acronym title="Don't Repeat Yourself">DRY</acronym>
+* Ease of testing
 
 ## Considered Options
 
-* [semantic-release-monorepo](https://www.npmjs.com/package/semantic-release-monorepo)
-* [Changesets](https://github.com/changesets/changesets)
+* [GitHub Actions](https://docs.github.com/en/actions)
+* [turbo-repo pipelines](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
 
 ## Decision Outcome
 
-Chosen option: "Changesets", because
+Chosen option: "turbo-repo pipelines", because
 
-* semantic-release-monorepo doesn't correctly detecting need to release new package
-* semantic-release forces the release process (commit messages, format, etc contributors
+* easy to test locally
+* turbo optimises the task execution order
+  
+### Consequences
+
+* It doesn't allow scaling across multiple jobs. We may need to revisit this decision later.

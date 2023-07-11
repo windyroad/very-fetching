@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/wrap-fetch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library for wrapping fetch, so requests and responses to be modified.",
   "type": "module",
   "main": "dist/index.js",

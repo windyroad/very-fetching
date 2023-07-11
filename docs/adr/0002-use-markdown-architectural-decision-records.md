@@ -2,7 +2,7 @@
 title: 2. Use markdown any decision records (MADR) 3.0.0 for decision records
 
 date: 2023-07-11
-status: approved
+status: accepted
 
 deciders: 
   - tom@windyroad.com.au  

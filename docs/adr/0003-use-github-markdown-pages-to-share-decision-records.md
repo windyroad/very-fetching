@@ -2,7 +2,7 @@
 title: 3. Use GitHub markdown rendering to share decision records
 
 date: 2023-07-11
-status: approved
+status: accepted
 
 deciders: 
   - tom@windyroad.com.au

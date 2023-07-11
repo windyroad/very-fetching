@@ -2,7 +2,7 @@
 title: 1. Use decision records to record decisions
 
 date: 2023-07-11
-status: approved
+status: accepted
 
 deciders: 
   - tom@windyroad.com.au
