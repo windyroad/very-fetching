@@ -15,8 +15,7 @@
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
-    "lint": "xo --fix --prettier",
-    "release": "semantic-release"
+    "lint": "xo --fix --prettier"
   },
   "repository": {
     "type": "git",
@@ -49,8 +48,6 @@
   },
   "devDependencies": {
     "fast-check": "^3.10.0",
-    "semantic-release": "^21.0.7",
-    "semantic-release-monorepo": "^7.0.5",
     "vitest": "^0.32.4"
   }
 }

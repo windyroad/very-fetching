@@ -6,15 +6,28 @@
       "inputs": ["src/**/*"],
       "outputs": ["dist/**"]
     },
-    "release": {
-      "dependsOn": ["^release"],
-      "cache": false
+    "//#build": {
+      "dependsOn": ["//#lint", "//#test"]
     },
     "//#lint": {
       "dependsOn": []
     },
     "//#test": {
       "dependsOn": []
+    },
+    "//#ci:lint": {
+      "dependsOn": []
+    },
+    "//#ci:test": {
+      "dependsOn": []
+    },
+    "ci:build": {
+      "dependsOn": ["^build", "//#ci:lint", "//#ci:test"],
+      "inputs": ["src/**/*"],
+      "outputs": ["dist/**"]
+    },
+    "//#ci:publish": {
+      "dependsOn": ["ci:build"]
     }
   },
   "globalDependencies": ["tsconfig.json", "vite.config.ts"]

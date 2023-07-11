@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites name="@windyroad/very-fetching" tests="14" failures="0" errors="0" time="3.823">
-    <testsuite name="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" timestamp="2023-07-10T08:14:10.727Z" hostname="48cadb7e2752" tests="4" failures="0" errors="0" skipped="0" time="0.032">
+<testsuites name="@windyroad/very-fetching" tests="16" failures="0" errors="0" time="2.325">
+    <testsuite name="packages/adapt-fetch-inputs/src/adapt-fetch-inputs.test.ts" timestamp="2023-07-11T02:15:23.348Z" hostname="MacBook-Pro.local" tests="2" failures="0" errors="0" skipped="0" time="0.018">
+        <testcase classname="packages/adapt-fetch-inputs/src/adapt-fetch-inputs.test.ts" name="adaptFetchInputs &gt; adds Authorization header to fetch inputs" time="0.015">
+        </testcase>
+        <testcase classname="packages/adapt-fetch-inputs/src/adapt-fetch-inputs.test.ts" name="adaptFetchInputs &gt; modifies request body to JSON string" time="0.001">
+        </testcase>
+    </testsuite>
+    <testsuite name="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" timestamp="2023-07-11T02:15:23.350Z" hostname="MacBook-Pro.local" tests="4" failures="0" errors="0" skipped="0" time="0.044">
         <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; returns an ExtendedResponse object" time="0.003">
         </testcase>
-        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; adds custom header to response" time="0.017">
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; adds custom header to response" time="0.016">
         </testcase>
-        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; replaces response body with custom string" time="0.005">
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; replaces response body with custom string" time="0.008">
         </testcase>
-        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; handles 404 error and returns custom error message" time="0.005">
+        <testcase classname="packages/decorate-fetch-response/src/decorate-fetch-response.test.ts" name="decorateFetch &gt; handles 404 error and returns custom error message" time="0.015">
             <system-out>
 Response {
   [[32mSymbol(realm)[39m]: { settingsObject: {} },
@@ -37,24 +43,24 @@ Response {
             </system-out>
         </testcase>
     </testsuite>
-    <testsuite name="packages/wrap-fetch/src/wrap-fetch.test.ts" timestamp="2023-07-10T08:14:10.737Z" hostname="48cadb7e2752" tests="7" failures="0" errors="0" skipped="0" time="0.106">
-        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; wraps fetch with a custom wrapper function" time="0.013">
+    <testsuite name="packages/wrap-fetch/src/wrap-fetch.test.ts" timestamp="2023-07-11T02:15:23.352Z" hostname="MacBook-Pro.local" tests="7" failures="0" errors="0" skipped="0" time="0.1">
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; wraps fetch with a custom wrapper function" time="0.016">
         </testcase>
-        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; passes all arguments to the wrapper function" time="0.069">
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; passes all arguments to the wrapper function" time="0.067">
         </testcase>
         <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; adds custom headers to requests" time="0.006">
         </testcase>
         <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; caches responses" time="0.001">
         </testcase>
-        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; logs requests and responses" time="0.001">
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; logs requests and responses" time="0">
         </testcase>
-        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; transforms responses" time="0.003">
+        <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; transforms responses" time="0.007">
         </testcase>
         <testcase classname="packages/wrap-fetch/src/wrap-fetch.test.ts" name="wrapFetch &gt; handles errors" time="0.002">
         </testcase>
     </testsuite>
-    <testsuite name="packages/xo-config/src/xo-config.test.ts" timestamp="2023-07-10T08:14:10.750Z" hostname="48cadb7e2752" tests="3" failures="0" errors="0" skipped="0" time="0.086">
-        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; should be a valid ESLint configuration" time="0.074">
+    <testsuite name="packages/xo-config/src/xo-config.test.ts" timestamp="2023-07-11T02:15:23.355Z" hostname="MacBook-Pro.local" tests="3" failures="0" errors="0" skipped="0" time="0.101">
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; should be a valid ESLint configuration" time="0.084">
             <system-out>
 [
   {
@@ -72,9 +78,9 @@ Response {
 
             </system-out>
         </testcase>
-        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; secret should cause error" time="0.005">
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; secret should cause error" time="0.008">
         </testcase>
-        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; ignored secret should not cause error" time="0.006">
+        <testcase classname="packages/xo-config/src/xo-config.test.ts" name="xo-config &gt; ignored secret should not cause error" time="0.008">
         </testcase>
     </testsuite>
 </testsuites>

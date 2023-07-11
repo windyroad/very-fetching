@@ -1,16 +1,47 @@
 {
-  "numTotalTestSuites": 6,
-  "numPassedTestSuites": 6,
+  "numTotalTestSuites": 8,
+  "numPassedTestSuites": 8,
   "numFailedTestSuites": 0,
   "numPendingTestSuites": 0,
-  "numTotalTests": 14,
-  "numPassedTests": 14,
+  "numTotalTests": 16,
+  "numPassedTests": 16,
   "numFailedTests": 0,
   "numPendingTests": 0,
   "numTodoTests": 0,
-  "startTime": 1688976846883,
+  "startTime": 1689041721005,
   "success": true,
   "testResults": [
+    {
+      "assertionResults": [
+        {
+          "ancestorTitles": [
+            "",
+            "adaptFetchInputs"
+          ],
+          "fullName": " adaptFetchInputs adds Authorization header to fetch inputs",
+          "status": "passed",
+          "title": "adds Authorization header to fetch inputs",
+          "duration": 15,
+          "failureMessages": []
+        },
+        {
+          "ancestorTitles": [
+            "",
+            "adaptFetchInputs"
+          ],
+          "fullName": " adaptFetchInputs modifies request body to JSON string",
+          "status": "passed",
+          "title": "modifies request body to JSON string",
+          "duration": 1,
+          "failureMessages": []
+        }
+      ],
+      "startTime": 1689041722662,
+      "endTime": 1689041722678,
+      "status": "passed",
+      "message": "",
+      "name": "/Users/tomhoward/Projects/very-fetching/packages/adapt-fetch-inputs/src/adapt-fetch-inputs.test.ts"
+    },
     {
       "assertionResults": [
         {
@@ -32,7 +63,7 @@
           "fullName": " decorateFetch adds custom header to response",
           "status": "passed",
           "title": "adds custom header to response",
-          "duration": 17,
+          "duration": 16,
           "failureMessages": []
         },
         {
@@ -43,7 +74,7 @@
           "fullName": " decorateFetch replaces response body with custom string",
           "status": "passed",
           "title": "replaces response body with custom string",
-          "duration": 5,
+          "duration": 8,
           "failureMessages": []
         },
         {
@@ -54,15 +85,15 @@
           "fullName": " decorateFetch handles 404 error and returns custom error message",
           "status": "passed",
           "title": "handles 404 error and returns custom error message",
-          "duration": 5,
+          "duration": 15,
           "failureMessages": []
         }
       ],
-      "startTime": 1688976848353,
-      "endTime": 1688976848383,
+      "startTime": 1689041722814,
+      "endTime": 1689041722856,
       "status": "passed",
       "message": "",
-      "name": "/workspaces/very-fetching/packages/decorate-fetch-response/src/decorate-fetch-response.test.ts"
+      "name": "/Users/tomhoward/Projects/very-fetching/packages/decorate-fetch-response/src/decorate-fetch-response.test.ts"
     },
     {
       "assertionResults": [
@@ -74,7 +105,7 @@
           "fullName": " wrapFetch wraps fetch with a custom wrapper function",
           "status": "passed",
           "title": "wraps fetch with a custom wrapper function",
-          "duration": 13,
+          "duration": 16,
           "failureMessages": []
         },
         {
@@ -85,7 +116,7 @@
           "fullName": " wrapFetch passes all arguments to the wrapper function",
           "status": "passed",
           "title": "passes all arguments to the wrapper function",
-          "duration": 69,
+          "duration": 67,
           "failureMessages": []
         },
         {
@@ -118,7 +149,7 @@
           "fullName": " wrapFetch logs requests and responses",
           "status": "passed",
           "title": "logs requests and responses",
-          "duration": 1,
+          "duration": 0,
           "failureMessages": []
         },
         {
@@ -129,7 +160,7 @@
           "fullName": " wrapFetch transforms responses",
           "status": "passed",
           "title": "transforms responses",
-          "duration": 3,
+          "duration": 7,
           "failureMessages": []
         },
         {
@@ -144,11 +175,11 @@
           "failureMessages": []
         }
       ],
-      "startTime": 1688976848345,
-      "endTime": 1688976848440,
+      "startTime": 1689041722867,
+      "endTime": 1689041722966,
       "status": "passed",
       "message": "",
-      "name": "/workspaces/very-fetching/packages/wrap-fetch/src/wrap-fetch.test.ts"
+      "name": "/Users/tomhoward/Projects/very-fetching/packages/wrap-fetch/src/wrap-fetch.test.ts"
     },
     {
       "assertionResults": [
@@ -160,7 +191,7 @@
           "fullName": " xo-config should be a valid ESLint configuration",
           "status": "passed",
           "title": "should be a valid ESLint configuration",
-          "duration": 74,
+          "duration": 84,
           "failureMessages": []
         },
         {
@@ -171,7 +202,7 @@
           "fullName": " xo-config secret should cause error",
           "status": "passed",
           "title": "secret should cause error",
-          "duration": 5,
+          "duration": 8,
           "failureMessages": []
         },
         {
@@ -182,15 +213,15 @@
           "fullName": " xo-config ignored secret should not cause error",
           "status": "passed",
           "title": "ignored secret should not cause error",
-          "duration": 6,
+          "duration": 8,
           "failureMessages": []
         }
       ],
-      "startTime": 1688976850553,
-      "endTime": 1688976850638,
+      "startTime": 1689041723163,
+      "endTime": 1689041723263,
       "status": "passed",
       "message": "",
-      "name": "/workspaces/very-fetching/packages/xo-config/src/xo-config.test.ts"
+      "name": "/Users/tomhoward/Projects/very-fetching/packages/xo-config/src/xo-config.test.ts"
     }
   ]
 }
