@@ -39,7 +39,7 @@ jobs:
         uses: changesets/action@v1.4.5
         with:
             publish: npm run ci:process:publish
-            version: num run ci:process:version
+            version: npm run ci:process:version
             commit: "chore: release"
             title: "chore: release"
             createGithubReleases: true
