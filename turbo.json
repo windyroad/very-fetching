@@ -29,8 +29,11 @@
     "//#ci:build": {
       "dependsOn": ["//#ci:lint", "//#ci:test"]
     },
+    "ci:version": {
+      "dependsOn": ["build"]
+    },
     "//#ci:version": {
-      "dependsOn": [],
+      "dependsOn": ["ci:build"],
       "cache": false
     },
     "ci:publish": {
