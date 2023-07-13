@@ -13,7 +13,6 @@ describe('xo-config', () => {
 	it('should be a valid ESLint configuration', async ({expect}) => {
 		const code = 'myVar = "23";';
 		const lintResult = await eslint.lintText(code);
-		console.log(lintResult);
 		expect(lintResult).toHaveProperty('length', 1);
 		expect(lintResult[0].messages).toHaveProperty('length', 0);
 	});

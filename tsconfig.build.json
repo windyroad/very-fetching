@@ -13,7 +13,11 @@
     "jsx": "react",
     "noEmit": false,
     "downlevelIteration": true,
-    "lib": [ "es2020", "DOM" ],
+    "lib": [
+      "es2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "strict": true,
   },
   "exclude": [

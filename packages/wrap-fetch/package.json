@@ -24,10 +24,6 @@
   "keywords": [
     "fetch",
     "wrapper",
-    "http",
-    "https",
-    "request",
-    "response",
     "middleware",
     "intercept"
   ],

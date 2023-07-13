@@ -1,7 +1,7 @@
 {
-  "name": "@windyroad/decorate-fetch-response",
-  "version": "1.0.1",
-  "description": "A library for decorating fetch responses.",
+  "name": "@windyroad/fetch-link",
+  "version": "0.9.0",
+  "description": "A library that adapts the fetch API to work with RFC8288 Link objects.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.js",
@@ -23,9 +23,10 @@
   },
   "keywords": [
     "fetch",
-    "wrapper",
-    "middleware",
-    "response"
+    "link",
+    "rfc8288",
+    "web linking",
+    "hypermedia"
   ],
   "author": {
     "name": "Windy Road Technology",
@@ -38,15 +39,18 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/decorate-fetch-response#readme",
+  "homepage": "https://github.com/windyroad/very-fetching/packages/fetch-link#readme",
   "publishConfig": {
     "access": "public"
   },
   "dependencies": {
-    "@windyroad/wrap-fetch": "*"
+    "@windyroad/adapt-fetch-inputs": "*",
+    "http-link-header": "^1.1.1"
   },
   "devDependencies": {
+    "@types/http-link-header": "^1.0.3",
     "fast-check": "^3.10.0",
+    "msw": "^1.2.2",
     "vitest": "^0.32.4"
   }
 }

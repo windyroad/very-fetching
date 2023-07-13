@@ -93,7 +93,6 @@ describe('decorateFetch', () => {
 		const response = await fetchWithCustomError(
 			'https://example.com/not-found',
 		);
-		console.log(response);
 		const body = await response.text();
 		expect(response.status).toBe(404);
 		expect(body).toBe('custom-error');
