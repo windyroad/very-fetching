@@ -1,6 +1,6 @@
 # @windyroad/fetch-link
 
-A library that adapts the fetch API to work with RFC8288 Link objects.
+A library that adapts the fetch API to work with [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
 
 ## Installation
 
