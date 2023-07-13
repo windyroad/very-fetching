@@ -11,9 +11,11 @@
     "process:build": "turbo run build",
     "ci:lint": "xo",
     "ci:test": "vitest --config vite.config.ci.ts --run --coverage",
-    "ci:publish": "[ \"$CI\" = true ] && changeset version && changeset publish || echo \"Dry run: changeset version && changeset publish\"",
     "ci:process:build": "turbo run ci:build",
+    "ci:process:version": "turbo run ci:version",
     "ci:process:publish": "turbo run ci:publish",
+    "ci:version": "[ \"$CI\" = true ] && changeset version || echo \"Dry run: changeset version\"",
+    "ci:publish": "[ \"$CI\" = true ] && changeset publish || echo \"Dry run: changeset publish\"",
     "release": "changeset publish "
   },
   "engines": {

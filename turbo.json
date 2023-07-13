@@ -29,11 +29,16 @@
     "//#ci:build": {
       "dependsOn": ["//#ci:lint", "//#ci:test"]
     },
+    "//#ci:version": {
+      "dependsOn": [],
+      "cache": false
+    },
     "ci:publish": {
       "dependsOn": ["build"]
     },
     "//#ci:publish": {
-      "dependsOn": ["ci:build"]
+      "dependsOn": ["ci:build"],
+      "cache": false
     }
   },
   "globalDependencies": ["tsconfig.json", "vite.config.ts"]
