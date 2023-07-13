@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/fetch-link",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "A library that adapts the fetch API to work with RFC8288 Link objects.",
   "type": "module",
   "main": "dist/index.js",
