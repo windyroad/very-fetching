@@ -3,7 +3,7 @@
 {
 	"name": "Node.js & TypeScript",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18",
+	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18-bullseye",
 	"features": {
 	},
 	"runArgs": [
@@ -30,6 +30,14 @@
 		"-e",
 		"GITHUB_EVENT_PATH=${localEnv:GITHUB_EVENT_PATH}"
 	],
+	// Some files in node_modules are machine architecture specific.
+	// by mounting volume to node_modules, we avoid the need to remove and
+	// reinstall node_modules when switching between host and container
+	"mounts": [
+		"source=node-modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+	],
+	// this makes sure that the node user can write to the node_modules folder.
+	"postCreateCommand": "sudo chown node node_modules",
 	"customizations": {
 		"vscode": {
 			"extensions": [
