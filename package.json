@@ -5,6 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "turbo:spellcheck": "turbo run spellcheck",
     "turbo:lint": "turbo run lint",
     "turbo:test": "turbo run test",
     "turbo:build": "turbo run build",
@@ -16,6 +17,7 @@
     "lint:xo": "xo --fix",
     "lint:markdown": "markdownlint-cli2 \"**/*.md\" --fix",
     "lint:markdown:watch": "nodemon -V -e \"*.md\" -x npm -- run ${npm_lifecycle_event%:watch}",
+    "spellcheck": "cspell lint --gitignore --dot --show-suggestions -e \".git/**\" \"**\"",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
     "ci:lint": "xo",
@@ -55,6 +57,7 @@
     "turbo": "1.10.5",
     "typescript": "^5.1.6",
     "vitest": "^0.32.4",
-    "xo": "^0.54.2"
+    "xo": "^0.54.2",
+    "cspell": "^6.31.1"
   }
 }

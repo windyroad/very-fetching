@@ -20,7 +20,7 @@ describe('xo-config', () => {
 	it('secret should cause error', async ({expect}) => {
 		const code =
 			// eslint-disable-next-line no-secrets/no-secrets
-			'A_SECRET = "ZWVTjPQSdhwRgl204Hc51YCsritMIzn8B=/p9UyeX7xu6KkAGqfm3FJ+oObLDNEva";';
+			'A_SECRET = "ZWVTjPQSdDhwRgl204Hc51YCsDriDtMIzn8B=/p9UyeX7xu6KkAGqDfm3FJ+oObLDNEva";';
 		const lintResult = await eslint.lintText(code);
 		const {messages} = lintResult[0];
 		expect(
@@ -36,7 +36,7 @@ describe('xo-config', () => {
 		const code =
 			// eslint-disable-next-line no-secrets/no-secrets
 			`// eslint-disable-next-line no-secrets/no-secrets
-A_SECRET = "ZWVTjPQSdhwRgl204Hc51YCsritMIzn8B=/p9UyeX7xu6KkAGqfm3FJ+oObLDNEva";`;
+A_SECRET = "ZWVTjPQSdDhwRgl204Hc51YCsDrDitMIzn8B=/p9UyeX7xu6KkAGqDfm3FJ+oObLDNEva";`;
 		const lintResult = await eslint.lintText(code);
 		const {messages} = lintResult[0];
 		expect(

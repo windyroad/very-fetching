@@ -27,6 +27,7 @@ const config = {
 			allowed_elements: ['acronym', 'p', 'img'],
 		},
 		MD025: false,
+		MD041: false,
 	},
 	// Define glob expressions to ignore
 	ignores: ['**/node_modules/**/*'],

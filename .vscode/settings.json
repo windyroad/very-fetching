@@ -9,8 +9,6 @@
     "xo.validate": [
         "javascript",
         "typescript",
-        "json",
-        "markdown"
     ],
     "npm.fetchOnlinePackageInfo": true,
     "npm.exclude": [
