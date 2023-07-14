@@ -4,15 +4,13 @@
         "esbenp.prettier-vscode",
         "streetsidesoftware.code-spell-checker",
         "adam-bender.commit-message-editor",
-        "hashicorp.terraform",
-        "svelte.svelte-vscode",
-        "ms-azuretools.vscode-docker",
         "herrmannplatz.npm-dependency-links",
         "christian-kohler.npm-intellisense",
         "idered.npm",
         "github.copilot",
-        "1yib.svelte-bundle",
         "github.copilot-chat",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "davidanson.vscode-markdownlint",
+        "samverschueren.linter-xo"
     ]
 }

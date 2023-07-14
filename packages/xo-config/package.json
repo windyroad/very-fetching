@@ -5,16 +5,11 @@
   "type": "commonjs",
   "main": "src/xo-config.cjs",
   "files": [
-    "src/xo-config.cjs"
+    "src/xo-config.cjs",
+    "src/markdownlint-cli2.cjs"
   ],
   "scripts": {
-    "test": "ava",
-    "//build": "npm run compile",
-    "//clean": "rimraf -rf ./dist",
-    "//compile": "tsc -p tsconfig.build.json",
-    "//prepublishOnly": "npm run build",
-    "//test": "vitest --run",
-    "//ci:test": "vitest run --config vite.config.ci.ts --coverage",
+    "test": "vitest --run",
     "lint": "xo --fix --prettier"
   },
   "repository": {
@@ -24,9 +19,9 @@
   "keywords": [
     "eslint",
     "eslintconfig",
+    "markdownlint",
     "xo",
     "config",
-    "typescript",
     "styleguide"
   ],
   "author": {
@@ -45,23 +40,23 @@
     "access": "public"
   },
   "devDependencies": {
-    "ava": "^5.3.1",
+    "@typescript-eslint/eslint-plugin": "^5.61.0",
     "eslint": "^8.44.0",
     "eslint-plugin-jsdoc": "^46.4.3",
     "eslint-plugin-jsonc": "^2.9.0",
-    "eslint-plugin-markdownlint": "^0.4.1",
     "eslint-plugin-no-secrets": "^0.8.9",
-    "@typescript-eslint/eslint-plugin": "^5.61.0",
     "fast-check": "^3.11.0",
     "is-plain-obj": "^4.1.0",
+    "markdownlint": "^0.29.0",
+    "markdownlint-cli2": "^0.8.1",
     "vitest": "^0.33.0"
   },
   "peerDependencies": {
+    "@typescript-eslint/eslint-plugin": ">=5.61.0",
     "eslint": ">=8.44.0",
     "eslint-plugin-jsdoc": ">=46.4.3",
     "eslint-plugin-jsonc": ">=2.9.0",
     "eslint-plugin-no-secrets": ">=0.8.9",
-    "eslint-plugin-markdownlint": ">=0.4.1",
-    "@typescript-eslint/eslint-plugin": ">=5.61.0"
+    "markdownlint-cli2": ">=0.8.1"
   }
 }

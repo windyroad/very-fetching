@@ -4,7 +4,8 @@ First off, thanks for taking the time to contribute! Here are some guidelines to
 
 ## Code of Conduct
 
-This project adheres to the [Contributor Covenant](https://www.contributor-covenant.org/) Code of Conduct. By participating, you are expected to uphold this code.
+This project adheres to the [Contributor Covenant](https://www.contributor-covenant.org/) Code
+of Conduct. By participating, you are expected to uphold this code.
 
 ## Getting Started
 
@@ -23,7 +24,8 @@ This project adheres to the [Contributor Covenant](https://www.contributor-coven
 
 ## Managing Releases
 
-This project uses [Changesets](https://github.com/atlassian/changesets) to manage releases. Changesets is a tool that helps automate the process of creating and publishing new versions of a package.
+This project uses [Changesets](https://github.com/atlassian/changesets) to manage releases.
+Changesets is a tool that helps automate the process of creating and publishing new versions of a package.
 
 To create a new release:
 
@@ -35,12 +37,31 @@ To create a new release:
 6. Submit a pull request against the main repository.
 7. Once your pull request is merged, the Changeset will be automatically published to npm.
 
+## Recording Decisions
+
+This project uses [Architecture Decision Records (ADRs)](https://adr.github.io/) to document
+important decisions made during development. ADRs are text files that describe a decision, the
+context in which it was made, and the consequences of the decision.
+
+To create a new ADR:
+
+1. Run `npx adr new "Title of the decision"` to create a new ADR file.
+2. Edit the ADR file to describe the decision, the context in which it was made, and the consequences of the decision.
+3. Commit the ADR file to the repository along with your other changes.
+
 ## Code Reviews
 
-Once you've submitted a pull request, maintainers will review your code. They may provide feedback and request changes. This is a normal part of the review process, and provides valuable learning opportunities.
+Once you've submitted a pull request, maintainers will review your code. They may provide
+feedback and request changes. This is a normal part of the review process, and provides
+valuable learning opportunities.
 
-Please be patient while waiting for your code to be reviewed. The maintainers are volunteers and may not be able to review your code immediately.
+Please be patient while waiting for your code to be reviewed. The maintainers are volunteers
+and may not be able to review your code immediately.
 
 ## Reporting Issues
 
-If you find a bug or have a suggestion for a new feature, please [open a new issue on GitHub](https://github.com/windyroad/very-fetching/issues). When reporting a bug, please include as much information as possible about how to reproduce it. This should include your environment (like your Node.js version), any error messages, and steps to reproduce the bug.
+If you find a bug or have a suggestion for a new feature, please
+[open a new issue on GitHub](https://github.com/windyroad/very-fetching/issues). When
+reporting a bug, please include as much information as possible about how to reproduce it.
+This should include your environment (like your Node.js version), any error messages, and
+steps to reproduce the bug.

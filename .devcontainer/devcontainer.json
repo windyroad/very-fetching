@@ -6,30 +6,6 @@
 	"image": "mcr.microsoft.com/devcontainers/typescript-node:0-18-bullseye",
 	"features": {
 	},
-	"runArgs": [
-		"-e",
-		"GITHUB_TOKEN=${localEnv:GITHUB_TOKEN}",
-		"-e",
-		"NPM_TOKEN=${localEnv:NPM_TOKEN}",
-		"-e",
-		"CI=${localEnv:CI}",
-		"-e",
-		"GITHUB_ACTIONS=${localEnv:GITHUB_ACTIONS}",
-		"-e",
-		"GITHUB_EVENT_NAME=${localEnv:GITHUB_EVENT_NAME}",
-		"-e",
-		"GITHUB_REF=${localEnv:GITHUB_REF}",
-		"-e",
-		"GITHUB_SHA=${localEnv:GITHUB_SHA}",
-		"-e",
-		"GITHUB_RUN_ID=${localEnv:GITHUB_RUN_ID}",
-		"-e",
-		"GITHUB_REPOSITORY=${localEnv:GITHUB_REPOSITORY}",
-		"-e",
-		"GITHUB_WORKSPACE=${localEnv:GITHUB_WORKSPACE}",
-		"-e",
-		"GITHUB_EVENT_PATH=${localEnv:GITHUB_EVENT_PATH}"
-	],
 	// Some files in node_modules are machine architecture specific.
 	// by mounting volume to node_modules, we avoid the need to remove and
 	// reinstall node_modules when switching between host and container
@@ -45,16 +21,14 @@
 				"esbenp.prettier-vscode",
 				"streetsidesoftware.code-spell-checker",
 				"adam-bender.commit-message-editor",
-				"hashicorp.terraform",
-				"svelte.svelte-vscode",
-				"ms-azuretools.vscode-docker",
 				"herrmannplatz.npm-dependency-links",
 				"christian-kohler.npm-intellisense",
 				"idered.npm",
 				"GitHub.copilot",
-				"1YiB.svelte-bundle",
 				"GitHub.copilot-chat",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"DavidAnson.vscode-markdownlint",
+				"samverschueren.linter-xo"
 			]
 		}
 	}}

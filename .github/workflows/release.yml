@@ -21,7 +21,7 @@ jobs:
         with:
           runCmd: |
             npm ci
-            npm run ci:process:build
+            npm run turbo:ci:build
 
   release:
     if: github.ref == 'refs/heads/main'
@@ -38,8 +38,8 @@ jobs:
       - name: Create Release Pull Request or Publish to npm
         uses: changesets/action@v1.4.5
         with:
-            publish: npm run ci:process:publish
-            version: npm run ci:process:version
+            publish: npm run turbo:ci:publish
+            version: npm run turbo:ci:version
             commit: "chore: release"
             title: "chore: release"
             createGithubReleases: true

@@ -1,6 +1,8 @@
 # @windyroad/decorate-fetch-response
 
-This package provides a function for decorating the response of a `fetch` request with additional properties. It uses the `wrapFetch` function from the `@windyroad/wrap-fetch` package to wrap the `fetch` implementation with a decorator function.
+This package provides a function for decorating the response of a `fetch` request with
+additional properties. It uses the `wrapFetch` function from the `@windyroad/wrap-fetch`
+package to wrap the `fetch` implementation with a decorator function.
 
 ## Installation
 
@@ -12,7 +14,8 @@ npm install --save @windyroad/decorate-fetch-response
 
 ## Usage
 
-To use this package in your project, you can import the `decorateFetchResponse` function and use it to decorate the response of a `fetch` request:
+To use this package in your project, you can import the `decorateFetchResponse` function and
+use it to decorate the response of a `fetch` request:
 
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
@@ -26,7 +29,9 @@ fetchWithCustomHeader('https://example.com').then((response) => {
 });
 ```
 
-In this example, the `decorateFetchResponse` function is used to add a custom header to the response of a `fetch` request. The `fetchWithCustomHeader` function is a decorated version of the `fetch` implementation that adds the `X-Custom-Header` header to the response.
+In this example, the `decorateFetchResponse` function is used to add a custom header to the
+response of a `fetch` request. The `fetchWithCustomHeader` function is a decorated version of
+the `fetch` implementation that adds the `X-Custom-Header` header to the response.
 
 ## API
 
@@ -107,4 +112,4 @@ Contributions are welcome! Please read the [contributing guidelines](../../CONTR
 
 ## License
 
-`@windyroad/xo-config` is lovingly licensed under the [MIT License](../../LICENSE). ❤️
+`@windyroad/decorate-fetch-response` is lovingly licensed under the [MIT License](../../LICENSE). ❤️
