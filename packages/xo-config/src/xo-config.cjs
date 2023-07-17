@@ -17,12 +17,25 @@ const config = {
 		'plugin:jsonc/prettier',
 	],
 	rules: {
-		'no-secrets/no-secrets': 'error',
+		'no-secrets/no-secrets': ['error', {ignoreContent: '^glowUp'}],
 		'n/file-extension-in-import': 'off',
 		'jsdoc/no-undefined-types': 'off',
 		...jsdoc.configs['recommended-typescript-flavor-error'].rules,
 		'jsdoc/require-param-type': 'off',
 		'jsdoc/require-returns-type': 'off',
+		'import/no-extraneous-dependencies': [
+			'error',
+			{
+				devDependencies: [
+					'**/*.test.ts',
+					'**/test/**',
+					'**/build-tools/**',
+					'src/build/**',
+				],
+				optionalDependencies: false,
+				peerDependencies: true,
+			},
+		],
 	},
 };
 
