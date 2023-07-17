@@ -54,8 +54,6 @@ fetchWithJsonBody('https://example.com', { method: 'POST', body: { foo: 'bar' } 
 
 ## API
 
-GitHub Copilot: Here's an example API documentation for `adaptFetchInputs` in Markdown:
-
 ### `adaptFetchInputs`
 
 ```typescript

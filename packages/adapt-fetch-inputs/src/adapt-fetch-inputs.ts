@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 import {
 	wrapFetch,
 	type FetchInputs,
@@ -20,21 +21,20 @@ export function adaptFetchInputs<
 		...args: WrapInputs
 	) => FetchInputs<FetchImpl> | Promise<FetchInputs<FetchImpl>>,
 	fetchImpl?: FetchImpl,
-): (...args: WrapInputs) => Promise<FetchReturns<typeof fetchImpl>> {
-	// Wrap the fetch implementation with the wrapper function
-
-	const wrapper = async (fetchImpl, ...args) => {
-		// Apply the input function to the inputs
-		const modifiedInputs = await adapter(...(args as WrapInputs));
-
-		// Call the original fetch implementation with the modified inputs
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
-		return fetchImpl(...(modifiedInputs as FetchInputs<typeof fetchImpl>));
+): (...args: WrapInputs) => Promise<FetchReturns<FetchImpl>> {
+	const wrapper = async (
+		fetchImplInner: FetchImpl,
+		...args: WrapInputs
+	): Promise<FetchReturns<FetchImpl>> => {
+		const modifiedInputs = await adapter(...args);
+		const response = await fetchImplInner(
+			...(modifiedInputs as Parameters<typeof fetch>),
+		);
+		return response;
 	};
 
-	const response = wrapFetch<WrapInputs, FetchReturns<FetchImpl>, FetchImpl>(
+	return wrapFetch<FetchImpl, WrapInputs, FetchReturns<FetchImpl>>(
 		wrapper,
 		fetchImpl,
 	);
-	return response;
 }

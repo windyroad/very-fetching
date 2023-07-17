@@ -19,7 +19,8 @@
       "dependsOn": ["//#lint:markdown"]
     },
     "//#lint:markdown": {
-      "dependsOn": []
+      "dependsOn": [],
+      "inputs": ["**/*.md"]
     },
     "//#test": {
       "dependsOn": []

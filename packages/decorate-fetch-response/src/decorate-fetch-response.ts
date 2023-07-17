@@ -21,11 +21,13 @@ export function decorateFetchResponse<
 	) => Promise<DecoratorReturns> | DecoratorReturns,
 	fetchImpl?: FetchImpl,
 ): (...args: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> {
-	return wrapFetch<FetchInputs<FetchImpl>, DecoratorReturns, FetchImpl>(
+	return wrapFetch<FetchImpl, FetchInputs<FetchImpl>, DecoratorReturns>(
 		async (fetchImpl, ...args) => {
-			const response = await fetchImpl(...args);
-
-			const modified = await decorator(response as FetchReturns<FetchImpl>);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+			const response = await fetchImpl(...(args as Parameters<typeof fetch>));
+			const modified = await decorator(
+				response as FetchReturns<typeof fetchImpl>,
+			);
 			return modified;
 		},
 		fetchImpl,
