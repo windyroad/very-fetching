@@ -15,7 +15,6 @@ describe('adaptFetchInputs', () => {
 		];
 
 		const fetchWithAuth = adaptFetchInputs(
-			mockFetch,
 			(url, options): Parameters<typeof mockFetch> => {
 				const token = 'token';
 				const headers = options?.headers ?? {};
@@ -24,6 +23,7 @@ describe('adaptFetchInputs', () => {
 					{...options, headers: {...headers, authorization: `Bearer ${token}`}},
 				];
 			},
+			mockFetch,
 		);
 
 		await fetchWithAuth(url, options);
@@ -47,7 +47,6 @@ describe('adaptFetchInputs', () => {
 		];
 
 		const fetchWithJsonBody = adaptFetchInputs(
-			mockFetch,
 			(url, options: typeof originalOptions): Parameters<typeof mockFetch> => {
 				const body = options?.body;
 				const headers = options?.headers || {};
@@ -60,6 +59,7 @@ describe('adaptFetchInputs', () => {
 					},
 				];
 			},
+			mockFetch,
 		);
 
 		await fetchWithJsonBody(url, originalOptions);
