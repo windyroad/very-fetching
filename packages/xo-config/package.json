@@ -45,6 +45,7 @@
     "eslint-plugin-jsdoc": "^46.4.3",
     "eslint-plugin-jsonc": "^2.9.0",
     "eslint-plugin-no-secrets": "^0.8.9",
+    "eslint-plugin-import": "^2.27.5",
     "fast-check": "^3.11.0",
     "is-plain-obj": "^4.1.0",
     "markdownlint": "^0.29.0",
@@ -57,6 +58,8 @@
     "eslint-plugin-jsdoc": ">=46.4.3",
     "eslint-plugin-jsonc": ">=2.9.0",
     "eslint-plugin-no-secrets": ">=0.8.9",
+    "eslint-plugin-import": ">=2.27.5",
     "markdownlint-cli2": ">=0.8.1"
+    
   }
 }

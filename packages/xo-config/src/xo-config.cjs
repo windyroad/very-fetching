@@ -13,7 +13,7 @@ const config = {
 	plugins: ['no-secrets', 'jsdoc', 'jsonc'],
 	extends: [
 		'plugin:jsonc/recommended-with-json',
-		'plugin:jsonc/recommended-with-json',
+		'plugin:import/recommended',
 		'plugin:jsonc/prettier',
 	],
 	rules: {
