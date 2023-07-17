@@ -13,10 +13,6 @@ To install `@windyroad/wrap-fetch`, you can use npm or yarn:
 npm install @windyroad/wrap-fetch
 ```
 
-```sh
-yarn add @windyroad/wrap-fetch
-```
-
 ## Usage
 
 To use `@windyroad/wrap-fetch`, you can import the `wrapFetch` function and use it to wrap the
@@ -28,15 +24,21 @@ Here's an example of how to use `wrapFetch` to add custom headers to requests:
 ```typescript
 import { wrapFetch } from '@windyroad/wrap-fetch';
 
-const fetchImpl = fetch;
-const wrapper = (fetch, ...args) => {
+const wrapper = (fetchImpl, ...args) => {
   const headers = new Headers(args[1].headers);
   headers.set('Authorization', 'Bearer token');
   args[1].headers = headers;
-  return fetch(...args);
+  return fetchImpl(...args);
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
+/**
+ * Or 
+ * ```
+ * const wrappedFetch = wrapFetch(wrapper, customFetch);
+ * ```
+ * if you want to wrap a different implementation of fetch.
+ **/
 
 const url = 'https://example.com';
 const options = { headers: { 'Content-Type': 'application/json' } };
@@ -58,7 +60,6 @@ Here's a list of some useful examples of using `@windyroad/wrap-fetch`:
     request.
 
 ```typescript
-const fetchImpl = fetch;
 const wrapper = (fetch, ...args) => {
   const headers = new Headers(args[1].headers);
   headers.set('Authorization', 'Bearer token');
@@ -66,7 +67,7 @@ const wrapper = (fetch, ...args) => {
   return fetch(...args);
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 const options = { headers: { 'Content-Type': 'application/json' } };
@@ -79,7 +80,6 @@ const response = await wrappedFetch(url, options);
    cached response if it is.
 
 ```typescript
-const fetchImpl = fetch;
 const cache = new Map();
 const wrapper = async (fetch, ...args) => {
   const key = JSON.stringify(args);
@@ -91,7 +91,7 @@ const wrapper = async (fetch, ...args) => {
   return response;
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -103,7 +103,6 @@ const response2 = await wrappedFetch(url);
     wrapping the `fetch` function with a function that logs the request and response data.
 
 ```typescript
-const fetchImpl = fetch;
 const log = console.log.bind(console);
 const wrapper = async (fetch, ...args) => {
   log('Request:', args);
@@ -112,7 +111,7 @@ const wrapper = async (fetch, ...args) => {
   return response;
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -123,14 +122,13 @@ const response = await wrappedFetch(url);
     `fetch` function with a function that transforms the response data before returning it.
 
 ```typescript
-const fetchImpl = fetch;
 const wrapper = async (fetch, ...args) => {
   const response = await fetch(...args);
   const data = await response.json();
   return { ...response, data };
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -142,12 +140,11 @@ const response = await wrappedFetch(url);
     making a real request.
 
 ```typescript
-const fetchImpl = fetch;
 const wrapper = async () => {
   return new Response('{"foo": "bar"}', { status: 200 });
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -158,7 +155,6 @@ const response = await wrappedFetch(url);
    tokens to requests by wrapping the `fetch` function with a function that adds the token to the request headers.
 
 ```typescript
-const fetchImpl = fetch;
 const token = 'secret';
 const wrapper = (fetch, ...args) => {
   const headers = new Headers(args[1].headers);
@@ -167,7 +163,7 @@ const wrapper = (fetch, ...args) => {
   return fetch(...args);
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -179,7 +175,6 @@ const response = await wrappedFetch(url);
    is found.
 
 ```typescript
-const fetchImpl = fetch;
 const wrapper = async (fetch, ...args) => {
   const response = await fetch(...args);
   if (!response.ok) {
@@ -189,7 +184,7 @@ const wrapper = async (fetch, ...args) => {
   return response;
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -201,7 +196,6 @@ await expect(wrappedFetch(url)).rejects.toThrow('Not found');
    request URL.
 
 ```typescript
-const fetchImpl = fetch;
 const wrapper = (fetch, ...args) => {
   const url = new URL(args[0]);
   url.searchParams.set('foo', 'bar');
@@ -209,7 +203,7 @@ const wrapper = (fetch, ...args) => {
   return fetch(...args);
 };
 
-const wrappedFetch = wrapFetch(fetchImpl, wrapper);
+const wrappedFetch = wrapFetch(wrapper);
 
 const url = 'https://example.com';
 
@@ -220,23 +214,40 @@ These examples should provide a good starting point for using `@windyroad/wrap-f
 
 ## API
 
-### `wrapFetch(fetchImpl: typeof fetch, wrapper: WrapperFunction): typeof fetch`
+### `wrapFetch`
 
-Wraps the global `fetch` function with a custom wrapper function.
+```typescript
+function wrapFetch<
+  WrapInputs extends any[] = Parameters<typeof fetch>,
+  WrapReturns = Awaited<ReturnType<typeof fetch>>,
+  FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+>(
+  wrapper: (
+    fetchImplInner: (
+      ...args: FetchInputs<typeof fetchImpl>
+    ) => Promise<FetchReturns<typeof fetchImpl>>,
+    ...args: WrapInputs
+  ) => Promise<WrapReturns>,
+  fetchImpl?: FetchImpl,
+): (...args: WrapInputs) => Promise<WrapReturns>
+```
 
-- `fetchImpl`: The global `fetch` function to wrap.
-- `wrapper`: The wrapper function to use.
+Wraps a `fetch` implementation with a wrapper function.
 
-Returns a wrapped `fetch` function.
+#### Parameters
 
-### `WrapperFunction(fetch: typeof fetch, ...args: any[]): Promise<Response>`
+- `wrapper`: The wrapper function to apply to the `fetch` implementation.
+- `fetchImpl`: The `fetch` implementation to wrap. Defaults to the global `fetch` function.
 
-The type of the wrapper function used by `wrapFetch`.
+#### Type Parameters
 
-- `fetch`: The global `fetch` function.
-- `args`: The arguments passed to the `fetch` function.
+- `WrapInputs`: The type of the input arguments for the wrapper function. Defaults to `Parameters<typeof fetch>`.
+- `WrapReturns`: The return type of the wrapper function. Defaults to `Awaited<ReturnType<typeof fetch>>`.
+- `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
 
-Returns a promise that resolves to the response.
+#### Returns
+
+A wrapped version of the `fetch` implementation.
 
 ## Contributing
 
