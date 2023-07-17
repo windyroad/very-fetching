@@ -1,10 +1,11 @@
-type FetchType<T extends ((...args: any) => Promise<any>) | undefined> =
+export type FetchType<T extends ((...args: any) => Promise<any>) | undefined> =
 	T extends undefined ? typeof fetch : T;
 
-type FetchInputs<T extends ((...args: any) => Promise<any>) | undefined> =
-	Parameters<FetchType<T>>;
+export type FetchInputs<
+	T extends ((...args: any) => Promise<any>) | undefined,
+> = Parameters<FetchType<T>>;
 
-type FetchReturns<
+export type FetchReturns<
 	T extends ((...args: any) => Promise<any>) | undefined = undefined,
 > = Awaited<ReturnType<FetchType<T>>>;
 
@@ -24,8 +25,8 @@ export function wrapFetch<
 >(
 	wrapper: (
 		fetchImplInner: (
-			...args: FetchInputs<typeof fetchImpl>
-		) => Promise<FetchReturns<typeof fetchImpl>>,
+			...args: FetchInputs<FetchImpl>
+		) => Promise<FetchReturns<FetchImpl>>,
 		...args: WrapInputs
 	) => Promise<WrapReturns>,
 	fetchImpl?: FetchImpl,
@@ -36,7 +37,7 @@ export function wrapFetch<
 	 * @returns A promise that resolves to the response.
 	 */
 	return async (...args: WrapInputs): Promise<WrapReturns> => {
-		const usableFetch = fetchImpl ?? globalThis.fetch;
+		const usableFetch = (fetchImpl ?? globalThis.fetch) as FetchImpl;
 		const result = await wrapper(usableFetch, ...args);
 		return result;
 	};

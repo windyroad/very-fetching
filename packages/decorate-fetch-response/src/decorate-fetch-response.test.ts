@@ -16,7 +16,7 @@ describe('decorateFetch', () => {
 				return new Response();
 			};
 
-			const decoratedFetch = decorateFetchResponse(fetchImpl, decorator);
+			const decoratedFetch = decorateFetchResponse(decorator, fetchImpl);
 			return decoratedFetch('https://example.com').then((result) => {
 				return (
 					typeof result === 'object' &&
@@ -33,13 +33,10 @@ describe('decorateFetch', () => {
 		const fetchImpl = vi.fn(
 			async (...args: Parameters<typeof fetch>) => new Response(),
 		);
-		const fetchWithCustomHeader = decorateFetchResponse(
-			fetchImpl,
-			async (response) => {
-				response.headers.set('X-Custom-Header', 'custom-value');
-				return response;
-			},
-		);
+		const fetchWithCustomHeader = decorateFetchResponse(async (response) => {
+			response.headers.set('X-Custom-Header', 'custom-value');
+			return response;
+		}, fetchImpl);
 
 		const response = await fetchWithCustomHeader('https://example.com');
 		expect(response.headers.get('X-Custom-Header')).toBe('custom-value');
@@ -49,17 +46,14 @@ describe('decorateFetch', () => {
 		const fetchImpl = vi.fn(
 			async (...args: Parameters<typeof fetch>) => new Response(),
 		);
-		const fetchWithCustomBody = decorateFetchResponse(
-			fetchImpl,
-			async (response) => {
-				const body = await response.text();
-				return new Response('custom-body', {
-					status: response.status,
-					statusText: response.statusText,
-					headers: response.headers,
-				});
-			},
-		);
+		const fetchWithCustomBody = decorateFetchResponse(async (response) => {
+			const body = await response.text();
+			return new Response('custom-body', {
+				status: response.status,
+				statusText: response.statusText,
+				headers: response.headers,
+			});
+		}, fetchImpl);
 
 		const response = await fetchWithCustomBody('https://example.com');
 		const body = await response.text();
@@ -76,19 +70,16 @@ describe('decorateFetch', () => {
 					statusText: 'Not Found',
 				}),
 		);
-		const fetchWithCustomError = decorateFetchResponse(
-			fetchImpl,
-			async (response) => {
-				if (response.status === 404) {
-					return new Response('custom-error', {
-						status: 404,
-						statusText: 'Not Found',
-					});
-				}
+		const fetchWithCustomError = decorateFetchResponse(async (response) => {
+			if (response.status === 404) {
+				return new Response('custom-error', {
+					status: 404,
+					statusText: 'Not Found',
+				});
+			}
 
-				return response;
-			},
-		);
+			return response;
+		}, fetchImpl);
 
 		const response = await fetchWithCustomError(
 			'https://example.com/not-found',

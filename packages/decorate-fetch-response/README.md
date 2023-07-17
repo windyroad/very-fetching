@@ -20,7 +20,7 @@ use it to decorate the response of a `fetch` request:
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
 
-const fetchWithCustomHeader = decorateFetchResponse(fetch, (response) => {
+const fetchWithCustomHeader = decorateFetchResponse((response) => {
   return response.headers.set('X-Custom-Header', 'custom-value');
 });
 
@@ -33,17 +33,6 @@ In this example, the `decorateFetchResponse` function is used to add a custom he
 response of a `fetch` request. The `fetchWithCustomHeader` function is a decorated version of
 the `fetch` implementation that adds the `X-Custom-Header` header to the response.
 
-## API
-
-### `decorateFetchResponse(fetchImpl, decorator)`
-
-Decorates the response of a `fetch` request with additional properties.
-
-- `fetchImpl`: The `fetch` implementation to use.
-- `decorator`: The decorator function to apply to the response.
-
-Returns a decorated version of the `fetch` implementation.
-
 ## Examples
 
 Here are a few examples of how you can use the `decorateFetchResponse` function:
@@ -53,7 +42,7 @@ Here are a few examples of how you can use the `decorateFetchResponse` function:
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
 
-const fetchWithCustomHeader = decorateFetchResponse(fetch, (response) => {
+const fetchWithCustomHeader = decorateFetchResponse((response) => {
   return response.headers.set('X-Custom-Header', 'custom-value');
 });
 
@@ -67,7 +56,7 @@ fetchWithCustomHeader('https://example.com').then((response) => {
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
 
-const fetchWithCustomBody = decorateFetchResponse(fetch, async (response) => {
+const fetchWithCustomBody = decorateFetchResponse(async (response) => {
   const body = await response.text();
   return new Response('custom-body', {
     status: response.status,
@@ -88,7 +77,7 @@ fetchWithCustomBody('https://example.com').then((response) => {
 ```typescript
 import decorateFetchResponse from '@windyroad/decorate-fetch-response';
 
-const fetchWithCustomError = decorateFetchResponse(fetch, async (response) => {
+const fetchWithCustomError = decorateFetchResponse(async (response) => {
   if (response.status === 404) {
     return new Response('custom-error', {
       status: 404,
@@ -105,6 +94,38 @@ fetchWithCustomError('https://example.com/not-found').then((response) => {
   });
 });
 ```
+
+## API
+
+### `decorateFetchResponse`
+
+```typescript
+function decorateFetchResponse<
+  DecoratorReturns = Awaited<ReturnType<typeof fetch>>,
+  FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+>(
+  decorator: (
+    response: FetchReturns<FetchImpl>,
+  ) => Promise<DecoratorReturns> | DecoratorReturns,
+  fetchImpl?: FetchImpl,
+): (...args: FetchParameters<FetchImpl>) => Promise<DecoratorReturns>
+```
+
+Decorates the response of a `fetch` request with additional properties.
+
+### Parameters
+
+- `decorator`: The decorator function to apply to the response.
+- `fetchImpl`: The `fetch` implementation to use. Defaults to the global `fetch` function.
+
+### Type Parameters
+
+- `DecoratorReturns`: The return type of the decorator function. Defaults to `Awaited<ReturnType<typeof fetch>>`.
+- `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
+
+### Returns
+
+A decorated version of the `fetch` implementation.
 
 ## Contributing
 
