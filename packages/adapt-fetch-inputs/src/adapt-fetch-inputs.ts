@@ -2,7 +2,7 @@
 import {
 	wrapFetch,
 	type FetchInputs,
-	type FetchReturns,
+	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
 
 /**
@@ -14,26 +14,24 @@ import {
  * @returns The adapted `fetch` function.
  */
 export function adaptFetchInputs<
-	FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+	FetchImpl extends (...args: any[]) => Promise<any> = typeof fetch,
 	WrapInputs extends any[] = Parameters<FetchImpl>,
 >(
 	adapter: (
 		...args: WrapInputs
 	) => FetchInputs<FetchImpl> | Promise<FetchInputs<FetchImpl>>,
 	fetchImpl?: FetchImpl,
-): (...args: WrapInputs) => Promise<FetchReturns<FetchImpl>> {
+): (...args: WrapInputs) => Promise<AwaitedFetchReturns<FetchImpl>> {
 	const wrapper = async (
 		fetchImplInner: FetchImpl,
 		...args: WrapInputs
-	): Promise<FetchReturns<FetchImpl>> => {
+	): Promise<AwaitedFetchReturns<FetchImpl>> => {
 		const modifiedInputs = await adapter(...args);
-		const response = await fetchImplInner(
-			...(modifiedInputs as Parameters<typeof fetch>),
-		);
+		const response = await fetchImplInner(...modifiedInputs);
 		return response;
 	};
 
-	return wrapFetch<FetchImpl, WrapInputs, FetchReturns<FetchImpl>>(
+	return wrapFetch<FetchImpl, WrapInputs, AwaitedFetchReturns<FetchImpl>>(
 		wrapper,
 		fetchImpl,
 	);

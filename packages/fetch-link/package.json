@@ -44,7 +44,9 @@
     "access": "public"
   },
   "dependencies": {
+    "@windyroad/wrap-fetch": "*",
     "@windyroad/adapt-fetch-inputs": "*",
+    "@windyroad/decorate-fetch-response": "*",
     "http-link-header": "^1.1.1"
   },
   "devDependencies": {

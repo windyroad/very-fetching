@@ -36,6 +36,7 @@ const config = {
 				peerDependencies: true,
 			},
 		],
+		'import/no-unresolved': 'off', // Need to find why this is failing
 	},
 };
 

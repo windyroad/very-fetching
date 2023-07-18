@@ -28,6 +28,9 @@ const config = {
 		},
 		MD025: false,
 		MD041: false,
+		MD024: {
+			allow_different_nesting: true,
+		},
 	},
 	// Define glob expressions to ignore
 	ignores: ['**/node_modules/**/*'],

@@ -1,7 +1,7 @@
 import {
 	wrapFetch,
 	type FetchInputs,
-	type FetchReturns,
+	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
 
 /**
@@ -13,21 +13,20 @@ import {
  * @returns A decorated version of the `fetch` implementation.
  */
 export function decorateFetchResponse<
-	FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
-	DecoratorReturns = FetchReturns<FetchImpl>,
+	FetchImpl extends (...args: any[]) => Promise<any> = typeof fetch,
+	DecoratorReturns = AwaitedFetchReturns<FetchImpl>,
 >(
 	decorator: (
-		response: FetchReturns<FetchImpl>,
+		response: AwaitedFetchReturns<FetchImpl>,
 	) => Promise<DecoratorReturns> | DecoratorReturns,
 	fetchImpl?: FetchImpl,
 ): (...args: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> {
 	return wrapFetch<FetchImpl, FetchInputs<FetchImpl>, DecoratorReturns>(
 		async (fetchImpl, ...args) => {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const response = await fetchImpl(...(args as Parameters<typeof fetch>));
-			const modified = await decorator(
-				response as FetchReturns<typeof fetchImpl>,
-			);
+			const response = await fetchImpl(...args);
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			const modified = await decorator(response);
 			return modified;
 		},
 		fetchImpl,

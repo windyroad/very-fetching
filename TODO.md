@@ -3,3 +3,4 @@
 - [x] look into using Changesets instead of semantic-releases
 - [x] fix markdown linting
 - [ ] fix json linting
+- [ ] see if changing imports to .ts fixes stale definitions and import not found problem

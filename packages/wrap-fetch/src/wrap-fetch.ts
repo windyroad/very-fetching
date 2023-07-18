@@ -1,12 +1,14 @@
 // Export type FetchType<T extends ((...args: any) => Promise<any>) | undefined> =
 // 	T extends undefined ? typeof fetch : T;
 
-export type FetchInputs<T extends (...args: any) => Promise<any>> =
-	Parameters<T>;
+export type FetchInputs<T extends (...args: any[]) => Promise<any>> =
+	T extends (...args: infer I) => Promise<any> ? I : never;
 
-export type FetchReturns<T extends (...args: any) => Promise<any>> = Awaited<
-	ReturnType<T>
->;
+export type AwaitedFetchReturns<T extends (...args: any[]) => Promise<any>> =
+	T extends (...args: any) => Promise<infer R> ? R : any;
+
+export type FetchReturns<T extends (...args: any[]) => Promise<any>> =
+	T extends (...args: any[]) => Promise<infer R> ? Promise<R> : Promise<any>;
 
 /**
  * Wraps a `fetch` implementation with a wrapper function.
@@ -18,9 +20,9 @@ export type FetchReturns<T extends (...args: any) => Promise<any>> = Awaited<
  * @returns A wrapped version of the `fetch` implementation.
  */
 export function wrapFetch<
-	FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+	FetchImpl extends (...args: any[]) => Promise<any> = typeof fetch,
 	WrapInputs extends any[] = Parameters<FetchImpl>,
-	WrapReturns = Awaited<ReturnType<FetchImpl>>,
+	WrapReturns = AwaitedFetchReturns<FetchImpl>,
 >(
 	wrapper: (
 		fetchImplInner: FetchImpl,

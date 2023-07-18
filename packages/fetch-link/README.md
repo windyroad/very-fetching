@@ -62,23 +62,29 @@ fetchWithLink(link)
 
 ## API
 
-### `fetchLink(target: Link | URL | RequestInfo, init?: RequestInit): Promise<Response>`
+### `fetchLink(target: string | Link | RequestInfo, init?: RequestInit): Promise<Response>`
 
-An enhanced fetch function that allows requests to RFC8288 Link objects.
+An enhanced fetch that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
+ returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
 
-- `target`: The `Link`, `URL`, or `RequestInfo` to fetch from.
-- `init`: Any custom settings that you want to apply to the request.
+#### Parameters
 
-Returns a Promise that resolves to the Response object representing the response to the request.
+- `target` - The Link, URL or RequestInfo to fetch from.
+- `init` - Any custom settings that you want to apply to the request.
 
-<!-- markdownlint-disable-next-line MD013 -->
-### `glowUpFetchWithLinks<FetchReturns = Awaited<ReturnType<typeof fetch>>>(fetchImpl: (...args: Parameters<typeof fetch>) => Promise<FetchReturns>): (target: Link | Parameters<typeof fetch>[0], init?: Parameters<typeof fetch>[1]) => Promise<FetchReturns>`
+#### Returns
 
-A function that adapts the fetch API to work with RFC8288 Link objects.
+A Promise that resolves to the Response object representing the response to the request.
 
-- `fetchImpl`: The original fetch function to adapt.
+### `glowUpFetchWithLinks(): (target: string | Link | RequestInfo, init?: RequestInit) => Promise<Response>`
 
-Returns an adapted fetch function that supports passing in a `Link` object.
+A function that returns an enhanced fetch function that allows requests to
+[RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and returns a Response
+object with a `links` method that returns an array of RFC8288 Link objects.
+
+#### Returns
+
+A function that can be used as an enhanced fetch function.
 
 ## Contributing
 

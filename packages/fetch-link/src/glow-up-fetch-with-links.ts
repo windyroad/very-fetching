@@ -1,21 +1,12 @@
-import {adaptFetchInputs} from '@windyroad/adapt-fetch-inputs';
-import {isLink, type Link} from './link.js';
-
-/**
- * Checks if a Headers object is empty.
- * @param headers The Headers object to check.
- * @returns True if the Headers object is empty, false otherwise.
- */
-function isHeadersEmpty(headers: Headers): boolean {
-	let isEmpty = true;
-	// eslint-disable-next-line no-unreachable-loop
-	for (const _header of headers) {
-		isEmpty = false;
-		break;
-	}
-
-	return isEmpty;
-}
+import {
+	type FetchInputs,
+	type AwaitedFetchReturns,
+} from '@windyroad/wrap-fetch';
+import {type Link} from './link.js';
+import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links.js';
+import {type LinkedResponse} from './linked-response.js';
+import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs.js';
+import {type DropFirst} from './drop-first.js';
 
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.
@@ -24,47 +15,16 @@ function isHeadersEmpty(headers: Headers): boolean {
  * @returns {Function} An adapted fetch function that supports passing in a Link object.
  */
 export function glowUpFetchWithLinks<
-	FetchReturns = Awaited<ReturnType<typeof fetch>>,
+	FetchImpl extends (
+		...args: Parameters<typeof fetch>
+	) => Promise<any> = typeof fetch,
 >(
-	fetchImpl: (...args: Parameters<typeof fetch>) => Promise<FetchReturns>,
+	fetchImpl?: FetchImpl,
 ): (
-	target: Link | Parameters<typeof fetch>[0],
-	init?: Parameters<typeof fetch>[1],
-) => Promise<FetchReturns> {
-	const adapter = (
-		target: Link | Parameters<typeof fetch>[0],
-		init: Parameters<typeof fetch>[1],
-	): Parameters<typeof fetch> => {
-		if (isLink(target)) {
-			const link = target;
-			const requestInit: RequestInit = init ?? {};
-
-			// In case link.method is undefined, we'll use 'GET' as a default.
-			const method = link.method ?? 'GET';
-
-			const headers = new Headers(requestInit.headers);
-			// Only set the 'Accept' header if link.type is defined.
-			if (link.type) {
-				headers.append('Accept', link.type);
-			}
-
-			if (link.hreflang) {
-				headers.append('Accept-Language', link.hreflang);
-			}
-
-			const fetchParameters: Parameters<typeof fetch> = [
-				link.uri,
-				{
-					...requestInit,
-					...(link.method && {method: link.method}),
-					...(!isHeadersEmpty(headers) && {headers}),
-				},
-			];
-			return fetchParameters;
-		}
-
-		return [target, init];
-	};
-
-	return adaptFetchInputs(fetchImpl, adapter);
+	...args: FetchInputs<FetchImpl> | [Link, ...DropFirst<FetchInputs<FetchImpl>>]
+) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
+	const fetchWithResponseLinks = decorateFetchResponseWithLinks(fetchImpl);
+	return glowUpFetchWithLinkInputs<FetchImpl>(
+		fetchWithResponseLinks as FetchImpl,
+	);
 }
