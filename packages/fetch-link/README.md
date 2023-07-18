@@ -22,42 +22,14 @@ representing the response to the request.
 ```typescript
 import { fetchLink } from '@windyroad/fetch-link';
 
-const link = {
-  uri: 'https://example.com',
-  rel: 'resource',
-  type: 'application/json',
-  hreflang: 'en-US',
-};
-
-fetchLink(link)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
-```
-
-### `glowUpFetchWithLinks`
-
-`glowUpFetchWithLinks` is a function that adapts the fetch API to work with RFC8288 Link
-objects. It takes in the original `fetch` function and returns an adapted `fetch` function that
-supports passing in a `Link` object.
-
-```typescript
-import { glowUpFetchWithLinks } from '@windyroad/fetch-link';
-
-const mockFetch = async (...args: Parameters<typeof fetch>) => new Response();
-const fetchWithLink = glowUpFetchWithLinks(mockFetch);
-
-const link = {
-  uri: 'https://example.com',
-  rel: 'resource',
-  type: 'application/json',
-  hreflang: 'en-US',
-};
-
-fetchWithLink(link)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
+// Fetch the collection using a URL
+const collectionResponse = await fetchLink(
+  'https://jsonplaceholder.typicode.com/posts',
+);
+// Fetch the first item linked by the collection
+const itemResponse = await fetchLink(collectionResponse.links('item')[0]);
+// Fetch the collection from the item
+const collectionResponse2 = await fetchLink(itemResponse.links('collection')[0]);
 ```
 
 ## API

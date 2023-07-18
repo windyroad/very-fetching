@@ -160,15 +160,3 @@ test('fetchLink should follow links to related resources', async ({expect}) => {
 	);
 });
 
-test('fetchLink should follow links to related resources', async ({expect}) => {
-	// Fetch the collection using a URL
-	const collectionResponse = await fetchLink(
-		'https://jsonplaceholder.typicode.com/posts',
-	);
-	// Fetch the first item
-	const itemResponse = await fetchLink(collectionResponse.links('item')[0]);
-	// Fetch the collection from the item
-	const collectionResponse2 = await fetchLink(
-		itemResponse.links('collection')[0],
-	);
-});
