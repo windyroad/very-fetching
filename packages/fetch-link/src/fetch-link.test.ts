@@ -159,4 +159,3 @@ test('fetchLink should follow links to related resources', async ({expect}) => {
 		collectionResponse.links('self'),
 	);
 });
-
