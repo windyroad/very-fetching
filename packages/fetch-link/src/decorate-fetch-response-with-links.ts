@@ -4,6 +4,7 @@ import {
 	type AwaitedFetchReturns,
 	type FetchInputs,
 } from '@windyroad/wrap-fetch';
+import uriTemplate from 'uri-templates';
 import {type Link} from './link.js';
 import {type LinkedResponse} from './linked-response.js';
 
@@ -28,20 +29,33 @@ export function decorateFetchResponseWithLinks<
 		linkHeader.parse(response?.headers?.get('link') ?? '');
 		linkHeader.parse(response?.headers?.get('link-template') ?? '');
 		return Object.assign(response, {
-			links: (filter?: Partial<Link> | string) =>
-				linkHeader.refs.filter((link) => {
-					if (typeof filter === 'string') {
-						return link.rel === filter;
-					}
+			links(
+				filter?: Partial<Link> | string,
+				parameters?: Record<string, string | Record<string, string>>,
+			): Link[] {
+				const links = filter
+					? linkHeader.refs.filter((link) => {
+							if (typeof filter === 'string') {
+								return link.rel === filter;
+							}
 
-					for (const key in filter) {
-						if (filter[key] !== link[key]) {
-							return false;
-						}
-					}
+							for (const key in filter) {
+								if (filter[key] !== link[key]) {
+									return false;
+								}
+							}
 
-					return true;
-				}),
+							return true;
+					  })
+					: linkHeader.refs;
+				if (parameters) {
+					for (const link of links) {
+						link.uri = uriTemplate(link.uri).fillFromObject(parameters);
+					}
+				}
+
+				return links;
+			},
 		});
 	}, fetchImpl);
 }

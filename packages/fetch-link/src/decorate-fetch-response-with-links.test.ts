@@ -119,3 +119,39 @@ test('links method filters links by multiple properties', async ({expect}) => {
 		{uri: 'https://example.com/other', rel: 'related', type: 'text/plain'},
 	]);
 });
+
+test('decorateFetchResponseWithLinks expands link templates with parameters', async ({
+	expect,
+}) => {
+	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+		new Response(null, {
+			headers: {
+				'link-template': '<https://example.com/{id}>; rel="resource-template"',
+			},
+		});
+
+	const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
+	const response = await decoratedFetch('https://example.com');
+
+	expect(response.links(undefined, {id: '123'})).toEqual([
+		{uri: 'https://example.com/123', rel: 'resource-template'},
+	]);
+});
+
+test('decorateFetchResponseWithLinks does not expand link templates without parameters', async ({
+	expect,
+}) => {
+	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+		new Response(null, {
+			headers: {
+				'link-template': '<https://example.com/{foo}>; rel="resource-template"',
+			},
+		});
+
+	const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
+	const response = await decoratedFetch('https://example.com');
+
+	expect(response.links('resource-template', {foo: 'bar'})).toEqual([
+		{uri: 'https://example.com/bar', rel: 'resource-template'},
+	]);
+});

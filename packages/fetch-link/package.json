@@ -47,10 +47,12 @@
     "@windyroad/wrap-fetch": "*",
     "@windyroad/adapt-fetch-inputs": "*",
     "@windyroad/decorate-fetch-response": "*",
-    "http-link-header": "^1.1.1"
+    "http-link-header": "^1.1.1",
+    "uri-templates": "^0.2.0"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.3",
+    "@types/uri-templates": "^0.1.31",
     "fast-check": "^3.10.0",
     "msw": "^1.2.2",
     "vitest": "^0.32.4"

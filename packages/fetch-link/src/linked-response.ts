@@ -10,7 +10,11 @@ export type LinkedResponse<FetchReturns extends Pick<Response, 'headers'>> =
 		/**
 		 * Returns an array of RFC8288 Link objects from the response headers.
 		 * @param filter Optional filter to apply to the links.
+		 * @param parameters Optional object containing key-value pairs to interpolate into the link templates.
 		 * @returns An array of RFC8288 Link objects.
 		 */
-		links: (filter?: Partial<Link> | string) => Link[];
+		links: (
+			filter?: Partial<Link> | string,
+			parameters?: Record<string, string | Record<string, string>>,
+		) => Link[];
 	};
