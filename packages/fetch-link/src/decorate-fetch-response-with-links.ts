@@ -33,29 +33,62 @@ export function decorateFetchResponseWithLinks<
 				filter?: Partial<Link> | string,
 				parameters?: Record<string, string | Record<string, string>>,
 			): Link[] {
-				const links = filter
-					? linkHeader.refs.filter((link) => {
-							if (typeof filter === 'string') {
-								return link.rel === filter;
-							}
-
-							for (const key in filter) {
-								if (filter[key] !== link[key]) {
-									return false;
-								}
-							}
-
-							return true;
-					  })
-					: linkHeader.refs;
-				if (parameters) {
-					for (const link of links) {
-						link.uri = uriTemplate(link.uri).fillFromObject(parameters);
-					}
-				}
+				const links = filterLinks({filter, linkHeader});
+				fillLinks({parameters, links});
 
 				return links;
 			},
 		});
 	}, fetchImpl);
+}
+
+/**
+ * Fills URI templates in an array of links with parameters.
+ * @param {object} options - The options object.
+ * @param {Record<string, string|Record<string, string>>} options.parameters - The parameters to fill the URI templates with.
+ * @param {LinkHeader.Reference[]} options.links - The array of links to fill.
+ */
+function fillLinks({
+	parameters,
+	links,
+}: {
+	parameters: Record<string, string | Record<string, string>> | undefined;
+	links: LinkHeader.Reference[];
+}) {
+	if (parameters) {
+		for (const link of links) {
+			link.uri = uriTemplate(link.uri).fillFromObject(parameters);
+		}
+	}
+}
+
+/**
+ * Filters the links in a LinkHeader based on a filter object or string.
+ * @param {object} options - The options object.
+ * @param {string|Partial<Link>} options.filter - The filter to apply to the links.
+ * @param {LinkHeader} options.linkHeader - The LinkHeader to filter.
+ * @returns {Link[]} An array of filtered links.
+ */
+function filterLinks({
+	filter,
+	linkHeader,
+}: {
+	filter: string | Partial<Link> | undefined;
+	linkHeader: LinkHeader;
+}) {
+	return filter
+		? linkHeader.refs.filter((link) => {
+				if (typeof filter === 'string') {
+					return link.rel === filter;
+				}
+
+				for (const key in filter) {
+					if (filter[key] !== link[key]) {
+						return false;
+					}
+				}
+
+				return true;
+		  })
+		: linkHeader.refs;
 }
