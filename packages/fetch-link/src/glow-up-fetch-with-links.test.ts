@@ -6,7 +6,6 @@ import {glowUpFetchWithLinks} from './glow-up-fetch-with-links.js';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, ctx) => {
-		console.log('request', request);
 		const linkHeader =
 			'<https://example.com/related>; rel="related"; type="text/html", <https://example.com/other>; rel="other"; type="text/plain"';
 		return response(
@@ -50,42 +49,47 @@ afterAll(async () => {
 });
 
 test('glowUpFetchWithLinks adds links method to response', async ({expect}) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
-		new Response(null, {
+	const fetchImpl = async (...args: Parameters<typeof fetch>) => {
+		const rval = new Response(null, {
 			headers: {link: '<https://example.com>; rel="resource"'},
 		});
+		return rval;
+	};
+
 	const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 	const response = await fetchWithLinks('https://example.com');
 	expect(response.links()).toEqual([
-		{uri: 'https://example.com', rel: 'resource'},
+		{uri: 'https://example.com/', rel: 'resource'},
 	]);
 });
 
 test('glowUpFetchWithLinks handles multiple link headers', async ({expect}) => {
-	const fetchImpl = async () =>
+	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
 		new Response(null, {
 			headers: {
 				link: '<https://example.com>; rel="resource"',
-				'link-template': '<https://example.com/{id}>; rel="resource-template"',
+				'link-template':
+					'<https://example.com/%7Bid%7B>; rel="resource-template"',
 			},
 		});
 	const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 	const response = await fetchWithLinks('https://example.com');
 	expect(response.links()).toEqual([
-		{uri: 'https://example.com', rel: 'resource'},
-		{uri: 'https://example.com/{id}', rel: 'resource-template'},
+		{uri: 'https://example.com/', rel: 'resource'},
+		{uri: 'https://example.com/%7Bid%7B', rel: 'resource-template'},
 	]);
 });
 
 test('glowUpFetchWithLinks handles empty link header', async ({expect}) => {
-	const fetchImpl = async () => new Response(null, {headers: {link: ''}});
+	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+		new Response(null, {headers: {link: ''}});
 	const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 	const response = await fetchWithLinks('https://example.com');
 	expect(response.links()).toEqual([]);
 });
 
 test('glowUpFetchWithLinks passes through fetch errors', async ({expect}) => {
-	const fetchImpl = async () => {
+	const fetchImpl = async (...args: Parameters<typeof fetch>) => {
 		throw new Error('fetch error');
 	};
 
@@ -163,7 +167,6 @@ test('glowUpFetchWithLinks follows RFC8288 links', async ({expect}) => {
 test('links method filters links by rel', async ({expect}) => {
 	const fetchWithLink = glowUpFetchWithLinks(fetch);
 	const response = await fetchWithLink('https://example.com');
-	console.log({response, headers: response.headers, links: response.links()});
 	expect(response.links('related')).toEqual([
 		{uri: 'https://example.com/related', rel: 'related', type: 'text/html'},
 	]);

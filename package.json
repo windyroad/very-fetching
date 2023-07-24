@@ -23,7 +23,8 @@
     "ci:lint": "xo",
     "ci:test": "vitest --config vite.config.ci.ts --run --coverage",
     "ci:version": "[ \"$CI\" = true ] && changeset version || echo \"Dry run: changeset version\"",
-    "ci:publish": "[ \"$CI\" = true ] && changeset publish || echo \"Dry run: changeset publish\""
+    "ci:publish": "[ \"$CI\" = true ] && changeset publish || echo \"Dry run: changeset publish\"",
+    "add-changeset": "changeset add"
   },
   "engines": {
     "node": "18"

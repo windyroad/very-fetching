@@ -7,6 +7,7 @@ import {
 import uriTemplate from 'uri-templates';
 import {type Link} from './link.js';
 import {type LinkedResponse} from './linked-response.js';
+import {resolveLinkUrls} from './resolve-link-urls.js';
 
 /**
  * Decorates a fetch implementation with a `links` method that returns an array of RFC8288 Link objects.
@@ -18,7 +19,7 @@ import {type LinkedResponse} from './linked-response.js';
 export function decorateFetchResponseWithLinks<
 	FetchImpl extends (
 		...args: any[]
-	) => Promise<Pick<Response, 'headers'>> = typeof fetch,
+	) => Promise<Pick<Response, 'headers' | 'url'>> = typeof fetch,
 >(
 	fetchImpl?: FetchImpl,
 ): (
@@ -28,15 +29,17 @@ export function decorateFetchResponseWithLinks<
 		const linkHeader = new LinkHeader();
 		linkHeader.parse(response?.headers?.get('link') ?? '');
 		linkHeader.parse(response?.headers?.get('link-template') ?? '');
+		console.log({respUrl: response.url});
 		return Object.assign(response, {
 			links(
 				filter?: Partial<Link> | string,
 				parameters?: Record<string, string | Record<string, string>>,
 			): Link[] {
+				console.log({linkResUrl: response.url});
 				const links = filterLinks({filter, linkHeader});
 				fillLinks({parameters, links});
-
-				return links;
+				const resolvedLinks = resolveLinkUrls(links, response.url);
+				return resolvedLinks.map((urlAndLink) => urlAndLink.link);
 			},
 		});
 	}, fetchImpl);

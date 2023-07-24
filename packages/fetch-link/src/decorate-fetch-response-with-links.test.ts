@@ -25,8 +25,8 @@ test('decorateFetchResponseWithLinks handles multiple link headers', async ({
 	const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 	const response = await decoratedFetch('https://example.com');
 	expect(response.links()).toEqual([
-		{uri: 'https://example.com', rel: 'resource'},
-		{uri: 'https://example.com/{id}', rel: 'resource-template'},
+		{uri: 'https://example.com/', rel: 'resource'},
+		{uri: 'https://example.com/%7Bid%7D', rel: 'resource-template'},
 	]);
 });
 

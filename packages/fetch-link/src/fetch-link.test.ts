@@ -51,6 +51,17 @@ const server = setupServer(
 			);
 		},
 	),
+	rest.get('https://examples.com', async (request, response, ctx) => {
+		const linkHeader = '</related>; rel="related"; type="text/html"';
+		return response(
+			ctx.status(200),
+			ctx.text('Example Domain'),
+			ctx.set('Link', linkHeader),
+		);
+	}),
+	rest.get('https://examples.com/related', async (request, response, ctx) => {
+		return response(ctx.status(200), ctx.text('Related Page'));
+	}),
 );
 
 beforeAll(async () => {
@@ -158,4 +169,18 @@ test('fetchLink should follow links to related resources', async ({expect}) => {
 	expect(collectionResponse2.links('self')).toEqual(
 		collectionResponse.links('self'),
 	);
+});
+
+test('fetchLink should resolve relative URLs in link response headers', async ({
+	expect,
+}) => {
+	const response = await fetchLink('https://examples.com');
+	const data = await response.text();
+	expect(data).toContain('Example Domain');
+
+	const relatedLink = response.links('related')[0];
+	expect(relatedLink).toHaveProperty('uri', 'https://examples.com/related');
+	const relatedResponse = await fetchLink(relatedLink);
+	const relatedData = await relatedResponse.text();
+	expect(relatedData).toContain('Related Page');
 });
