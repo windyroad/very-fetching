@@ -37,6 +37,22 @@ const config = {
 			},
 		],
 		'import/no-unresolved': 'off', // Need to find why this is failing
+		'unicorn/prevent-abbreviations': [
+			'error',
+			{
+				replacements: {
+					cmd: {
+						command: true,
+					},
+					ctx: {
+						context: true,
+					},
+					errCb: {
+						handleError: true,
+					},
+				},
+			},
+		],
 	},
 };
 
