@@ -39,7 +39,7 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/packages/fetch-link#readme",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/fetch-fragement/README.md",
   "publishConfig": {
     "access": "public"
   },

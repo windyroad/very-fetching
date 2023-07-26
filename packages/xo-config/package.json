@@ -35,7 +35,7 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/eslint-config#readme",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/xo-config/README.md",
   "publishConfig": {
     "access": "public"
   },

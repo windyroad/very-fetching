@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/adapt-fetch-input#readme",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/adapt-fetch-input/README.md",
   "publishConfig": {
     "access": "public"
   },

@@ -38,7 +38,7 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/tree/main/packages/wrap-fetch#readme",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/wrap-fetch/README.md",
   "publishConfig": {
     "access": "public"
   },
