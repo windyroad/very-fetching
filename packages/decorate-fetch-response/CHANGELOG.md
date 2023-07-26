@@ -1,5 +1,13 @@
 # @windyroad/decorate-fetch-response
 
+## 2.1.0
+
+### Minor Changes
+
+- 5580a09: Added `decorateFetchResponseUsingInputs` which allows you to decorate the fetch response
+  based on the fetch inputs. For instance `@windyroad/fetch-fragment` uses the hash in the
+  requested URL to return a response with a body which is just the matching fragment.
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,5 +1,14 @@
 # @windyroad/xo-config
 
+## 1.3.0
+
+### Minor Changes
+
+- aecc6ee: - Improved XO configuration to use more descriptive variable names.
+  - Renamed "cmd" to "command".
+  - Renamed "ctx" to "context".
+  - Renamed "errCb" to "handleError".
+
 ## 1.2.0
 
 ### Minor Changes

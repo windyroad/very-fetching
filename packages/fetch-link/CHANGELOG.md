@@ -1,5 +1,22 @@
 # @windyroad/fetch-link
 
+## 2.1.0
+
+### Minor Changes
+
+- 8ed9ffd: The `links()` method on `LinkedResponse` now supports link templates, which allow for variables
+  to be replaced with values to provide a concrete URL. To achieve this, a new optional parameters
+  parameter has been added to the `links()` method, which accepts a set of name-value pairs to be
+  interpolated into the link templates. This enhancement provides greater flexibility and
+  customization for users of the `LinkedResponse` type.
+- 26256c8: `fetchLinks()` and `glowUpFetchWithLinks()` now resolves relative URLs in `link`
+  response headers as per [RFC 8288, Section 3.1](https://tools.ietf.org/html/rfc8288#section-3.1)
+
+### Patch Changes
+
+- Updated dependencies [5580a09]
+  - @windyroad/decorate-fetch-response@2.1.0
+
 ## 2.0.0
 
 ### Major Changes
