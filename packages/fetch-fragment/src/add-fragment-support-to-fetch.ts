@@ -9,7 +9,7 @@ import {
 	type FetchInputs,
 } from '@windyroad/wrap-fetch';
 import pointer from 'json-pointer';
-import {isJsonContent} from './is-json-content.js';
+import {isJsonContent} from './is-json-content';
 
 /**
  * Fetches a fragment from a JSON response based on a URL fragment identifier.

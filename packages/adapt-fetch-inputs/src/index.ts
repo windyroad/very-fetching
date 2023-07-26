@@ -1,1 +1,1 @@
-export * from './adapt-fetch-inputs.js';
+export * from './adapt-fetch-inputs';

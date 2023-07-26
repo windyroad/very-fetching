@@ -1,7 +1,7 @@
 import {test, beforeAll, afterAll, afterEach} from 'vitest';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {fetchFragment} from './fetch-fragment.js';
+import {fetchFragment} from './fetch-fragment';
 
 const server = setupServer(
 	rest.get(

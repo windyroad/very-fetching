@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import {describe, test, vi, beforeEach} from 'vitest';
-import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch.js';
+import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch';
 
 describe('fetchFragment', () => {
 	const mockResponse = {

@@ -1,6 +1,6 @@
 import fc from 'fast-check';
 import {describe, it, vi} from 'vitest';
-import {adaptFetchInputs} from './adapt-fetch-inputs.js';
+import {adaptFetchInputs} from './adapt-fetch-inputs';
 
 describe('adaptFetchInputs', () => {
 	it('adds Authorization header to fetch inputs', async ({expect}) => {

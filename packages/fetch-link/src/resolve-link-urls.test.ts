@@ -1,7 +1,7 @@
 import {test} from 'vitest';
 import fc from 'fast-check';
-import {resolveLinkUrls} from './resolve-link-urls.js';
-import {type Link} from './link.js';
+import {resolveLinkUrls} from './resolve-link-urls';
+import {type Link} from './link';
 
 test('resolveLinkUrls resolves links relative to base URL', async ({
 	expect,

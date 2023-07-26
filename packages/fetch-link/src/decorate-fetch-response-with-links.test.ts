@@ -1,6 +1,6 @@
 import {test, vi} from 'vitest';
 import fc from 'fast-check';
-import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links.js';
+import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
 
 test('decorateFetchResponseWithLinks adds links method to response', async ({
 	expect,

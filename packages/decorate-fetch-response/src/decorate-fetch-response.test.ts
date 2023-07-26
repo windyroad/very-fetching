@@ -3,7 +3,7 @@ import {describe, test, vi} from 'vitest';
 import {
 	decorateFetchResponse,
 	decorateFetchResponseUsingInputs,
-} from './decorate-fetch-response.js';
+} from './decorate-fetch-response';
 
 describe('decorateFetch', () => {
 	test('returns an ExtendedResponse object', () => {

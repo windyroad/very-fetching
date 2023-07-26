@@ -2,7 +2,7 @@ import fc from 'fast-check';
 import {describe, test, it, vi, expect, beforeAll, afterAll} from 'vitest';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {wrapFetch} from './wrap-fetch.js';
+import {wrapFetch} from './wrap-fetch';
 
 it('wraps fetch with a custom wrapper function', async () => {
 	const fetchImpl = vi.fn(async () => new Response());

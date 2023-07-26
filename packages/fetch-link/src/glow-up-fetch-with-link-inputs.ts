@@ -3,8 +3,8 @@ import {
 	type FetchInputs,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
-import {isLink, type Link} from './link.js';
-import {type DropFirst} from './drop-first.js';
+import {isLink, type Link} from './link';
+import {type DropFirst} from './drop-first';
 
 /**
  * Checks if a Headers object is empty.

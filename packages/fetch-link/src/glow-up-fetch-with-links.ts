@@ -2,11 +2,11 @@ import {
 	type FetchInputs,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
-import {type Link} from './link.js';
-import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links.js';
-import {type LinkedResponse} from './linked-response.js';
-import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs.js';
-import {type DropFirst} from './drop-first.js';
+import {type Link} from './link';
+import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
+import {type LinkedResponse} from './linked-response';
+import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs';
+import {type DropFirst} from './drop-first';
 
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.

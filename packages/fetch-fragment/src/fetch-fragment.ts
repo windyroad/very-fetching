@@ -1,4 +1,4 @@
-import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch.js';
+import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch';
 
 /**
  * An enhanced fetch that allows fetching JSON fragments

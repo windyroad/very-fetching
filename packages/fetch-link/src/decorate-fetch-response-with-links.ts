@@ -5,9 +5,9 @@ import {
 	type FetchInputs,
 } from '@windyroad/wrap-fetch';
 import uriTemplate from 'uri-templates';
-import {type Link} from './link.js';
-import {type LinkedResponse} from './linked-response.js';
-import {resolveLinkUrls} from './resolve-link-urls.js';
+import {type Link} from './link';
+import {type LinkedResponse} from './linked-response';
+import {resolveLinkUrls} from './resolve-link-urls';
 
 /**
  * Decorates a fetch implementation with a `links` method that returns an array of RFC8288 Link objects.

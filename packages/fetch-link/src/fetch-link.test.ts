@@ -1,8 +1,8 @@
 import {test, beforeAll, afterAll} from 'vitest';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {fetchLink} from './fetch-link.js';
-import {type Link} from './link.js';
+import {fetchLink} from './fetch-link';
+import {type Link} from './link';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {

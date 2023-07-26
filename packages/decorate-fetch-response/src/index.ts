@@ -1,1 +1,1 @@
-export * from './decorate-fetch-response.js';
+export * from './decorate-fetch-response';

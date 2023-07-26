@@ -53,6 +53,7 @@ const config = {
 				},
 			},
 		],
+		'import/extensions': ['error', 'never'],
 	},
 };
 

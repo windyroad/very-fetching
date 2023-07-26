@@ -2,7 +2,7 @@ import {test, vi, beforeAll, afterAll} from 'vitest';
 import fc from 'fast-check';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {glowUpFetchWithLinks} from './glow-up-fetch-with-links.js';
+import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {
