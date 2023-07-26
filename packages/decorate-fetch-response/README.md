@@ -97,7 +97,7 @@ fetchWithCustomError('https://example.com/not-found').then((response) => {
 
 ## API
 
-### `decorateFetchResponse`
+### `decorateFetchResponse(decorator, fetchImpl?)`
 
 ```typescript
 function decorateFetchResponse<
@@ -124,6 +124,30 @@ Decorates the response of a `fetch` request with additional properties.
 - `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
 
 ### Returns
+
+A decorated version of the `fetch` implementation.
+
+### `decorateFetchResponseUsingInputs(decorator, fetchImpl?)`
+
+Decorates the response of a fetch request with additional properties.
+
+#### Type parameters
+
+- `FetchImpl`: The type of the `fetch` implementation.
+- `DecoratorReturns`: The return type of the decorator function.
+
+#### Parameters
+
+- `decorator`: The decorator function to apply to the response.
+  - Type: `(response: AwaitedFetchReturns<FetchImpl>, ...arguments_: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> | DecoratorReturns`
+  - The `response` parameter is the response object returned by the `fetch` function.
+  - The `arguments_` parameter is an array of arguments passed to the `fetch` function.
+  - The function should return a new response object or a promise that resolves to a new response object.
+- `fetchImpl` (optional): The `fetch` implementation to use.
+  - Type: `FetchImpl`
+  - Default: `fetch`
+
+#### Returns
 
 A decorated version of the `fetch` implementation.
 

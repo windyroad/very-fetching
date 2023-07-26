@@ -1,6 +1,9 @@
 import fc from 'fast-check';
 import {describe, test, vi} from 'vitest';
-import {decorateFetchResponse} from './decorate-fetch-response.js';
+import {
+	decorateFetchResponse,
+	decorateFetchResponseUsingInputs,
+} from './decorate-fetch-response.js';
 
 describe('decorateFetch', () => {
 	test('returns an ExtendedResponse object', () => {
@@ -87,5 +90,27 @@ describe('decorateFetch', () => {
 		const body = await response.text();
 		expect(response.status).toBe(404);
 		expect(body).toBe('custom-error');
+	});
+
+	test('replaces response body request URL', async ({expect}) => {
+		const fetchImpl = vi.fn(
+			async (...args: Parameters<typeof fetch>) => new Response(),
+		);
+		const fetchWithCustomBody = decorateFetchResponseUsingInputs(
+			async (response, ...args) => {
+				const body = await response.text();
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				return new Response(args[0].toString(), {
+					status: response.status,
+					statusText: response.statusText,
+					headers: response.headers,
+				});
+			},
+			fetchImpl,
+		);
+
+		const response = await fetchWithCustomBody('https://example.com');
+		const body = await response.text();
+		expect(body).toBe('https://example.com');
 	});
 });
