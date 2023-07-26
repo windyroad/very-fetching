@@ -1,5 +1,11 @@
 # @windyroad/fetch-link
 
+## 2.2.0
+
+### Minor Changes
+
+- 65076a8: added support for fetching json fragments using `@windyroad/fetch-fragment`
+
 ## 2.1.0
 
 ### Minor Changes
