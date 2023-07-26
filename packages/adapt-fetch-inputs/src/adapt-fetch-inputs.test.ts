@@ -5,7 +5,7 @@ import {adaptFetchInputs} from './adapt-fetch-inputs.js';
 describe('adaptFetchInputs', () => {
 	it('adds Authorization header to fetch inputs', async ({expect}) => {
 		const mockFetch = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const url = 'https://example.com';
 		const options = {method: 'GET'};
@@ -33,7 +33,7 @@ describe('adaptFetchInputs', () => {
 
 	it('modifies request body to JSON string', async ({expect}) => {
 		const mockFetch = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const url = 'https://example.com';
 		const originalOptions = {method: 'POST', body: {foo: 'bar'}, headers: {}};

@@ -14,19 +14,19 @@ import {
  * @returns The adapted `fetch` function.
  */
 export function adaptFetchInputs<
-	FetchImpl extends (...args: any[]) => Promise<any> = typeof fetch,
+	FetchImpl extends (...arguments_: any[]) => Promise<any> = typeof fetch,
 	WrapInputs extends any[] = Parameters<FetchImpl>,
 >(
 	adapter: (
-		...args: WrapInputs
+		...arguments_: WrapInputs
 	) => FetchInputs<FetchImpl> | Promise<FetchInputs<FetchImpl>>,
 	fetchImpl?: FetchImpl,
-): (...args: WrapInputs) => Promise<AwaitedFetchReturns<FetchImpl>> {
+): (...arguments_: WrapInputs) => Promise<AwaitedFetchReturns<FetchImpl>> {
 	const wrapper = async (
 		fetchImplInner: FetchImpl,
-		...args: WrapInputs
+		...arguments_: WrapInputs
 	): Promise<AwaitedFetchReturns<FetchImpl>> => {
-		const modifiedInputs = await adapter(...args);
+		const modifiedInputs = await adapter(...arguments_);
 		const response = await fetchImplInner(...modifiedInputs);
 		return response;
 	};

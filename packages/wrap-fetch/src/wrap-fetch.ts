@@ -1,14 +1,17 @@
 // Export type FetchType<T extends ((...args: any) => Promise<any>) | undefined> =
 // 	T extends undefined ? typeof fetch : T;
 
-export type FetchInputs<T extends (...args: any[]) => Promise<any>> =
-	T extends (...args: infer I) => Promise<any> ? I : never;
+export type FetchInputs<T extends (...arguments_: any[]) => Promise<any>> =
+	T extends (...arguments_: infer I) => Promise<any> ? I : never;
 
-export type AwaitedFetchReturns<T extends (...args: any[]) => Promise<any>> =
-	T extends (...args: any) => Promise<infer R> ? R : any;
+export type AwaitedFetchReturns<
+	T extends (...arguments_: any[]) => Promise<any>,
+> = T extends (...arguments_: any) => Promise<infer R> ? R : any;
 
-export type FetchReturns<T extends (...args: any[]) => Promise<any>> =
-	T extends (...args: any[]) => Promise<infer R> ? Promise<R> : Promise<any>;
+export type FetchReturns<T extends (...arguments_: any[]) => Promise<any>> =
+	T extends (...arguments_: any[]) => Promise<infer R>
+		? Promise<R>
+		: Promise<any>;
 
 /**
  * Wraps a `fetch` implementation with a wrapper function.
@@ -20,24 +23,24 @@ export type FetchReturns<T extends (...args: any[]) => Promise<any>> =
  * @returns A wrapped version of the `fetch` implementation.
  */
 export function wrapFetch<
-	FetchImpl extends (...args: any[]) => Promise<any> = typeof fetch,
+	FetchImpl extends (...arguments_: any[]) => Promise<any> = typeof fetch,
 	WrapInputs extends any[] = Parameters<FetchImpl>,
 	WrapReturns = AwaitedFetchReturns<FetchImpl>,
 >(
 	wrapper: (
 		fetchImplInner: FetchImpl,
-		...args: WrapInputs
+		...arguments_: WrapInputs
 	) => Promise<WrapReturns>,
 	fetchImpl?: FetchImpl,
-): (...args: WrapInputs) => Promise<WrapReturns> {
+): (...arguments_: WrapInputs) => Promise<WrapReturns> {
 	/**
 	 * A wrapped version of the global `fetch` function that calls the `wrapper` function with the `fetch` function and its arguments.
-	 * @param args The arguments to pass to the `fetch` function.
+	 * @param arguments_ The arguments to pass to the `fetch` function.
 	 * @returns A promise that resolves to the response.
 	 */
-	return async (...args: WrapInputs): Promise<WrapReturns> => {
+	return async (...arguments_: WrapInputs): Promise<WrapReturns> => {
 		const usableFetch = (fetchImpl ?? globalThis.fetch) as FetchImpl;
-		const result = await wrapper(usableFetch, ...args);
+		const result = await wrapper(usableFetch, ...arguments_);
 		return result;
 	};
 }

@@ -34,7 +34,7 @@ describe('decorateFetch', () => {
 
 	test('adds custom header to response', async ({expect}) => {
 		const fetchImpl = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const fetchWithCustomHeader = decorateFetchResponse(async (response) => {
 			response.headers.set('X-Custom-Header', 'custom-value');
@@ -47,7 +47,7 @@ describe('decorateFetch', () => {
 
 	test('replaces response body with custom string', async ({expect}) => {
 		const fetchImpl = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const fetchWithCustomBody = decorateFetchResponse(async (response) => {
 			const body = await response.text();
@@ -67,7 +67,7 @@ describe('decorateFetch', () => {
 		expect,
 	}) => {
 		const fetchImpl = vi.fn(
-			async (...args: Parameters<typeof fetch>) =>
+			async (...arguments_: Parameters<typeof fetch>) =>
 				new Response('error', {
 					status: 404,
 					statusText: 'Not Found',
@@ -94,13 +94,13 @@ describe('decorateFetch', () => {
 
 	test('replaces response body request URL', async ({expect}) => {
 		const fetchImpl = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const fetchWithCustomBody = decorateFetchResponseUsingInputs(
-			async (response, ...args) => {
+			async (response, ...arguments_) => {
 				const body = await response.text();
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				return new Response(args[0].toString(), {
+				return new Response(arguments_[0].toString(), {
 					status: response.status,
 					statusText: response.statusText,
 					headers: response.headers,

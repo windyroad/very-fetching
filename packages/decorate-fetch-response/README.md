@@ -139,7 +139,8 @@ Decorates the response of a fetch request with additional properties.
 #### Parameters
 
 - `decorator`: The decorator function to apply to the response.
-  - Type: `(response: AwaitedFetchReturns<FetchImpl>, ...arguments_: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> | DecoratorReturns`
+  - Type: `(response: AwaitedFetchReturns<FetchImpl>, ...arguments_: FetchInputs<FetchImpl>)
+   => Promise<DecoratorReturns> | DecoratorReturns`
   - The `response` parameter is the response object returned by the `fetch` function.
   - The `arguments_` parameter is an array of arguments passed to the `fetch` function.
   - The function should return a new response object or a promise that resolves to a new response object.

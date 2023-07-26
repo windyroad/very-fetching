@@ -4,3 +4,5 @@
 - [x] fix markdown linting
 - [ ] fix json linting
 - [ ] see if changing imports to .ts fixes stale definitions and import not found problem
+- [ ] see if we can pin the relative package dependencies
+- [ ] output jsdoc

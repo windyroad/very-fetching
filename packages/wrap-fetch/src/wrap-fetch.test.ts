@@ -7,8 +7,8 @@ import {wrapFetch} from './wrap-fetch.js';
 it('wraps fetch with a custom wrapper function', async () => {
 	const fetchImpl = vi.fn(async () => new Response());
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) =>
-			fetchImpl(...args),
+		async (fetchImpl: typeof fetch, ...arguments_: Parameters<typeof fetch>) =>
+			fetchImpl(...arguments_),
 	);
 
 	const wrappedFetch = wrapFetch(wrapper, fetchImpl);
@@ -22,11 +22,11 @@ it('wraps fetch with a custom wrapper function', async () => {
 
 it('passes all arguments to the wrapper function', async () => {
 	const fetchImpl = vi.fn(
-		async (...args: Parameters<typeof fetch>) => new Response(),
+		async (...arguments_: Parameters<typeof fetch>) => new Response(),
 	);
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) =>
-			fetchImpl(...args),
+		async (fetchImpl: typeof fetch, ...arguments_: Parameters<typeof fetch>) =>
+			fetchImpl(...arguments_),
 	);
 
 	const wrappedFetch = wrapFetch(wrapper, fetchImpl);
@@ -86,13 +86,16 @@ it('caches responses', async () => {
 	const fetchImpl = vi.fn(async () => new Response());
 	const cache = new Map<string, Awaited<ReturnType<typeof fetch>>>();
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) => {
-			const key = JSON.stringify(args);
+		async (
+			fetchImpl: typeof fetch,
+			...arguments_: Parameters<typeof fetch>
+		) => {
+			const key = JSON.stringify(arguments_);
 			if (cache.has(key)) {
 				return cache.get(key);
 			}
 
-			const response = await fetchImpl(...args);
+			const response = await fetchImpl(...arguments_);
 			cache.set(key, response);
 			return response;
 		},
@@ -116,9 +119,12 @@ it('logs requests and responses', async () => {
 	const fetchImpl = vi.fn(async () => new Response());
 	const log = vi.fn();
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) => {
-			log('Request:', args);
-			const response = await fetchImpl(...args);
+		async (
+			fetchImpl: typeof fetch,
+			...arguments_: Parameters<typeof fetch>
+		) => {
+			log('Request:', arguments_);
+			const response = await fetchImpl(...arguments_);
 			log('Response:', response);
 			return response;
 		},
@@ -141,8 +147,11 @@ it('logs requests and responses', async () => {
 it('transforms responses', async () => {
 	const fetchImpl = vi.fn(async () => new Response('{"foo": "bar"}'));
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) => {
-			const response = await fetchImpl(...args);
+		async (
+			fetchImpl: typeof fetch,
+			...arguments_: Parameters<typeof fetch>
+		) => {
+			const response = await fetchImpl(...arguments_);
 			const data = (await response.json()) as unknown;
 			return {...response, data};
 		},
@@ -164,8 +173,11 @@ it('handles errors', async () => {
 		async () => new Response('{"error": "Not found"}', {status: 404}),
 	);
 	const wrapper = vi.fn(
-		async (fetchImpl: typeof fetch, ...args: Parameters<typeof fetch>) => {
-			const response = await fetchImpl(...args);
+		async (
+			fetchImpl: typeof fetch,
+			...arguments_: Parameters<typeof fetch>
+		) => {
+			const response = await fetchImpl(...arguments_);
 			if (!response.ok) {
 				const data = (await response.json()) as unknown;
 				if (
@@ -192,7 +204,7 @@ it('handles errors', async () => {
 });
 
 test('wrapFetch should wrap the global fetch function by default', async () => {
-	const wrapper = vi.fn(async (fetchImpl, ...args) => {
+	const wrapper = vi.fn(async (fetchImpl, ...arguments_) => {
 		return 'wrapped';
 	});
 	const wrappedFetch = wrapFetch(wrapper);
@@ -204,10 +216,10 @@ describe('wrapFetch intercept', () => {
 	const server = setupServer(
 		rest.get(
 			'https://jsonplaceholder.typicode.com/posts',
-			async (request, response, ctx) => {
+			async (request, response, context) => {
 				return response(
-					ctx.status(200),
-					ctx.json([{id: 1, title: 'foo', author: 'John Doe'}]),
+					context.status(200),
+					context.json([{id: 1, title: 'foo', author: 'John Doe'}]),
 				);
 			},
 		),
@@ -226,9 +238,9 @@ describe('wrapFetch intercept', () => {
 	}) => {
 		const wrapper = async (
 			fetchImpl: typeof fetch,
-			...args: Parameters<typeof fetch>
+			...arguments_: Parameters<typeof fetch>
 		) => {
-			const response = await fetchImpl(...args);
+			const response = await fetchImpl(...arguments_);
 			const data = (await response.json()) as unknown;
 			return data;
 		};
