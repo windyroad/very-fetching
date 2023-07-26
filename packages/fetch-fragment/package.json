@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/fetch-fragment",
-  "version": "0.9.0",
+  "version": "1.0.0",
   "description": "A fetch library that can retrieve json fragments",
   "type": "module",
   "main": "dist/index.js",
