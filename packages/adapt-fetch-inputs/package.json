@@ -42,7 +42,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@windyroad/wrap-fetch": "*"
+    "@windyroad/wrap-fetch": "2.0.0"
   },
   "devDependencies": {
     "fast-check": "^3.10.0",
