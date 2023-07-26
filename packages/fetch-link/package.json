@@ -47,6 +47,7 @@
     "@windyroad/wrap-fetch": "2.0.0",
     "@windyroad/adapt-fetch-inputs": "2.0.0",
     "@windyroad/decorate-fetch-response": "2.1.0",
+    "@windyroad/fetch-fragment": "1.0.0",
     "http-link-header": "^1.1.1",
     "uri-templates": "^0.2.0"
   },

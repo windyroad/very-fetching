@@ -2,6 +2,7 @@ import {
 	type FetchInputs,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
+import {addFragmentSupportToFetch} from '@windyroad/fetch-fragment';
 import {type Link} from './link';
 import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
 import {type LinkedResponse} from './linked-response';
@@ -25,7 +26,10 @@ export function glowUpFetchWithLinks<
 		| FetchInputs<FetchImpl>
 		| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
 ) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
-	const fetchWithResponseLinks = decorateFetchResponseWithLinks(fetchImpl);
+	const fetchWithFragmentSupport = addFragmentSupportToFetch(fetchImpl);
+	const fetchWithResponseLinks = decorateFetchResponseWithLinks<FetchImpl>(
+		fetchWithFragmentSupport as FetchImpl,
+	);
 	return glowUpFetchWithLinkInputs<FetchImpl>(
 		fetchWithResponseLinks as FetchImpl,
 	);

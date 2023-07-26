@@ -1,4 +1,4 @@
-import {test, vi, beforeAll, afterAll} from 'vitest';
+import {test, vi, beforeAll, afterAll, beforeEach, describe} from 'vitest';
 import fc from 'fast-check';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
@@ -174,4 +174,37 @@ test('links method filters links by rel', async ({expect}) => {
 		{uri: 'https://example.com/other', rel: 'other', type: 'text/plain'},
 	]);
 	expect(response.links('unrelated')).toEqual([]);
+});
+
+describe('glowUpFetchWithLinks fragments', () => {
+	const mockResponse = {
+		json: vi.fn(),
+		body: 'mock body',
+		status: 200,
+		statusText: 'OK',
+		headers: new Headers(),
+	};
+
+	const mockFetchImpl = vi
+		.fn(async (...arguments_: Parameters<typeof fetch>) => new Response())
+		.mockResolvedValue(mockResponse as unknown as Response);
+
+	beforeEach(() => {
+		vi.clearAllMocks();
+		mockResponse.headers.set('Content-Type', 'application/json');
+	});
+
+	test('returns a fragment from a JSON response', async ({expect}) => {
+		const mockFragment = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
+		mockResponse.json.mockResolvedValueOnce(mockFragment);
+		const fetchFragmentImpl = glowUpFetchWithLinks(mockFetchImpl);
+		const response = await fetchFragmentImpl('https://example.com#/foo');
+		expect(response.status).toBe(200);
+		expect(response.headers.get('Content-Type')).toBe('application/json');
+		expect(response.headers.get('Content-Length')).toBe(
+			String(JSON.stringify(mockFragment.foo).length),
+		);
+		expect(await response.text()).toBe(JSON.stringify(mockFragment.foo));
+		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
+	});
 });
