@@ -1,11 +1,5 @@
 # @windyroad/fetch-link
 
-## 1.0.0
-
-### Major Changes
-
-- 7cdb3c7: Inital release
-
 ## 2.0.0
 
 ### Major Changes
