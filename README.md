@@ -7,6 +7,7 @@ A set of very fetching Typescript utility libraries for fetch.
 - [`packages/adapt-fetch-input`](./packages/adapt-fetch-inputs/README.md) A library
    for adapting fetch inputs
 - [`packages/decorate-fetch-response`](./packages/decorate-fetch-response/README.md): A library for decorating fetch responses.
+- [`packages/fetch-fragment`](./packages/fetch-fragment/README.md): A fetch library that can retrieve json fragments
 - [`packages/fetch-link`](./packages/fetch-link/README.md): A library that adapts the fetch
   API to work with [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
 - [`packages/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so

@@ -1,0 +1,59 @@
+{
+  "name": "@windyroad/fetch-fragment",
+  "version": "0.9.0",
+  "description": "A fetch library that can retrieve json fragments",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run compile",
+    "clean": "rimraf -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
+    "ci:test": "vitest run --config vite.config.ci.ts --coverage",
+    "lint": "xo --fix --prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windyroad/very-fetching.git"
+  },
+  "keywords": [
+    "fetch",
+    "json",
+    "json-pointer",
+    "fragment"
+  ],
+  "author": {
+    "name": "Windy Road Technology",
+    "url": "https://windyroad.com.au"
+  },
+  "contributors": [
+    "Tom Howard <tom@windyroad.com.au>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/windyroad/very-fetching/issues"
+  },
+  "homepage": "https://github.com/windyroad/very-fetching/packages/fetch-link#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@windyroad/decorate-fetch-response": "*",
+    "@windyroad/wrap-fetch": "*",
+    "http-link-header": "^1.1.1",
+    "json-pointer": "^0.6.2"
+  },
+  "devDependencies": {
+    "@types/http-link-header": "^1.0.3",
+    "@types/json-pointer": "^1.0.31",
+    "fast-check": "^3.10.0",
+    "msw": "^1.2.2",
+    "vitest": "^0.32.4"
+  }
+}
