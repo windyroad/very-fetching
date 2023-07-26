@@ -7,7 +7,7 @@ describe('fetchLink', () => {
 	// Use case 1: Fetching a resource with a Link object that specifies a custom HTTP method and headers.
 	test('fetchLink with custom HTTP method and headers', async ({expect}) => {
 		const mockFetch = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 
 		const link: Link = {
@@ -25,7 +25,7 @@ describe('fetchLink', () => {
 
 	// Use case 2: Fetching a resource with a Link object that specifies a custom media type and language.
 	test('fetchLink with custom media type and language', async ({expect}) => {
-		const mockFetch = vi.fn(async (...args: Parameters<typeof fetch>) => {
+		const mockFetch = vi.fn(async (...arguments_: Parameters<typeof fetch>) => {
 			return new Response();
 		});
 
@@ -53,7 +53,7 @@ describe('fetchLink', () => {
 	// Use case 3: Fetching a resource with a standard fetch request.
 	test('fetchLink with standard fetch request', async ({expect}) => {
 		const mockFetch = vi.fn(
-			async (...args: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) => new Response(),
 		);
 		const fetchWithLink = glowUpFetchWithLinkInputs(mockFetch);
 		await fetchWithLink('https://example.com');

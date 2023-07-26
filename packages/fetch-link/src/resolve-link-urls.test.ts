@@ -94,20 +94,20 @@ test('resolveLinkUrls returns URLs with port number', async ({expect}) => {
 });
 
 test('resolveLinkUrls returns URLs with path parameters', async ({expect}) => {
-	const links = [{uri: '/path/%7Bparam%7B', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param%7B', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
 		url.url.toString(),
 	);
 
-	expect(actualUrls).toEqual(['https://example.com/path/%7Bparam%7B']);
+	expect(actualUrls).toEqual(['https://example.com/path/%7B_param%7B']);
 });
 
 test('resolveLinkUrls returns URLs with query parameters and path parameters', async ({
 	expect,
 }) => {
-	const links = [{uri: '/path/%7Bparam%7B?query=value', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param%7B?query=value', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
@@ -115,7 +115,7 @@ test('resolveLinkUrls returns URLs with query parameters and path parameters', a
 	);
 
 	expect(actualUrls).toEqual([
-		'https://example.com/path/%7Bparam%7B?query=value',
+		'https://example.com/path/%7B_param%7B?query=value',
 	]);
 });
 
@@ -135,21 +135,23 @@ test('resolveLinkUrls returns URLs with query parameters and hash fragment', asy
 test('resolveLinkUrls returns URLs with path parameters and hash fragment', async ({
 	expect,
 }) => {
-	const links = [{uri: '/path/%7Bparam%7B#fragment', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param%7B#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
 		url.url.toString(),
 	);
 
-	expect(actualUrls).toEqual(['https://example.com/path/%7Bparam%7B#fragment']);
+	expect(actualUrls).toEqual([
+		'https://example.com/path/%7B_param%7B#fragment',
+	]);
 });
 
 test('resolveLinkUrls returns URLs with query parameters, path parameters, and hash fragment', async ({
 	expect,
 }) => {
 	const links = [
-		{uri: '/path/%7Bparam%7B?query=value#fragment', rel: 'resource'},
+		{uri: '/path/%7B_param%7B?query=value#fragment', rel: 'resource'},
 	];
 	const baseUrl = 'https://example.com/';
 
@@ -158,7 +160,7 @@ test('resolveLinkUrls returns URLs with query parameters, path parameters, and h
 	);
 
 	expect(actualUrls).toEqual([
-		'https://example.com/path/%7Bparam%7B?query=value#fragment',
+		'https://example.com/path/%7B_param%7B?query=value#fragment',
 	]);
 });
 
@@ -221,14 +223,14 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in path parameters', async ({
 	expect,
 }) => {
-	const links = [{uri: '/path/%7Bparam:%2G%7B', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param:%2G%7B', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
 		url.url.toString(),
 	);
 
-	expect(actualUrls).toEqual(['https://example.com/path/%7Bparam:%2G%7B']);
+	expect(actualUrls).toEqual(['https://example.com/path/%7B_param:%2G%7B']);
 });
 
 test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in hash fragment', async ({
@@ -260,7 +262,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in path parameters and hash fragment', async ({
 	expect,
 }) => {
-	const links = [{uri: '/path/%7Bparam:%2G%7B#fragment', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param:%2G%7B#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
@@ -268,14 +270,14 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in pat
 	);
 
 	expect(actualUrls).toEqual([
-		'https://example.com/path/%7Bparam:%2G%7B#fragment',
+		'https://example.com/path/%7B_param:%2G%7B#fragment',
 	]);
 });
 
 test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in query parameters and path parameters', async ({
 	expect,
 }) => {
-	const links = [{uri: '/path/%7Bparam:%2G%7B?query=value', rel: 'resource'}];
+	const links = [{uri: '/path/%7B_param:%2G%7B?query=value', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
 	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
@@ -283,7 +285,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	);
 
 	expect(actualUrls).toEqual([
-		'https://example.com/path/%7Bparam:%2G%7B?query=value',
+		'https://example.com/path/%7B_param:%2G%7B?query=value',
 	]);
 });
 
@@ -291,7 +293,8 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	expect,
 }) => {
 	const links = [
-		{uri: '/path/%7Bparam:%2G%7B?query=value#fragment', rel: 'resource'},
+		// eslint-disable-next-line no-secrets/no-secrets
+		{uri: '/path/%7B_param:%2G%7B?query=value#fragment', rel: 'resource'},
 	];
 	const baseUrl = 'https://example.com/';
 
@@ -300,7 +303,8 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	);
 
 	expect(actualUrls).toEqual([
-		'https://example.com/path/%7Bparam:%2G%7B?query=value#fragment',
+		// eslint-disable-next-line no-secrets/no-secrets
+		'https://example.com/path/%7B_param:%2G%7B?query=value#fragment',
 	]);
 });
 

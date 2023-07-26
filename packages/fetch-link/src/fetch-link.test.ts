@@ -5,63 +5,66 @@ import {fetchLink} from './fetch-link.js';
 import {type Link} from './link.js';
 
 const server = setupServer(
-	rest.get('https://example.com', async (request, response, ctx) => {
+	rest.get('https://example.com', async (request, response, context) => {
 		console.log('request', request);
 		const linkHeader =
 			'<https://example.com/related>; rel="related"; type="text/html", <https://example.com/other>; rel="other"; type="text/plain"';
 		return response(
-			ctx.status(200),
-			ctx.text('Example Domain'),
-			ctx.set('Link', linkHeader),
+			context.status(200),
+			context.text('Example Domain'),
+			context.set('Link', linkHeader),
 		);
 	}),
 	rest.post(
 		'https://jsonplaceholder.typicode.com/posts',
-		async (request, response, ctx) => {
+		async (request, response, context) => {
 			const location = 'https://jsonplaceholder.typicode.com/posts/101';
 			const linkHeader = `<${location}>; rel="self", <https://jsonplaceholder.typicode.com/posts>; rel="collection"`;
 			return response(
-				ctx.status(201),
-				ctx.json({id: 101}),
-				ctx.set('Link', linkHeader),
+				context.status(201),
+				context.json({id: 101}),
+				context.set('Link', linkHeader),
 			);
 		},
 	),
 	rest.get(
 		'https://jsonplaceholder.typicode.com/posts',
-		async (request, response, ctx) => {
+		async (request, response, context) => {
 			const linkHeader =
 				'<https://jsonplaceholder.typicode.com/posts/1>; rel="item", <https://jsonplaceholder.typicode.com/posts/2>; rel="item", <https://jsonplaceholder.typicode.com/posts>; rel="self"';
 			return response(
-				ctx.status(200),
-				ctx.json([{id: 1, title: 'foo', author: 'John Doe'}]),
-				ctx.set('Link', linkHeader),
+				context.status(200),
+				context.json([{id: 1, title: 'foo', author: 'John Doe'}]),
+				context.set('Link', linkHeader),
 			);
 		},
 	),
 	rest.get(
 		'https://jsonplaceholder.typicode.com/posts/1',
-		async (request, response, ctx) => {
+		async (request, response, context) => {
 			const linkHeader =
 				'<https://jsonplaceholder.typicode.com/posts/1>; rel="self", <https://jsonplaceholder.typicode.com/posts>; rel="collection";';
 			return response(
-				ctx.status(200),
-				ctx.json([{id: 1, title: 'foo', author: 'John Doe'}]),
-				ctx.set('Link', linkHeader),
+				context.status(200),
+				context.json([{id: 1, title: 'foo', author: 'John Doe'}]),
+				context.set('Link', linkHeader),
 			);
 		},
 	),
-	rest.get('https://examples.com', async (request, response, ctx) => {
+	rest.get('https://examples.com', async (request, response, context) => {
 		const linkHeader = '</related>; rel="related"; type="text/html"';
 		return response(
-			ctx.status(200),
-			ctx.text('Example Domain'),
-			ctx.set('Link', linkHeader),
+			context.status(200),
+			context.text('Example Domain'),
+			context.set('Link', linkHeader),
 		);
 	}),
-	rest.get('https://examples.com/related', async (request, response, ctx) => {
-		return response(ctx.status(200), ctx.text('Related Page'));
-	}),
+	rest.get(
+		'https://examples.com/related',
+		async (request, response, context) => {
+			return response(context.status(200), context.text('Related Page'));
+		},
+	),
 );
 
 beforeAll(async () => {

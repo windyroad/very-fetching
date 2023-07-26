@@ -18,24 +18,22 @@ import {resolveLinkUrls} from './resolve-link-urls.js';
  */
 export function decorateFetchResponseWithLinks<
 	FetchImpl extends (
-		...args: any[]
+		...arguments_: any[]
 	) => Promise<Pick<Response, 'headers' | 'url'>> = typeof fetch,
 >(
 	fetchImpl?: FetchImpl,
 ): (
-	...args: FetchInputs<FetchImpl>
+	...arguments_: FetchInputs<FetchImpl>
 ) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
 	return decorateFetchResponse(async (response) => {
 		const linkHeader = new LinkHeader();
 		linkHeader.parse(response?.headers?.get('link') ?? '');
 		linkHeader.parse(response?.headers?.get('link-template') ?? '');
-		console.log({respUrl: response.url});
 		return Object.assign(response, {
 			links(
 				filter?: Partial<Link> | string,
 				parameters?: Record<string, string | Record<string, string>>,
 			): Link[] {
-				console.log({linkResUrl: response.url});
 				const links = filterLinks({filter, linkHeader});
 				fillLinks({parameters, links});
 				const resolvedLinks = resolveLinkUrls(links, response.url);

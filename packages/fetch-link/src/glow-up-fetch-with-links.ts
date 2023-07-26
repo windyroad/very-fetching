@@ -16,12 +16,14 @@ import {type DropFirst} from './drop-first.js';
  */
 export function glowUpFetchWithLinks<
 	FetchImpl extends (
-		...args: Parameters<typeof fetch>
+		...arguments_: Parameters<typeof fetch>
 	) => Promise<any> = typeof fetch,
 >(
 	fetchImpl?: FetchImpl,
 ): (
-	...args: FetchInputs<FetchImpl> | [Link, ...DropFirst<FetchInputs<FetchImpl>>]
+	...arguments_:
+		| FetchInputs<FetchImpl>
+		| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
 ) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
 	const fetchWithResponseLinks = decorateFetchResponseWithLinks(fetchImpl);
 	return glowUpFetchWithLinkInputs<FetchImpl>(

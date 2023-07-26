@@ -5,7 +5,8 @@ import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-lin
 test('decorateFetchResponseWithLinks adds links method to response', async ({
 	expect,
 }) => {
-	const mockFetch = async (...args: Parameters<typeof fetch>) => new Response();
+	const mockFetch = async (...arguments_: Parameters<typeof fetch>) =>
+		new Response();
 
 	const decoratedFetch = decorateFetchResponseWithLinks(mockFetch);
 	const response = await decoratedFetch('https://example.com');
@@ -15,7 +16,7 @@ test('decorateFetchResponseWithLinks adds links method to response', async ({
 test('decorateFetchResponseWithLinks handles multiple link headers', async ({
 	expect,
 }) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+	const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
 		new Response(null, {
 			headers: {
 				link: '<https://example.com>; rel="resource"',
@@ -33,7 +34,7 @@ test('decorateFetchResponseWithLinks handles multiple link headers', async ({
 test('decorateFetchResponseWithLinks handles undefined link header', async ({
 	expect,
 }) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+	const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
 		new Response(null, {headers: {}});
 	const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 	const response = await decoratedFetch('https://example.com');
@@ -43,7 +44,7 @@ test('decorateFetchResponseWithLinks handles undefined link header', async ({
 test('decorateFetchResponseWithLinks passes through fetch errors', async ({
 	expect,
 }) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) => {
+	const fetchImpl = async (...arguments_: Parameters<typeof fetch>) => {
 		throw new Error('fetch error');
 	};
 
@@ -57,7 +58,7 @@ test('decorateFetchResponseWithLinks passes through single fetch arguments', asy
 	expect,
 }) => {
 	const mockFetch = vi.fn(
-		async (...args: Parameters<typeof fetch>) => new Response(),
+		async (...arguments_: Parameters<typeof fetch>) => new Response(),
 	);
 
 	const decoratedFetch = decorateFetchResponseWithLinks(mockFetch);
@@ -69,7 +70,7 @@ test('decorateFetchResponseWithLinks passes through multiple fetch arguments', a
 	expect,
 }) => {
 	const mockFetch = vi.fn(
-		async (...args: Parameters<typeof fetch>) => new Response(),
+		async (...arguments_: Parameters<typeof fetch>) => new Response(),
 	);
 
 	const decoratedFetch = decorateFetchResponseWithLinks(mockFetch);
@@ -123,7 +124,7 @@ test('links method filters links by multiple properties', async ({expect}) => {
 test('decorateFetchResponseWithLinks expands link templates with parameters', async ({
 	expect,
 }) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+	const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
 		new Response(null, {
 			headers: {
 				'link-template': '<https://example.com/{id}>; rel="resource-template"',
@@ -141,7 +142,7 @@ test('decorateFetchResponseWithLinks expands link templates with parameters', as
 test('decorateFetchResponseWithLinks does not expand link templates without parameters', async ({
 	expect,
 }) => {
-	const fetchImpl = async (...args: Parameters<typeof fetch>) =>
+	const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
 		new Response(null, {
 			headers: {
 				'link-template': '<https://example.com/{foo}>; rel="resource-template"',

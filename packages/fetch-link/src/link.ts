@@ -30,6 +30,7 @@ export type Link = {
  */
 export function isLink(input: any): input is Link {
 	return (
-		typeof input === 'object' && ['uri', 'rel'].every((prop) => prop in input)
+		typeof input === 'object' &&
+		['uri', 'rel'].every((property) => property in input)
 	);
 }

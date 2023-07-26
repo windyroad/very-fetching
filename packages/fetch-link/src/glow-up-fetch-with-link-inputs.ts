@@ -30,21 +30,23 @@ function isHeadersEmpty(headers: Headers): boolean {
  */
 export function glowUpFetchWithLinkInputs<
 	FetchImpl extends (
-		...args: Parameters<typeof fetch>
+		...arguments_: Parameters<typeof fetch>
 	) => Promise<any> = typeof fetch,
 >(
 	fetchImpl?: FetchImpl,
 ): (
-	...args: FetchInputs<FetchImpl> | [Link, ...DropFirst<FetchInputs<FetchImpl>>]
+	...arguments_:
+		| FetchInputs<FetchImpl>
+		| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
 ) => Promise<AwaitedFetchReturns<FetchImpl>> {
 	const adapter = (
-		...args:
+		...arguments_:
 			| FetchInputs<FetchImpl>
 			| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
 	): // Target: Link | FetchInputs<FetchImpl>[0],
 	// init: FetchInputs<FetchImpl>[1],
 	FetchInputs<FetchImpl> => {
-		const [target, init] = args;
+		const [target, init] = arguments_;
 		if (isLink(target)) {
 			const link = target;
 
@@ -69,7 +71,7 @@ export function glowUpFetchWithLinkInputs<
 			return fetchParameters;
 		}
 
-		return args as FetchInputs<FetchImpl>;
+		return arguments_ as FetchInputs<FetchImpl>;
 	};
 
 	return adaptFetchInputs<
