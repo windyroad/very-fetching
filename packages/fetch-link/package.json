@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/fetch-link",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "A library that adapts the fetch API to work with RFC8288 Link objects.",
   "type": "module",
   "main": "dist/index.js",
@@ -48,7 +48,7 @@
     "@windyroad/wrap-fetch": "2.0.0",
     "@windyroad/adapt-fetch-inputs": "2.0.0",
     "@windyroad/decorate-fetch-response": "2.1.0",
-    "@windyroad/fetch-fragment": "1.0.0",
+    "@windyroad/fetch-fragment": "1.1.0",
     "http-link-header": "^1.1.1",
     "uri-templates": "^0.2.0",
     "json-ptr": "^3.1.1"

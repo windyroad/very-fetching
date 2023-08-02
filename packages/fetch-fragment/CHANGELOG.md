@@ -1,5 +1,11 @@
 # @windyroad/fetch-link
 
+## 1.1.0
+
+### Minor Changes
+
+- 72a9b65: Switched underlying JSON Pointer implementation from json-pointer to json-ptr due to it's better performance benchmarks
+
 ## 2.0.0
 
 ### Major Changes

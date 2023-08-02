@@ -1,5 +1,32 @@
 # @windyroad/fetch-link
 
+## 2.3.0
+
+### Minor Changes
+
+- d336fed: Added support for automatically expanding templated fragments links. For instance if a response has
+  a body
+
+  ```json
+  {
+    "foo": [1, 2, 3],
+    "bar": ["a", "b"]
+  }
+  ```
+
+  and a `link` `<#/{key}/{index}>; rel="item"`, then the `links()` response method will return the following links.
+
+  - `#/foo/0`
+  - `#/foo/1`
+  - `#/foo/2`
+  - `#/bar/0`
+  - `#/bar/1`
+
+### Patch Changes
+
+- Updated dependencies [72a9b65]
+  - @windyroad/fetch-fragment@1.1.0
+
 ## 2.2.0
 
 ### Minor Changes
