@@ -6,7 +6,6 @@ import {type Link} from './link';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {
-		console.log('request', request);
 		const linkHeader =
 			'<https://example.com/related>; rel="related"; type="text/html", <https://example.com/other>; rel="other"; type="text/plain"';
 		return response(
@@ -136,8 +135,6 @@ test('links method filters links by rel', async ({expect}) => {
 
 test('links method filters links by multiple properties', async ({expect}) => {
 	const response = await fetchLink('https://example.com');
-	console.log({header: response.headers.get('Link')});
-	console.log({links: response.links()});
 	expect(response.links({rel: 'related', type: 'text/html'})).toEqual([
 		{
 			uri: 'https://example.com/related',

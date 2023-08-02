@@ -14,6 +14,7 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
+    "test:watch": "vitest --watch",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
     "lint": "xo --fix --prettier"
   },
@@ -49,7 +50,8 @@
     "@windyroad/decorate-fetch-response": "2.1.0",
     "@windyroad/fetch-fragment": "1.0.0",
     "http-link-header": "^1.1.1",
-    "uri-templates": "^0.2.0"
+    "uri-templates": "^0.2.0",
+    "json-ptr": "^3.1.1"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.3",

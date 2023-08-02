@@ -5,3 +5,4 @@
 * [3. use-github-markdown-pages-to-share-decision-records](0003-use-github-markdown-pages-to-share-decision-records.md)
 * [4. use-changesets-for-managing-releases](0004-use-changesets-for-managing-releases.md)
 * [5. use-turbo-repo-for-pipelines](0005-use-turbo-repo-for-pipelines.md)
+* [6. use-uri-templates-for-item-links](0006-use-uri-templates-for-item-links.md)

@@ -6,4 +6,5 @@
 - [x] see if changing imports to .ts fixes stale definitions and import not found problem
 - [x] see if we can pin the relative package dependencies
 - [ ] output jsdoc
-- [ ] get templated fragment links working
+- [x] get templated fragment links working
+

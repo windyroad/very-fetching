@@ -16,7 +16,7 @@ test('resolveLinkUrls resolves links relative to base URL', async ({
 		'https://example.com/base/other/resource',
 	];
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -29,7 +29,7 @@ test('resolveLinkUrls returns empty array for empty input', async ({
 	const links: Link[] = [];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map(
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map(
 		(urlAndLink) => urlAndLink.url,
 	);
 
@@ -40,7 +40,7 @@ test('resolveLinkUrls returns URLs with correct protocol', async ({expect}) => {
 	const links = [{uri: '//example.com', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -51,7 +51,7 @@ test('resolveLinkUrls returns URLs with query parameters', async ({expect}) => {
 	const links = [{uri: '/path?query=value', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -62,7 +62,7 @@ test('resolveLinkUrls returns URLs with hash fragment', async ({expect}) => {
 	const links = [{uri: '/path#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -75,7 +75,7 @@ test('resolveLinkUrls returns URLs with username and password', async ({
 	const links = [{uri: '//user:password@example.com', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -86,7 +86,7 @@ test('resolveLinkUrls returns URLs with port number', async ({expect}) => {
 	const links = [{uri: '//example.com:8080', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -97,7 +97,7 @@ test('resolveLinkUrls returns URLs with path parameters', async ({expect}) => {
 	const links = [{uri: '/path/%7B_param%7B', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -110,7 +110,7 @@ test('resolveLinkUrls returns URLs with query parameters and path parameters', a
 	const links = [{uri: '/path/%7B_param%7B?query=value', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -125,7 +125,7 @@ test('resolveLinkUrls returns URLs with query parameters and hash fragment', asy
 	const links = [{uri: '/path?query=value#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -138,7 +138,7 @@ test('resolveLinkUrls returns URLs with path parameters and hash fragment', asyn
 	const links = [{uri: '/path/%7B_param%7B#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -155,7 +155,7 @@ test('resolveLinkUrls returns URLs with query parameters, path parameters, and h
 	];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -170,7 +170,7 @@ test('resolveLinkUrls returns URLs with special characters', async ({
 	const links = [{uri: "/path/!$&'()*+,;=:@", rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -185,7 +185,7 @@ test('resolveLinkUrls returns URLs with percent-encoded characters', async ({
 	];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -200,7 +200,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences', asyn
 	const links = [{uri: '/path/%2G', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -213,7 +213,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	const links = [{uri: '/path?query=%2G', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -226,7 +226,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in pat
 	const links = [{uri: '/path/%7B_param:%2G%7B', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -239,7 +239,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in has
 	const links = [{uri: '/path#%2G', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -252,7 +252,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	const links = [{uri: '/path?query=%2G#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -265,7 +265,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in pat
 	const links = [{uri: '/path/%7B_param:%2G%7B#fragment', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -280,7 +280,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	const links = [{uri: '/path/%7B_param:%2G%7B?query=value', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -298,7 +298,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in que
 	];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 
@@ -314,7 +314,7 @@ test('resolveLinkUrls returns URLs with invalid percent-encoded sequences in use
 	const links = [{uri: '//user:%2G@example.com', rel: 'resource'}];
 	const baseUrl = 'https://example.com/';
 
-	const actualUrls = resolveLinkUrls(links, baseUrl).map((url) =>
+	const actualUrls = resolveLinkUrls({links, baseUrl}).map((url) =>
 		url.url.toString(),
 	);
 

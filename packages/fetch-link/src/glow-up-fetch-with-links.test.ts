@@ -2,6 +2,7 @@ import {test, vi, beforeAll, afterAll, beforeEach, describe} from 'vitest';
 import fc from 'fast-check';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
+import {MockResponse} from '@windyroad/fetch-fragment';
 import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
 
 const server = setupServer(
@@ -68,15 +69,14 @@ test('glowUpFetchWithLinks handles multiple link headers', async ({expect}) => {
 		new Response(null, {
 			headers: {
 				link: '<https://example.com>; rel="resource"',
-				'link-template':
-					'<https://example.com/%7Bid%7B>; rel="resource-template"',
+				'link-template': '<https://example.com/{id}>; rel="resource-template"',
 			},
 		});
 	const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 	const response = await fetchWithLinks('https://example.com');
 	expect(response.links()).toEqual([
 		{uri: 'https://example.com/', rel: 'resource'},
-		{uri: 'https://example.com/%7Bid%7B', rel: 'resource-template'},
+		{uri: 'https://example.com/{id}', rel: 'resource-template'},
 	]);
 });
 
@@ -177,26 +177,32 @@ test('links method filters links by rel', async ({expect}) => {
 });
 
 describe('glowUpFetchWithLinks fragments', () => {
-	const mockResponse = {
-		json: vi.fn(),
-		body: 'mock body',
+	let mockResponseBody: any = {};
+	const mockResponseHeaders = new Headers();
+	const mockResponseOptions = {
 		status: 200,
 		statusText: 'OK',
-		headers: new Headers(),
+		headers: mockResponseHeaders,
+		url: 'http://example.com',
 	};
-
-	const mockFetchImpl = vi
-		.fn(async (...arguments_: Parameters<typeof fetch>) => new Response())
-		.mockResolvedValue(mockResponse as unknown as Response);
+	const mockFetchImpl = vi.fn(
+		async (...arguments_: Parameters<typeof fetch>) =>
+			new MockResponse(
+				mockResponseBody ? JSON.stringify(mockResponseBody) : undefined,
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				{...mockResponseOptions, url: arguments_[0].toString()},
+			),
+	);
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockResponse.headers.set('Content-Type', 'application/json');
+		mockResponseHeaders.set('Content-Type', 'application/json');
 	});
 
 	test('returns a fragment from a JSON response', async ({expect}) => {
 		const mockFragment = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
-		mockResponse.json.mockResolvedValueOnce(mockFragment);
+		mockResponseBody = mockFragment;
+
 		const fetchFragmentImpl = glowUpFetchWithLinks(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.status).toBe(200);
@@ -206,5 +212,31 @@ describe('glowUpFetchWithLinks fragments', () => {
 		);
 		expect(await response.text()).toBe(JSON.stringify(mockFragment.foo));
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
+	});
+
+	test('can fetch linked fragments', async ({expect}) => {
+		const json = {
+			foo: [
+				{id: 1, name: 'Alice'},
+				{id: 2, name: 'Bob'},
+			],
+			bar: [
+				{id: 4, name: 'Jane'},
+				{id: 6, name: 'Bruce'},
+			],
+		};
+		mockResponseBody = json;
+		mockResponseHeaders.set('link', '<#/{key}/{index}>; rel="item"');
+		const decoratedFetch = glowUpFetchWithLinks(mockFetchImpl);
+		const response = await decoratedFetch('http://example.com');
+		const links = response.links();
+		expect(links).toEqual([
+			{uri: 'http://example.com/#/foo/0', rel: 'item'},
+			{uri: 'http://example.com/#/foo/1', rel: 'item'},
+			{uri: 'http://example.com/#/bar/0', rel: 'item'},
+			{uri: 'http://example.com/#/bar/1', rel: 'item'},
+		]);
+		const fragment = await decoratedFetch(links[2]);
+		expect(await fragment.json()).toEqual(json.bar[0]);
 	});
 });
