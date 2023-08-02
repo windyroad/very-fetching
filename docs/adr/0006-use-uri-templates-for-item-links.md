@@ -15,25 +15,25 @@ deciders: # {list of people who made the decision}
 
 ## Context and Problem Statement
 
-If `item` links are like `/somehost.com/someresource/#/somejsonpath/*/foo/*/` and the items
+If `item` links are like `/host.com/resource/#/jsonpath/*/foo/*/` and the items
 have `self` links, then that could to be something like
 
 ```json
 {
-  "uri" :"/somehost.com/someresource/*/*/", 
-  "anchor": "/somejsonpath/*/foo/*/"
+  "uri" :"/host.com/resource/*/*/", 
+  "anchor": "/jsonpath/*/foo/*/"
 }
 ```
 
 and we won't be able to figure out with certainty what the URI is.
 
-If instead we have `item` links like `/somehost.com/someresource/#/somejsonpath/{alpha}/foo/{bravo}`
+If instead we have `item` links like `/host.com/resource/#/jsonpath/{alpha}/foo/{bravo}`
 and the items have `self` links like
 
 ```json
 { 
-  "uri" :"/somehost.com/someresource/{bravo}/{alpha}/", 
-  "anchor": "/somejsonpath/{alpha}/foo/{bravo}"
+  "uri" :"/host.com/resource/{bravo}/{alpha}/", 
+  "anchor": "/jsonpath/{alpha}/foo/{bravo}"
 }
 ```
 
