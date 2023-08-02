@@ -1,5 +1,6 @@
 import {test, describe, vi} from 'vitest';
 import fc from 'fast-check';
+import {MockResponse} from '@windyroad/fetch-fragment';
 import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
 import {findMatchingFragments} from './find-matching-fragments';
 
@@ -173,15 +174,15 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 2, name: 'Bob'},
 			],
 		};
-		const fetchImpl = vi.fn().mockResolvedValue({
-			headers: new Headers({
-				link: '<#/foo/{index}>; rel="item"',
-				'Content-Type': 'application/json',
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/foo/{index}>; rel="item"',
+					'Content-Type': 'application/json',
+				}),
+				url: 'http://example.com',
 			}),
-			json: async () => json,
-			clone() {},
-			url: 'http://example.com',
-		});
+		);
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
@@ -204,15 +205,15 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 6, name: 'Bruce'},
 			],
 		};
-		const fetchImpl = vi.fn().mockResolvedValue({
-			headers: new Headers({
-				link: '<#/{key}/{index}>; rel="item"',
-				'Content-Type': 'application/json',
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/{key}/{index}>; rel="item"',
+					'Content-Type': 'application/json',
+				}),
+				url: 'http://example.com',
 			}),
-			json: async () => json,
-			clone() {},
-			url: 'http://example.com',
-		});
+		);
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
@@ -233,14 +234,14 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 2, name: 'Bob'},
 			],
 		};
-		const fetchImpl = vi.fn().mockResolvedValue({
-			headers: new Headers({
-				link: '<#/foo/{index}>; rel="item"',
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/foo/{index}>; rel="item"',
+				}),
+				url: 'http://example.com',
 			}),
-			json: async () => json,
-			clone() {},
-			url: 'http://example.com',
-		});
+		);
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
@@ -258,15 +259,15 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 2, name: 'Bob'},
 			],
 		};
-		const fetchImpl = vi.fn().mockResolvedValue({
-			headers: new Headers({
-				link: '<#/foo/{index}>; rel="item", <#/foo/{index}/name>; rel="name" anchor="#/foo/{index}"',
-				'Content-Type': 'application/json',
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/foo/{index}>; rel="item", <#/foo/{index}/name>; rel="name" anchor="#/foo/{index}"',
+					'Content-Type': 'application/json',
+				}),
+				url: 'http://example.com',
 			}),
-			json: async () => json,
-			clone() {},
-			url: 'http://example.com',
-		});
+		);
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
@@ -285,15 +286,15 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 2, name: 'Bob'},
 			],
 		};
-		const fetchImpl = vi.fn().mockResolvedValue({
-			headers: new Headers({
-				link: '<#/bar/{id}>; rel="item"',
-				'Content-Type': 'application/json',
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/bar/{id}>; rel="item"',
+					'Content-Type': 'application/json',
+				}),
+				url: 'http://example.com',
 			}),
-			json: async () => json,
-			clone() {},
-			url: 'http://example.com',
-		});
+		);
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
