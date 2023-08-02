@@ -11,6 +11,7 @@
         "github.copilot-chat",
         "github.vscode-github-actions",
         "davidanson.vscode-markdownlint",
-        "samverschueren.linter-xo"
+        "samverschueren.linter-xo",
+        "ambar.bundle-size"
     ]
 }
