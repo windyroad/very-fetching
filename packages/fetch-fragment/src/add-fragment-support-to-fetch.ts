@@ -8,7 +8,7 @@ import {
 	type AwaitedFetchReturns,
 	type FetchInputs,
 } from '@windyroad/wrap-fetch';
-import pointer from 'json-pointer';
+import {JsonPointer} from 'json-ptr';
 import {isJsonContent} from './is-json-content';
 
 /**
@@ -50,6 +50,18 @@ export function addFragmentSupportToFetch<
 	);
 }
 
+class FragmentResponse extends Response {
+	url: string;
+
+	constructor(
+		body?: BodyInit | undefined,
+		init?: ResponseInit & {url: string},
+	) {
+		super(body, init);
+		this.url = init?.url ?? '';
+	}
+}
+
 /**
  * Retrieves a JSON fragment from a response and returns a new response with only the fragment.
  * @template FetchImpl - The type of the fetch implementation to use.
@@ -64,16 +76,21 @@ async function getFragment<
 		Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>
 	> = typeof fetch,
 >(input: URL, response: AwaitedFetchReturns<FetchImpl>) {
-	const hash = input.hash.slice(1);
+	const {hash} = input;
 	if (isJsonContent(response)) {
 		if (response.body) {
 			try {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const fragment = pointer.get(
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-					await response.json(),
-					hash,
-				);
+				const json = await response.json();
+				const pointer = JsonPointer.create(hash);
+				const fragment = pointer.get(json);
+				if (fragment === undefined) {
+					return new FragmentResponse(undefined, {
+						status: 404,
+						headers: response.headers,
+						url: input.href,
+					});
+				}
 
 				const fragmentString = JSON.stringify(fragment);
 				const headers = new Headers(response.headers);
@@ -90,31 +107,41 @@ async function getFragment<
 
 				// Update Link-Template headers
 				adjustLinkHeaders({headers, headerName: 'Link-Template', hash});
-
-				return new Response(fragmentString, {
+				return new FragmentResponse(fragmentString, {
 					status: response.status,
 					statusText: response.statusText,
 					headers,
+					url: input.href,
 				});
 			} catch (error: unknown) {
-				if (error instanceof Error) {
-					return new Response(error.message, {
-						status: error.message.startsWith('Invalid reference token')
-							? 404
-							: 400,
+				if (
+					error instanceof ReferenceError &&
+					error.message === 'Invalid JSON Pointer syntax.'
+				) {
+					return new FragmentResponse(error.message, {
+						status: 400,
 						headers: response.headers,
+						url: input.href,
 					});
 				}
 
 				throw error;
 			}
 			// Else fall through to 404
-		} else {
-			return new Response(null, {status: 404, headers: response.headers});
 		}
-	} else {
-		return new Response(null, {status: 415, headers: response.headers});
+
+		return new FragmentResponse(undefined, {
+			status: 404,
+			headers: response.headers,
+			url: input.href,
+		});
 	}
+
+	return new FragmentResponse(undefined, {
+		status: 415,
+		headers: response.headers,
+		url: input.href,
+	});
 }
 
 /**
@@ -143,8 +170,8 @@ function adjustLinkHeaders({
 
 		links.refs = links.refs.filter((link) => {
 			if (link.anchor?.startsWith(hash)) {
-				link.anchor = link.anchor.slice(hash.length);
-				if (link.anchor.length === 0) {
+				link.anchor = `#${link.anchor.slice(hash.length)}`;
+				if (link.anchor.length === 1) {
 					delete link.anchor;
 				}
 

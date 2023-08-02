@@ -1,23 +1,28 @@
 import fc from 'fast-check';
 import {describe, test, vi, beforeEach} from 'vitest';
+import {MockResponse} from './mock-response';
 import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch';
 
 describe('fetchFragment', () => {
-	const mockResponse = {
-		json: vi.fn(),
-		body: 'mock body',
+	let mockResponseBody: any = {};
+	const mockResponseHeaders = new Headers();
+	const mockResponseOptions = {
 		status: 200,
 		statusText: 'OK',
-		headers: new Headers(),
+		headers: mockResponseHeaders,
+		url: 'https://example.com',
 	};
-
-	const mockFetchImpl = vi
-		.fn(async (...arguments_: Parameters<typeof fetch>) => new Response())
-		.mockResolvedValue(mockResponse as unknown as Response);
+	const mockFetchImpl = vi.fn(
+		async (...arguments_: Parameters<typeof fetch>) =>
+			new MockResponse(
+				mockResponseBody ? JSON.stringify(mockResponseBody) : undefined,
+				mockResponseOptions,
+			),
+	);
 
 	beforeEach(() => {
 		vi.clearAllMocks();
-		mockResponse.headers.set('Content-Type', 'application/json');
+		mockResponseHeaders.set('Content-Type', 'application/json');
 	});
 
 	test('returns the original response if the URL does not have a hash', async ({
@@ -25,14 +30,14 @@ describe('fetchFragment', () => {
 	}) => {
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com');
-		expect(response).toBe(mockResponse);
+		expect(response.url).toEqual('https://example.com');
+		expect(await response.json()).toEqual({});
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
 	});
 
 	test('returns a 404 response if the fragment is not found in a JSON response', async ({
 		expect,
 	}) => {
-		mockResponse.json.mockResolvedValueOnce({});
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.status).toBe(404);
@@ -42,7 +47,6 @@ describe('fetchFragment', () => {
 	test('returns a 400 response if the hash is an invalid pointer', async ({
 		expect,
 	}) => {
-		mockResponse.json.mockResolvedValueOnce({});
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#foo');
 		expect(response.status).toBe(400);
@@ -52,7 +56,7 @@ describe('fetchFragment', () => {
 	test('returns a 415 response if the response is not JSON', async ({
 		expect,
 	}) => {
-		mockResponse.headers.delete('Content-Type');
+		mockResponseHeaders.delete('Content-Type');
 
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
@@ -61,25 +65,23 @@ describe('fetchFragment', () => {
 	});
 
 	test('returns a fragment from a JSON response', async ({expect}) => {
-		const mockFragment = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
-		mockResponse.json.mockResolvedValueOnce(mockFragment);
+		mockResponseBody = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.status).toBe(200);
 		expect(response.headers.get('Content-Type')).toBe('application/json');
 		expect(response.headers.get('Content-Length')).toBe(
-			String(JSON.stringify(mockFragment.foo).length),
+			String(JSON.stringify(mockResponseBody.foo).length),
 		);
-		expect(await response.text()).toBe(JSON.stringify(mockFragment.foo));
+		expect(await response.json()).toEqual(mockResponseBody.foo);
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
 	});
 
 	test('filters Link headers that do not match the fragment hash', async ({
 		expect,
 	}) => {
-		const mockFragment = {foo: 'bar'};
-		mockResponse.json.mockResolvedValueOnce(mockFragment);
-		mockResponse.headers.set('Link', '<https://example.com>; rel="self"');
+		mockResponseBody = {foo: 'bar'};
+		mockResponseHeaders.set('Link', '<https://example.com>; rel="self"');
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.headers.get('Link')).toBeNull();
@@ -89,24 +91,23 @@ describe('fetchFragment', () => {
 	test('updates Link-Template headers with the fragment hash', async ({
 		expect,
 	}) => {
-		const mockFragment = {foo: 'bar'};
-		mockResponse.json.mockResolvedValueOnce(mockFragment);
-		mockResponse.headers.set(
+		mockResponseBody = {foo: 'bar'};
+		mockResponseHeaders.set(
 			'Link-Template',
 			'<https://example.com/{id}>; rel="self"',
 		);
-		mockResponse.headers.append(
+		mockResponseHeaders.append(
 			'Link',
-			'<https://example.com/{id}>; rel="parent" anchor="/foo"',
+			'<https://example.com/{id}>; rel="parent" anchor="#/foo"',
 		);
-		mockResponse.headers.append(
+		mockResponseHeaders.append(
 			'Link',
-			'<https://example.com/{id}>; rel="parent" anchor="/foo/bar"',
+			'<https://example.com/{id}>; rel="parent" anchor="#/foo/bar"',
 		);
 		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.headers.get('Link')).toBe(
-			'<https://example.com/{id}>; rel=parent, <https://example.com/{id}>; rel=parent; anchor="/bar"',
+			'<https://example.com/{id}>; rel=parent, <https://example.com/{id}>; rel=parent; anchor="#/bar"',
 		);
 		expect(response.headers.get('Link-Template')).toBeNull();
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
