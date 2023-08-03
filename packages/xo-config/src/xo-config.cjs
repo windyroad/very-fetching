@@ -27,6 +27,7 @@ const config = {
 			'error',
 			{
 				devDependencies: [
+					'**/*.bench.ts',
 					'**/*.test.ts',
 					'**/test/**',
 					'**/build-tools/**',

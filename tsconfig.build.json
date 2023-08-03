@@ -23,6 +23,7 @@
   "exclude": [
     "**/test/**/*.test.ts",
     "**/*.test.ts",
+    "**/*.bench.ts",
     "**/node_modules",
     "**/dist",
     "**/public",

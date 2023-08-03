@@ -25,6 +25,9 @@
     "//#test": {
       "dependsOn": []
     },
+    "//#bench": {
+      "dependsOn": []
+    },
     "//#ci:lint": {
       "dependsOn": []
     },
