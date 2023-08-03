@@ -1,8 +1,14 @@
+export type Fragment = {
+	path: string;
+	value: any;
+	variables: Record<string, string>;
+};
+
 /**
  * An RFC8288 Link object, which represents a hyperlink from one resource to another.
  */
 export type Link = {
-	[attribute: string]: string | undefined;
+	[attribute: string]: any;
 	/** The URI of the resource that the link refers to. See {@link https://tools.ietf.org/html/rfc8288#section-2.1|RFC8288 Section 2.1}. */
 	uri: string;
 	/** The relationship between the resource and the link. See {@link https://tools.ietf.org/html/rfc8288#section-3.3|RFC8288 Section 3.3}. */
@@ -21,6 +27,7 @@ export type Link = {
 	type?: string;
 	/** @property {string=} method - The HTTP method to use when accessing the resource that the link refers to. See {@link https://tools.ietf.org/html/rfc8288#section-3.8|RFC8288 Section 3.8}. */
 	method?: string;
+	fragment?: Fragment;
 };
 
 /**

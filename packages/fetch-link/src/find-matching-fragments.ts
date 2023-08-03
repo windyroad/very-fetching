@@ -1,10 +1,5 @@
 import {JsonPointer, type PathSegment, type PathSegments} from 'json-ptr';
-
-export type Fragment = {
-	path: string;
-	value: any;
-	variables: Record<string, any>;
-};
+import {type Fragment} from './link';
 
 /**
  * Finds all fragments in the given object that match the given template.

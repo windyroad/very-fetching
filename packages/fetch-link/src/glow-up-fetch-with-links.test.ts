@@ -231,10 +231,42 @@ describe('glowUpFetchWithLinks fragments', () => {
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
 		expect(links).toEqual([
-			{uri: 'http://example.com/#/foo/0', rel: 'item'},
-			{uri: 'http://example.com/#/foo/1', rel: 'item'},
-			{uri: 'http://example.com/#/bar/0', rel: 'item'},
-			{uri: 'http://example.com/#/bar/1', rel: 'item'},
+			{
+				uri: 'http://example.com/#/foo/0',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/0',
+					value: json.foo[0],
+					variables: {key: 'foo', index: '0'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/1',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/1',
+					value: json.foo[1],
+					variables: {key: 'foo', index: '1'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar/0',
+				rel: 'item',
+				fragment: {
+					path: '#/bar/0',
+					value: json.bar[0],
+					variables: {key: 'bar', index: '0'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar/1',
+				rel: 'item',
+				fragment: {
+					path: '#/bar/1',
+					value: json.bar[1],
+					variables: {key: 'bar', index: '1'},
+				},
+			},
 		]);
 		const fragment = await decoratedFetch(links[2]);
 		expect(await fragment.json()).toEqual(json.bar[0]);

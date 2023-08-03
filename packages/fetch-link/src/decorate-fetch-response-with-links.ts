@@ -6,18 +6,13 @@ import {
 } from '@windyroad/wrap-fetch';
 import LinkHeader from 'http-link-header';
 import uriTemplate from 'uri-templates';
-import {JsonPointer, JsonStringPointer} from 'json-ptr';
-import {
-	getBody,
-	InitialResponseBodyState,
-	type ClonedResponseBodyState,
-	type ResponseBodyState,
-} from './get-body';
-import {type Link} from './link';
+import {JsonPointer} from 'json-ptr';
+import {findMatchingFragments} from './find-matching-fragments';
+import {getBody, type ResponseBodyState} from './get-body';
+import {isFragmentOf} from './is-fragment-of';
+import {type Link, type Fragment} from './link';
 import {type LinkedResponse} from './linked-response';
 import {resolveLinkUrls} from './resolve-link-urls';
-import {findMatchingFragments} from './find-matching-fragments';
-import {isFragmentOf} from './is-fragment-of';
 
 /**
  * Decorates a fetch implementation with a `links` method that returns an array of RFC8288 Link objects.
@@ -41,13 +36,16 @@ export function decorateFetchResponseWithLinks<
 		const linkHeader = new LinkHeader();
 		linkHeader.parse(response?.headers?.get('link') ?? '');
 		linkHeader.parse(response?.headers?.get('link-template') ?? '');
-		let resolvedLinks = resolveLinkUrls({
+		const resolvedLinks = resolveLinkUrls({
 			links: linkHeader.refs,
 			baseUrl: response.url,
 		});
 		let responseBodyState: ResponseBodyState<FetchImpl> = {
 			originalResponse: response,
 		};
+
+		let links: Link[];
+
 		if (isJsonContent(response)) {
 			const responseUrl = new URL(response.url);
 			const resolvedLinksAreHashed = resolvedLinks.map((urlAndLink) => {
@@ -69,36 +67,22 @@ export function decorateFetchResponseWithLinks<
 				responseBodyState = await getBody(responseBodyState);
 			}
 
-			resolvedLinks = resolvedLinksAreHashed.flatMap<{
-				url: URL;
-				link: Link;
-			}>((urlAndLink) => {
+			links = resolvedLinksAreHashed.flatMap<Link>((urlAndLink) => {
 				const {url, link, isTemplatedHash} = urlAndLink;
 				if (isTemplatedHash) {
 					const {jsonBody} = responseBodyState;
 					const matches = findMatchingFragments(jsonBody, url.hash);
-					return matches.map((match) => {
-						const matchUrl = new URL(match.path, response.url);
-						return {
-							url: matchUrl,
-							link: {
-								...link,
-								uri: matchUrl.href,
-								...(link.anchor && {
-									anchor: uriTemplate(link.anchor).fillFromObject(
-										match.variables,
-									),
-								}),
-							},
-						};
+					const templatedLinks = matches.map((match) => {
+						return matchToLink(link, url, match);
 					});
+					return templatedLinks;
 				}
 
-				return {url, link};
+				return link;
 			});
+		} else {
+			links = resolvedLinks.map((urlAndLink) => urlAndLink.link);
 		}
-
-		const links = resolvedLinks.map((urlAndLink) => urlAndLink.link);
 
 		return Object.assign(
 			responseBodyState.clonedResponse ?? responseBodyState.originalResponse,
@@ -114,6 +98,49 @@ export function decorateFetchResponseWithLinks<
 			},
 		);
 	}, fetchImpl);
+}
+
+/**
+ * Converts a Link object and a URL to a FragmentLink object by filling in the URI template with the variables from the Fragment.
+ * @param {Link} link - The Link object to convert.
+ * @param {URL} url - The URL object to use for filling in the URI template.
+ * @param {Fragment} match - The Fragment object containing the variables to use for filling in the URI template.
+ * @returns {Link} The resulting FragmentLink object.
+ */
+function matchToLink(link: Link, url: URL, match: Fragment): Link {
+	return {
+		...link,
+		uri: new URL(match.path, url).href,
+		...(link.anchor && {
+			anchor: interpolateAnchor(link.anchor, match),
+		}),
+		fragment: match,
+	};
+}
+
+/**
+ * Interpolates the given anchor with the variables from the given match object.
+ * @param {string} anchor - The anchor to interpolate.
+ * @param {Fragment} match - The match object containing the variables to interpolate.
+ * @returns {string} - The interpolated anchor.
+ */
+function interpolateAnchor(anchor: string, match: Fragment): string {
+	const segments = JsonPointer.decode(anchor);
+	const interpolatedSegments = segments.map((segment) => {
+		if (
+			typeof segment === 'string' &&
+			segment.startsWith('{') &&
+			segment.endsWith('}')
+		) {
+			const variableName = segment.slice(1, -1);
+			if (Object.prototype.hasOwnProperty.call(match.variables, variableName)) {
+				return match.variables[variableName];
+			}
+		}
+
+		return segment;
+	});
+	return JsonPointer.create(interpolatedSegments).uriFragmentIdentifier;
 }
 
 /**

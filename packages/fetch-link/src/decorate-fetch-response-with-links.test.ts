@@ -1,6 +1,7 @@
 import {test, describe, vi} from 'vitest';
 import fc from 'fast-check';
 import {MockResponse} from '@windyroad/fetch-fragment';
+import {JsonPointer} from 'json-ptr';
 import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
 import {findMatchingFragments} from './find-matching-fragments';
 
@@ -187,8 +188,24 @@ describe('decorateFetchResponseWithLinks', () => {
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
 		expect(links).toEqual([
-			{uri: 'http://example.com/#/foo/0', rel: 'item'},
-			{uri: 'http://example.com/#/foo/1', rel: 'item'},
+			{
+				uri: 'http://example.com/#/foo/0',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/0',
+					value: json.foo[0],
+					variables: {index: '0'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/1',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/1',
+					value: json.foo[1],
+					variables: {index: '1'},
+				},
+			},
 		]);
 	});
 
@@ -200,7 +217,8 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 1, name: 'Alice'},
 				{id: 2, name: 'Bob'},
 			],
-			bar: [
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			'bar/baz': [
 				{id: 4, name: 'Jane'},
 				{id: 6, name: 'Bruce'},
 			],
@@ -218,10 +236,42 @@ describe('decorateFetchResponseWithLinks', () => {
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
 		expect(links).toEqual([
-			{uri: 'http://example.com/#/foo/0', rel: 'item'},
-			{uri: 'http://example.com/#/foo/1', rel: 'item'},
-			{uri: 'http://example.com/#/bar/0', rel: 'item'},
-			{uri: 'http://example.com/#/bar/1', rel: 'item'},
+			{
+				uri: 'http://example.com/#/foo/0',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/0',
+					value: json.foo[0],
+					variables: {index: '0', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/1',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/1',
+					value: json.foo[1],
+					variables: {index: '1', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/0',
+				rel: 'item',
+				fragment: {
+					path: '#/bar~1baz/0',
+					value: json['bar/baz'][0],
+					variables: {index: '0', key: 'bar/baz'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/1',
+				rel: 'item',
+				fragment: {
+					path: '#/bar~1baz/1',
+					value: json['bar/baz'][1],
+					variables: {index: '1', key: 'bar/baz'},
+				},
+			},
 		]);
 	});
 
@@ -258,11 +308,16 @@ describe('decorateFetchResponseWithLinks', () => {
 				{id: 1, name: 'Alice'},
 				{id: 2, name: 'Bob'},
 			],
+			// eslint-disable-next-line @typescript-eslint/naming-convention
+			'bar/baz': [
+				{id: 4, name: 'Jane'},
+				{id: 6, name: 'Bruce'},
+			],
 		};
 		const fetchImpl = vi.fn().mockResolvedValue(
 			new MockResponse(JSON.stringify(json), {
 				headers: new Headers({
-					link: '<#/foo/{index}>; rel="item", <#/foo/{index}/name>; rel="name" anchor="#/foo/{index}"',
+					link: '<#/{key}/{index}>; rel="item", <#/{key}/{index}/name>; rel="name" anchor="#/{key}/{index}"',
 					'Content-Type': 'application/json',
 				}),
 				url: 'http://example.com',
@@ -272,10 +327,82 @@ describe('decorateFetchResponseWithLinks', () => {
 		const response = await decoratedFetch('http://example.com');
 		const links = response.links();
 		expect(links).toEqual([
-			{uri: 'http://example.com/#/foo/0', rel: 'item'},
-			{uri: 'http://example.com/#/foo/1', rel: 'item'},
-			{uri: 'http://example.com/#/foo/0/name', rel: 'name', anchor: '#/foo/0'},
-			{uri: 'http://example.com/#/foo/1/name', rel: 'name', anchor: '#/foo/1'},
+			{
+				uri: 'http://example.com/#/foo/0',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/0',
+					value: json.foo[0],
+					variables: {index: '0', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/1',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/1',
+					value: json.foo[1],
+					variables: {index: '1', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/0',
+				rel: 'item',
+				fragment: {
+					path: '#/bar~1baz/0',
+					value: json['bar/baz'][0],
+					variables: {index: '0', key: 'bar/baz'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/1',
+				rel: 'item',
+				fragment: {
+					path: '#/bar~1baz/1',
+					value: json['bar/baz'][1],
+					variables: {index: '1', key: 'bar/baz'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/0/name',
+				rel: 'name',
+				anchor: '#/foo/0',
+				fragment: {
+					path: '#/foo/0/name',
+					value: json.foo[0].name,
+					variables: {index: '0', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/foo/1/name',
+				rel: 'name',
+				anchor: '#/foo/1',
+				fragment: {
+					path: '#/foo/1/name',
+					value: json.foo[1].name,
+					variables: {index: '1', key: 'foo'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/0/name',
+				rel: 'name',
+				anchor: '#/bar~1baz/0',
+				fragment: {
+					path: '#/bar~1baz/0/name',
+					value: json['bar/baz'][0].name,
+					variables: {index: '0', key: 'bar/baz'},
+				},
+			},
+			{
+				uri: 'http://example.com/#/bar~1baz/1/name',
+				rel: 'name',
+				anchor: '#/bar~1baz/1',
+				fragment: {
+					path: '#/bar~1baz/1/name',
+					value: json['bar/baz'][1].name,
+					variables: {index: '1', key: 'bar/baz'},
+				},
+			},
 		]);
 	});
 
