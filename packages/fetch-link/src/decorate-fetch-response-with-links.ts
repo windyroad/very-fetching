@@ -1,9 +1,6 @@
 import {decorateFetchResponse} from '@windyroad/decorate-fetch-response';
 import {isJsonContent} from '@windyroad/fetch-fragment';
-import {
-	type AwaitedFetchReturns,
-	type FetchInputs,
-} from '@windyroad/wrap-fetch';
+import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
 import LinkHeader from 'http-link-header';
 import uriTemplate from 'uri-templates';
 import {JsonPointer} from 'json-ptr';
@@ -15,22 +12,21 @@ import {type LinkedResponse} from './linked-response';
 import {resolveLinkUrls} from './resolve-link-urls';
 
 /**
- * Decorates a fetch implementation with a `links` method that returns an array of RFC8288 Link objects.
- * @template FetchInputs The input types of the fetch implementation.
- * @template FetchReturns The return type of the fetch implementation.
- * @param fetchImpl The fetch implementation to decorate.
- * @returns The decorated fetch implementation.
+ * Decorates a `fetch`-like function with link parsing and resolution functionality.
+ * @template FetchImpl - The type of the `fetch`-like function to decorate.
+ * @param fetchImpl - The `fetch`-like function to decorate.
+ * @returns - A decorated `fetch`-like function that returns a `LinkedResponse`.
  */
 export function decorateFetchResponseWithLinks<
 	FetchImpl extends (
-		...arguments_: any[]
+		...arguments_: any
 	) => Promise<
 		Pick<Response, 'headers' | 'json' | 'clone' | 'url'>
 	> = typeof fetch,
 >(
 	fetchImpl?: FetchImpl,
 ): (
-	...arguments_: FetchInputs<FetchImpl>
+	...arguments_: Parameters<FetchImpl>
 ) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
 	return decorateFetchResponse(async (response) => {
 		const linkHeader = new LinkHeader();
@@ -61,6 +57,11 @@ export function decorateFetchResponseWithLinks<
 
 				return {url, link, isTemplatedHash: false};
 			});
+
+			// If the links are templated hashes, then we'll need to iterated
+			// over the matching parts of the body, but we still want the body
+			// to be readable, so we'll clone the response, read the body from
+			// the original and return the clone
 			if (
 				resolvedLinksAreHashed.some((urlAndLink) => urlAndLink.isTemplatedHash)
 			) {
@@ -73,7 +74,7 @@ export function decorateFetchResponseWithLinks<
 					const {jsonBody} = responseBodyState;
 					const matches = findMatchingFragments(jsonBody, url.hash);
 					const templatedLinks = matches.map((match) => {
-						return matchToLink(link, url, match);
+						return matchToLink({link, url, match});
 					});
 					return templatedLinks;
 				}
@@ -101,13 +102,22 @@ export function decorateFetchResponseWithLinks<
 }
 
 /**
- * Converts a Link object and a URL to a FragmentLink object by filling in the URI template with the variables from the Fragment.
- * @param {Link} link - The Link object to convert.
- * @param {URL} url - The URL object to use for filling in the URI template.
- * @param {Fragment} match - The Fragment object containing the variables to use for filling in the URI template.
- * @returns {Link} The resulting FragmentLink object.
+ * Converts a `Link` object and a `URL` to a `FragmentLink` object by filling in the URI template with the variables from the `Fragment`.
+ * @param {object} options - The options object.
+ * @param {Link} options.link - The `Link` object to convert.
+ * @param {URL} options.url - The `URL` object to use for filling in the URI template.
+ * @param {Fragment} options.match - The `Fragment` object containing the variables to use for filling in the URI template.
+ * @returns {Link} - The resulting `FragmentLink` object.
  */
-function matchToLink(link: Link, url: URL, match: Fragment): Link {
+function matchToLink({
+	link,
+	url,
+	match,
+}: {
+	link: Link;
+	url: URL;
+	match: Fragment;
+}): Link {
 	return {
 		...link,
 		uri: new URL(match.path, url).href,

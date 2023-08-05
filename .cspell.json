@@ -13,5 +13,7 @@
     "dictionaries": [
         "project-words"
     ],
-    "ignorePaths": []
+    "ignorePaths": [
+        "vite.config.ts.timestamp-*.mjs"
+    ]
 }

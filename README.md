@@ -1,6 +1,13 @@
 # @windyroad/very-fetching
 
-A set of very fetching Typescript utility libraries for fetch.
+We believe that hypermedia APIs, APIs who's responses include links and forms, significantly
+reduces to coupling between the client and server, making them easier to evolve.
+
+The [`packages/fetch-link`](./packages/fetch-link/README.md) library, and the libraries its
+built on, adapts the fetch API to work with
+[RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Links. It parses `Link` and
+`Link-Template` headers, providing them via `links()` method on the `Response`, and
+it can use links and request inputs, allowing call chaining.
 
 ## Packages
 

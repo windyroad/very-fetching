@@ -1,8 +1,6 @@
-import {adaptFetchInputs} from '@windyroad/adapt-fetch-inputs';
-import {
-	type FetchInputs,
-	type AwaitedFetchReturns,
-} from '@windyroad/wrap-fetch';
+import {type AwaitedFetchReturns, wrapFetch} from '@windyroad/wrap-fetch';
+import {type FetchFragmentFunction} from '@windyroad/fetch-fragment';
+import {FragmentResponse} from '@windyroad/fetch-fragment';
 import {isLink, type Link} from './link';
 import {type DropFirst} from './drop-first';
 
@@ -24,58 +22,75 @@ function isHeadersEmpty(headers: Headers): boolean {
 
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.
- * @template FetchReturns - The return type of the original fetch function.
+ * @template Arguments - The argument types of the original fetch function.
+ * @template FetchImpl - The type of the original fetch function to adapt.
  * @param {Function} fetchImpl - The original fetch function to adapt.
  * @returns {Function} An adapted fetch function that supports passing in a Link object.
  */
 export function glowUpFetchWithLinkInputs<
-	FetchImpl extends (
-		...arguments_: Parameters<typeof fetch>
-	) => Promise<any> = typeof fetch,
+	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
+	FetchImpl extends (...arguments_: Arguments) => Promise<any> = (
+		...arguments_: Arguments
+	) => ReturnType<typeof fetch>,
 >(
 	fetchImpl?: FetchImpl,
 ): (
-	...arguments_:
-		| FetchInputs<FetchImpl>
-		| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
-) => Promise<AwaitedFetchReturns<FetchImpl>> {
-	const adapter = (
-		...arguments_:
-			| FetchInputs<FetchImpl>
-			| [Link, ...DropFirst<FetchInputs<FetchImpl>>]
-	): // Target: Link | FetchInputs<FetchImpl>[0],
-	// init: FetchInputs<FetchImpl>[1],
-	FetchInputs<FetchImpl> => {
-		const [target, init] = arguments_;
-		if (isLink(target)) {
-			const link = target;
-
-			const headers = new Headers(init?.headers ?? {});
-			// Only set the 'Accept' header if link.type is defined.
-			if (link.type) {
-				headers.append('Accept', link.type);
-			}
-
-			if (link.hreflang) {
-				headers.append('Accept-Language', link.hreflang);
-			}
-
-			const fetchParameters = [
-				link.uri,
-				{
-					...init,
-					...(link.method && {method: link.method}),
-					...(!isHeadersEmpty(headers) && {headers}),
-				},
-			] as unknown as FetchInputs<FetchImpl>;
-			return fetchParameters;
-		}
-
-		return arguments_ as FetchInputs<FetchImpl>;
-	};
-
-	return adaptFetchInputs<
+	...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
+) => Promise<FragmentResponse | AwaitedFetchReturns<FetchImpl>> {
+	/**
+	 * Currently the code just adapts the input from a link to a url.
+	 * For performance reasons, if the link is a fragment, it should
+	 * just return a FragmentResponse.
+	 * This means we need to use wrapFetch instead of adaptFetchInputs
+	 * because wrapFetch will allow us to avoid calling fetchImpl
+	 */
+	return wrapFetch<
+		Arguments,
 		FetchImpl,
-		FetchInputs<FetchImpl> | [Link, ...DropFirst<FetchInputs<FetchImpl>>]
-	>(adapter, fetchImpl);
+		Arguments | [Link, ...DropFirst<Arguments>],
+		Awaited<ReturnType<FetchFragmentFunction<Arguments, FetchImpl>>>
+	>(
+		async (
+			fetchImplInner,
+			...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
+		) => {
+			const [target, init, ...other] = arguments_;
+			if (isLink(target)) {
+				if (target.fragment) {
+					return new FragmentResponse(target.fragment.value, {
+						status: 200,
+						url: target.uri,
+					});
+				}
+
+				const link = target;
+
+				const headers = new Headers(init?.headers ?? {});
+				// Only set the 'Accept' header if link.type is defined.
+				if (link.type) {
+					headers.append('Accept', link.type);
+				}
+
+				if (link.hreflang) {
+					headers.append('Accept-Language', link.hreflang);
+				}
+
+				const fetchParameters = [
+					link.uri,
+					{
+						...init,
+						...(link.method && {method: link.method}),
+						...(!isHeadersEmpty(headers) && {headers}),
+					},
+					...other,
+				];
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+				return fetchImplInner(...(fetchParameters as Arguments));
+			}
+
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+			return fetchImplInner(...(arguments_ as unknown as Arguments));
+		},
+		fetchImpl,
+	);
 }

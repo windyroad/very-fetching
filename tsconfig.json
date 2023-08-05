@@ -15,9 +15,9 @@
       "./*.tsx"
     ],
     "exclude": [
-      "apps",
-      "packages",
-      "dist"
+      "**/apps/**/*",
+      "**/packages/**/*",
+      "**/dist/**/*"
     ]  
 }
   

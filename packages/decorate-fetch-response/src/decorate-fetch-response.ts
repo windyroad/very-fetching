@@ -1,27 +1,31 @@
-import {
-	wrapFetch,
-	type FetchInputs,
-	type AwaitedFetchReturns,
-} from '@windyroad/wrap-fetch';
+import {wrapFetch, type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
 
 /**
  * Decorates the response of a fetch request with additional properties.
+ * @template Arguments The type of the input arguments for the `fetch` implementation.
  * @template FetchImpl The type of the `fetch` implementation.
  * @template DecoratorReturns The return type of the decorator function.
- * @param decorator The decorator function to apply to the response.
- * @param fetchImpl The `fetch` implementation to use.
- * @returns A decorated version of the `fetch` implementation.
+ * @param decorator - The decorator function to apply to the response.
+ * @param fetchImpl - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @returns - A decorated version of the `fetch` implementation.
  */
 export function decorateFetchResponse<
-	FetchImpl extends (...arguments_: any[]) => Promise<any> = typeof fetch,
+	Arguments extends any[] = Parameters<typeof fetch>,
+	FetchImpl extends (...arguments_: Arguments) => Promise<any> = (
+		...arguments_: Arguments
+	) => ReturnType<typeof fetch>,
 	DecoratorReturns = AwaitedFetchReturns<FetchImpl>,
 >(
 	decorator: (
 		response: AwaitedFetchReturns<FetchImpl>,
 	) => Promise<DecoratorReturns> | DecoratorReturns,
 	fetchImpl?: FetchImpl,
-): (...arguments_: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> {
-	return decorateFetchResponseUsingInputs(async (response, ...arguments_) => {
+): (...arguments_: Arguments) => Promise<DecoratorReturns> {
+	return decorateFetchResponseUsingInputs<
+		Arguments,
+		FetchImpl,
+		DecoratorReturns
+	>(async (response, ...arguments_) => {
 		const result = await decorator(response);
 		return result;
 	}, fetchImpl);
@@ -29,23 +33,27 @@ export function decorateFetchResponse<
 
 /**
  * Decorates the response of a fetch request with additional properties.
+ * @template Arguments The type of the input arguments for the `fetch` implementation.
  * @template FetchImpl The type of the `fetch` implementation.
  * @template DecoratorReturns The return type of the decorator function.
- * @param decorator The decorator function to apply to the response.
- * @param fetchImpl The `fetch` implementation to use.
- * @returns A decorated version of the `fetch` implementation.
+ * @param decorator - The decorator function to apply to the response.
+ * @param fetchImpl - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @returns - A decorated version of the `fetch` implementation.
  */
 export function decorateFetchResponseUsingInputs<
-	FetchImpl extends (...arguments_: any[]) => Promise<any> = typeof fetch,
+	Arguments extends any[] = Parameters<typeof fetch>,
+	FetchImpl extends (...arguments_: Arguments) => Promise<any> = (
+		...arguments_: Arguments
+	) => ReturnType<typeof fetch>,
 	DecoratorReturns = AwaitedFetchReturns<FetchImpl>,
 >(
 	decorator: (
 		response: AwaitedFetchReturns<FetchImpl>,
-		...arguments_: FetchInputs<FetchImpl>
+		...arguments_: Arguments
 	) => Promise<DecoratorReturns> | DecoratorReturns,
 	fetchImpl?: FetchImpl,
-): (...arguments_: FetchInputs<FetchImpl>) => Promise<DecoratorReturns> {
-	return wrapFetch<FetchImpl, FetchInputs<FetchImpl>, DecoratorReturns>(
+): (...arguments_: Arguments) => Promise<DecoratorReturns> {
+	return wrapFetch<Arguments, FetchImpl, Arguments, DecoratorReturns>(
 		async (fetchImpl, ...arguments_) => {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			const response = await fetchImpl(...arguments_);

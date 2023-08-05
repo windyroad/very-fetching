@@ -3,71 +3,56 @@ import {
 	decorateFetchResponseUsingInputs,
 } from '@windyroad/decorate-fetch-response';
 import LinkHeader from 'http-link-header';
-import {
-	type FetchReturns,
-	type AwaitedFetchReturns,
-	type FetchInputs,
-} from '@windyroad/wrap-fetch';
+import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
 import {JsonPointer} from 'json-ptr';
 import {isJsonContent} from './is-json-content';
+import {FragmentResponse} from './fragment-response';
+import {type FetchFragmentFunction} from './fetch-fragment-function';
 
 /**
  * Fetches a fragment from a JSON response based on a URL fragment identifier.
  * If the response is not JSON or the fragment is not found, returns a 404 or 415 response.
+ * @template Arguments The type of the input arguments for the `fetch` implementation.
  * @template FetchImpl The type of the `fetch` implementation to use.
- * @param fetchImpl The `fetch` implementation to use.
- * @returns A function that fetches a fragment from a JSON response.
+ * @param {FetchImpl} [fetchImpl] - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @returns {FetchFragmentFunction<Arguments, FetchImpl>} - A function that fetches a fragment from a JSON response.
  */
 export function addFragmentSupportToFetch<
+	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
 	FetchImpl extends (
-		...arguments_: Parameters<typeof fetch>
+		...arguments_: Arguments
 	) => Promise<
 		Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>
 	> = typeof fetch,
->(
-	fetchImpl?: FetchImpl,
-): (
-	...arguments_: FetchInputs<FetchImpl>
-) => Promise<Response | AwaitedFetchReturns<FetchImpl>> {
-	return decorateFetchResponseUsingInputs(
-		async (response, ...arguments_: FetchInputs<FetchImpl>) => {
-			let input = arguments_[0];
-			if (typeof input === 'string') {
-				input = new URL(input);
-			}
+>(fetchImpl?: FetchImpl): FetchFragmentFunction<Arguments, FetchImpl> {
+	return decorateFetchResponseUsingInputs<
+		Arguments,
+		FetchImpl,
+		AwaitedFetchReturns<FetchImpl> | FragmentResponse
+	>(async (response, ...arguments_: Arguments) => {
+		let input = arguments_[0];
+		if (typeof input === 'string') {
+			input = new URL(input);
+		}
 
-			if (!(input instanceof URL)) {
-				input = new URL(input.url);
-			}
+		if (!(input instanceof URL)) {
+			input = new URL(input.url);
+		}
 
-			if (input.hash) {
-				return getFragment(input, response);
-			}
+		if (input.hash) {
+			return getFragment(input, response);
+		}
 
-			return response;
-		},
-		fetchImpl,
-	);
-}
-
-class FragmentResponse extends Response {
-	url: string;
-
-	constructor(
-		body?: BodyInit | undefined,
-		init?: ResponseInit & {url: string},
-	) {
-		super(body, init);
-		this.url = init?.url ?? '';
-	}
+		return response;
+	}, fetchImpl);
 }
 
 /**
  * Retrieves a JSON fragment from a response and returns a new response with only the fragment.
- * @template FetchImpl - The type of the fetch implementation to use.
+ * @template FetchImpl The type of the `fetch` implementation to use.
  * @param {URL} input - The URL of the response.
  * @param {Promise<Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>>} response - The response to extract the fragment from.
- * @returns {Promise<Response>} A new response with only the fragment.
+ * @returns {Promise<FragmentResponse>} - A new response with only the fragment.
  */
 async function getFragment<
 	FetchImpl extends (
@@ -107,7 +92,7 @@ async function getFragment<
 
 				// Update Link-Template headers
 				adjustLinkHeaders({headers, headerName: 'Link-Template', hash});
-				return new FragmentResponse(fragmentString, {
+				return new FragmentResponse(fragment, {
 					status: response.status,
 					statusText: response.statusText,
 					headers,

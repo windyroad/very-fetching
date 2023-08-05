@@ -1,6 +1,12 @@
 # @windyroad/fetch-link
 
-A library that adapts the fetch API to work with [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
+We believe that hypermedia APIs, APIs who's responses include links and forms, significantly
+reduces to coupling between the client and server, making them easier to evolve.
+
+This library that adapts the fetch API to work with
+[RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Links. It parses `Link` and
+`Link-Template` headers, providing them via `links()` method on the `Response`, and
+it can use links and request inputs, allowing call chaining.
 
 ## Installation
 
