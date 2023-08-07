@@ -1,5 +1,4 @@
-import {type AwaitedFetchReturns, wrapFetch} from '@windyroad/wrap-fetch';
-import {type FetchFragmentFunction} from '@windyroad/fetch-fragment';
+import {wrapFetch, type FetchFunction} from '@windyroad/wrap-fetch';
 import {FragmentResponse} from '@windyroad/fetch-fragment';
 import {isLink, type Link} from './link';
 import {type DropFirst} from './drop-first';
@@ -23,20 +22,18 @@ function isHeadersEmpty(headers: Headers): boolean {
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.
  * @template Arguments - The argument types of the original fetch function.
- * @template FetchImpl - The type of the original fetch function to adapt.
+ * @template ResponseType - The awaited response type of the original fetch function to adapt.
  * @param {Function} fetchImpl - The original fetch function to adapt.
  * @returns {Function} An adapted fetch function that supports passing in a Link object.
  */
 export function glowUpFetchWithLinkInputs<
 	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
-	FetchImpl extends (...arguments_: Arguments) => Promise<any> = (
-		...arguments_: Arguments
-	) => ReturnType<typeof fetch>,
+	ResponseType extends Response = Response,
 >(
-	fetchImpl?: FetchImpl,
+	fetchImpl?: FetchFunction<Arguments, ResponseType>,
 ): (
 	...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
-) => Promise<FragmentResponse | AwaitedFetchReturns<FetchImpl>> {
+) => Promise<ResponseType | FragmentResponse<ResponseType>> {
 	/**
 	 * Currently the code just adapts the input from a link to a url.
 	 * For performance reasons, if the link is a fragment, it should
@@ -46,12 +43,12 @@ export function glowUpFetchWithLinkInputs<
 	 */
 	return wrapFetch<
 		Arguments,
-		FetchImpl,
+		ResponseType,
 		Arguments | [Link, ...DropFirst<Arguments>],
-		Awaited<ReturnType<FetchFragmentFunction<Arguments, FetchImpl>>>
+		ResponseType | FragmentResponse<ResponseType>
 	>(
 		async (
-			fetchImplInner,
+			fetchImplInner: FetchFunction<Arguments, ResponseType>,
 			...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
 		) => {
 			const [target, init, ...other] = arguments_;
@@ -84,11 +81,9 @@ export function glowUpFetchWithLinkInputs<
 					},
 					...other,
 				];
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 				return fetchImplInner(...(fetchParameters as Arguments));
 			}
 
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 			return fetchImplInner(...(arguments_ as unknown as Arguments));
 		},
 		fetchImpl,

@@ -102,13 +102,13 @@ fetchWithCustomError('https://example.com/not-found').then((response) => {
 ```typescript
 function decorateFetchResponse<
   DecoratorReturns = Awaited<ReturnType<typeof fetch>>,
-  FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+  FetchFunction<Arguments, ResponseType> extends (...args: any) => Promise<any> = typeof fetch,
 >(
   decorator: (
-    response: FetchReturns<FetchImpl>,
+    response: FetchReturns<FetchFunction<Arguments, ResponseType>>,
   ) => Promise<DecoratorReturns> | DecoratorReturns,
-  fetchImpl?: FetchImpl,
-): (...args: FetchParameters<FetchImpl>) => Promise<DecoratorReturns>
+  fetchImpl?: FetchFunction<Arguments, ResponseType>,
+): (...args: FetchParameters<FetchFunction<Arguments, ResponseType>>) => Promise<DecoratorReturns>
 ```
 
 Decorates the response of a `fetch` request with additional properties.
@@ -121,7 +121,7 @@ Decorates the response of a `fetch` request with additional properties.
 ### Type Parameters
 
 - `DecoratorReturns`: The return type of the decorator function. Defaults to `Awaited<ReturnType<typeof fetch>>`.
-- `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
+- `FetchFunction<Arguments, ResponseType>`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
 
 ### Returns
 
@@ -133,19 +133,19 @@ Decorates the response of a fetch request with additional properties.
 
 #### Type parameters
 
-- `FetchImpl`: The type of the `fetch` implementation.
+- `FetchFunction<Arguments, ResponseType>`: The type of the `fetch` implementation.
 - `DecoratorReturns`: The return type of the decorator function.
 
 #### Parameters
 
 - `decorator`: The decorator function to apply to the response.
-  - Type: `(response: AwaitedFetchReturns<FetchImpl>, ...arguments_: FetchInputs<FetchImpl>)
+  - Type: `(response: ResponseType, ...arguments_: Arguments)
    => Promise<DecoratorReturns> | DecoratorReturns`
   - The `response` parameter is the response object returned by the `fetch` function.
   - The `arguments_` parameter is an array of arguments passed to the `fetch` function.
   - The function should return a new response object or a promise that resolves to a new response object.
 - `fetchImpl` (optional): The `fetch` implementation to use.
-  - Type: `FetchImpl`
+  - Type: `FetchFunction<Arguments, ResponseType>`
   - Default: `fetch`
 
 #### Returns

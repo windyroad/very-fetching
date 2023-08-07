@@ -58,13 +58,13 @@ fetchWithJsonBody('https://example.com', { method: 'POST', body: { foo: 'bar' } 
 
 ```typescript
 function adaptFetchInputs<
-  FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
-  WrapInputs extends any[] = Parameters<FetchImpl>,
+  FetchFunction<Arguments, ResponseType> extends (...args: any) => Promise<any> = typeof fetch,
+  WrapInputs extends any[] = Parameters<FetchFunction<Arguments, ResponseType>>,
 >(
   adapter: (
     ...args: WrapInputs
-  ) => FetchInputs<FetchImpl> | Promise<FetchInputs<FetchImpl>>,
-  fetchImpl?: FetchImpl,
+  ) => FetchInputs<FetchFunction<Arguments, ResponseType>> | Promise<FetchInputs<FetchFunction<Arguments, ResponseType>>>,
+  fetchImpl?: FetchFunction<Arguments, ResponseType>,
 ): (...args: WrapInputs) => Promise<FetchReturns<typeof fetchImpl>>
 ```
 
@@ -77,7 +77,7 @@ Adapts a `fetch` function with the given adapter function.
 
 #### Type Parameters
 
-- `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
+- `FetchFunction<Arguments, ResponseType>`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
 - `WrapInputs`: The input types of the wrapper function.
 
 #### Returns

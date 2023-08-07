@@ -1,6 +1,9 @@
 import {decorateFetchResponse} from '@windyroad/decorate-fetch-response';
-import {isJsonContent} from '@windyroad/fetch-fragment';
-import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
+import {FragmentResponse, isJsonContent} from '@windyroad/fetch-fragment';
+import {
+	type FetchFunction,
+	type AwaitedFetchReturns,
+} from '@windyroad/wrap-fetch';
 import LinkHeader from 'http-link-header';
 import uriTemplate from 'uri-templates';
 import {JsonPointer} from 'json-ptr';
@@ -13,92 +16,18 @@ import {resolveLinkUrls} from './resolve-link-urls';
 
 /**
  * Decorates a `fetch`-like function with link parsing and resolution functionality.
- * @template FetchImpl - The type of the `fetch`-like function to decorate.
+ * @template Arguments - The parameters type of the `fetch`-like function to decorate.
+ * @template ResponseType - The awaited response type of the `fetch`-like function to decorate.
  * @param fetchImpl - The `fetch`-like function to decorate.
  * @returns - A decorated `fetch`-like function that returns a `LinkedResponse`.
  */
 export function decorateFetchResponseWithLinks<
-	FetchImpl extends (
-		...arguments_: any
-	) => Promise<
-		Pick<Response, 'headers' | 'json' | 'clone' | 'url'>
-	> = typeof fetch,
+	Arguments extends any[] = Parameters<typeof fetch>,
+	ResponseType extends Response = Response,
 >(
-	fetchImpl?: FetchImpl,
-): (
-	...arguments_: Parameters<FetchImpl>
-) => Promise<LinkedResponse<AwaitedFetchReturns<FetchImpl>>> {
-	return decorateFetchResponse(async (response) => {
-		const linkHeader = new LinkHeader();
-		linkHeader.parse(response?.headers?.get('link') ?? '');
-		linkHeader.parse(response?.headers?.get('link-template') ?? '');
-		const resolvedLinks = resolveLinkUrls({
-			links: linkHeader.refs,
-			baseUrl: response.url,
-		});
-		let responseBodyState: ResponseBodyState<FetchImpl> = {
-			originalResponse: response,
-		};
-
-		let links: Link[];
-
-		if (isJsonContent(response)) {
-			const responseUrl = new URL(response.url);
-			const resolvedLinksAreHashed = resolvedLinks.map((urlAndLink) => {
-				const {url, link} = urlAndLink;
-				if (isFragmentOf(url, responseUrl)) {
-					/**
-					 * See if the hash is a template and if so, generate the range of
-					 * matching hashes and add them to the links array
-					 */
-					const hashTemplate = uriTemplate(url.hash);
-					return {url, link, isTemplatedHash: hashTemplate.varNames.length};
-				}
-
-				return {url, link, isTemplatedHash: false};
-			});
-
-			// If the links are templated hashes, then we'll need to iterated
-			// over the matching parts of the body, but we still want the body
-			// to be readable, so we'll clone the response, read the body from
-			// the original and return the clone
-			if (
-				resolvedLinksAreHashed.some((urlAndLink) => urlAndLink.isTemplatedHash)
-			) {
-				responseBodyState = await getBody(responseBodyState);
-			}
-
-			links = resolvedLinksAreHashed.flatMap<Link>((urlAndLink) => {
-				const {url, link, isTemplatedHash} = urlAndLink;
-				if (isTemplatedHash) {
-					const {jsonBody} = responseBodyState;
-					const matches = findMatchingFragments(jsonBody, url.hash);
-					const templatedLinks = matches.map((match) => {
-						return matchToLink({link, url, match});
-					});
-					return templatedLinks;
-				}
-
-				return link;
-			});
-		} else {
-			links = resolvedLinks.map((urlAndLink) => urlAndLink.link);
-		}
-
-		return Object.assign(
-			responseBodyState.clonedResponse ?? responseBodyState.originalResponse,
-			{
-				links(
-					filter?: Partial<Link> | string,
-					parameters?: Record<string, string | Record<string, string>>,
-				): Link[] {
-					const filtered = filterLinks({filter, links});
-					fillLinks({parameters, links: filtered});
-					return filtered;
-				},
-			},
-		);
-	}, fetchImpl);
+	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+): (...arguments_: Arguments) => Promise<LinkedResponse<ResponseType>> {
+	return decorateFetchResponse(decorateResponseWithLinks, fetchImpl);
 }
 
 /**
@@ -202,4 +131,105 @@ function filterLinks({
 				return true;
 		  })
 		: links;
+}
+
+/**
+ * Decorates a fetch response object with link headers.
+ * @template ResponseType - The type of the fetch response object to decorate.
+ * @param {ResponseType} response - The fetch response object to decorate.
+ * @returns {Promise<LinkedResponse<ResponseType>>} A decorated fetch response object with link headers.
+ */
+async function decorateResponseWithLinks<
+	ResponseType extends Response = Response,
+>(response: ResponseType): Promise<LinkedResponse<ResponseType>> {
+	const linkHeader = new LinkHeader();
+	linkHeader.parse(response?.headers?.get('link') ?? '');
+	linkHeader.parse(response?.headers?.get('link-template') ?? '');
+	const resolvedLinks = resolveLinkUrls({
+		links: linkHeader.refs,
+		baseUrl: response.url,
+	});
+	let responseBodyState: ResponseBodyState<ResponseType> = {
+		originalResponse: response,
+	};
+
+	let links: Link[];
+
+	if (isJsonContent(response)) {
+		const responseUrl = new URL(response.url);
+		const resolvedLinksAreHashed = resolvedLinks.map((urlAndLink) => {
+			const {url, link} = urlAndLink;
+			if (isFragmentOf(url, responseUrl)) {
+				/**
+				 * See if the hash is a template and if so, generate the range of
+				 * matching hashes and add them to the links array
+				 */
+				const hashTemplate = uriTemplate(url.hash);
+				return {url, link, isTemplatedHash: hashTemplate.varNames.length};
+			}
+
+			return {url, link, isTemplatedHash: false};
+		});
+
+		// If the links are templated hashes, then we'll need to iterated
+		// over the matching parts of the body, but we still want the body
+		// to be readable, so we'll clone the response, read the body from
+		// the original and return the clone
+		if (
+			resolvedLinksAreHashed.some((urlAndLink) => urlAndLink.isTemplatedHash)
+		) {
+			responseBodyState = await getBody(responseBodyState);
+		}
+
+		links = resolvedLinksAreHashed.flatMap<Link>((urlAndLink) => {
+			const {url, link, isTemplatedHash} = urlAndLink;
+			if (isTemplatedHash) {
+				const {jsonBody} = responseBodyState;
+				const matches = findMatchingFragments(jsonBody, url.hash);
+				const templatedLinks = matches.map((match) => {
+					return matchToLink({link, url, match});
+				});
+				return templatedLinks;
+			}
+
+			return link;
+		});
+	} else {
+		links = resolvedLinks.map((urlAndLink) => urlAndLink.link);
+	}
+
+	if (response instanceof FragmentResponse && response.parent) {
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+		const parent = await decorateResponseWithLinks(response.parent);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+		return Object.assign(
+			responseBodyState.clonedResponse ?? responseBodyState.originalResponse,
+			{
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				...(parent && {parent}),
+				links(
+					filter?: Partial<Link> | string,
+					parameters?: Record<string, string | Record<string, string>>,
+				): Link[] {
+					const filtered = filterLinks({filter, links});
+					fillLinks({parameters, links: filtered});
+					return filtered;
+				},
+			},
+		);
+	}
+
+	return Object.assign(
+		responseBodyState.clonedResponse ?? responseBodyState.originalResponse,
+		{
+			links(
+				filter?: Partial<Link> | string,
+				parameters?: Record<string, string | Record<string, string>>,
+			): Link[] {
+				const filtered = filterLinks({filter, links});
+				fillLinks({parameters, links: filtered});
+				return filtered;
+			},
+		},
+	);
 }

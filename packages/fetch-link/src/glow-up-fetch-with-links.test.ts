@@ -2,8 +2,9 @@ import {test, vi, beforeAll, afterAll, beforeEach, describe} from 'vitest';
 import fc from 'fast-check';
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {MockResponse} from '@windyroad/fetch-fragment';
+import {type FragmentResponse, MockResponse} from '@windyroad/fetch-fragment';
 import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
+import {type LinkedResponse} from './linked-response';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {
@@ -186,12 +187,15 @@ describe('glowUpFetchWithLinks fragments', () => {
 		url: 'http://example.com',
 	};
 	const mockFetchImpl = vi.fn(
-		async (...arguments_: Parameters<typeof fetch>) =>
-			new MockResponse(
+		async (...arguments_: Parameters<typeof fetch>) => {
+			// eslint-disable-next-line @typescript-eslint/no-base-to-string
+			const url = new URL(arguments_[0].toString());
+			url.hash = '';
+			return new MockResponse(
 				mockResponseBody ? JSON.stringify(mockResponseBody) : undefined,
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
-				{...mockResponseOptions, url: arguments_[0].toString()},
-			),
+				{...mockResponseOptions, url: url.toString()},
+			);
+		},
 	);
 
 	beforeEach(() => {
@@ -202,7 +206,7 @@ describe('glowUpFetchWithLinks fragments', () => {
 	test('returns a fragment from a JSON response', async ({expect}) => {
 		const mockFragment = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
 		mockResponseBody = mockFragment;
-
+		mockResponseHeaders.set('link', '<#/{key}>; rel="item"');
 		const fetchFragmentImpl = glowUpFetchWithLinks(mockFetchImpl);
 		const response = await fetchFragmentImpl('https://example.com#/foo');
 		expect(response.status).toBe(200);
@@ -211,6 +215,15 @@ describe('glowUpFetchWithLinks fragments', () => {
 			String(JSON.stringify(mockFragment.foo).length),
 		);
 		expect(await response.text()).toBe(JSON.stringify(mockFragment.foo));
+		expect(response).toHaveProperty('parent');
+		const {parent} = response as FragmentResponse<Response>;
+		expect(parent).toBeDefined();
+		expect(parent).toHaveProperty('links');
+
+		const links = (
+			parent as LinkedResponse<FragmentResponse<Response>>
+		).links();
+		expect(links).toHaveLength(1);
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
 	});
 

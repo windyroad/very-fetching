@@ -1,36 +1,32 @@
 import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
 
 export type InitialResponseBodyState<
-	FetchImpl extends (
-		...arguments_: any[]
-	) => Promise<Pick<Response, 'json' | 'clone'>>,
+	ResponseType extends Pick<Response, 'json' | 'clone'>,
 > = {
 	clonedResponse?: undefined;
-	originalResponse: AwaitedFetchReturns<FetchImpl>;
+	originalResponse: ResponseType;
 	jsonBody?: undefined;
 };
 
 export type ClonedResponseBodyState<
-	FetchImpl extends (
-		...arguments_: any[]
-	) => Promise<Pick<Response, 'json' | 'clone'>>,
+	ResponseType extends Pick<Response, 'json' | 'clone'>,
 > = {
-	clonedResponse: AwaitedFetchReturns<FetchImpl>;
-	originalResponse: AwaitedFetchReturns<FetchImpl>;
+	clonedResponse: ResponseType;
+	originalResponse: ResponseType;
 	jsonBody: Record<string, unknown>;
 };
 
 export type ResponseBodyState<
-	FetchImpl extends (
-		...arguments_: any[]
-	) => Promise<Pick<Response, 'json' | 'clone'>>,
-> = ClonedResponseBodyState<FetchImpl> | InitialResponseBodyState<FetchImpl>;
+	ResponseType extends Pick<Response, 'json' | 'clone'>,
+> =
+	| ClonedResponseBodyState<ResponseType>
+	| InitialResponseBodyState<ResponseType>;
 
 /**
  * Gets the response body from a fetch response. If the response has not been cloned,
  * it will be cloned and the JSON body will be parsed.
  * The original response will have it's body consumed. The clone will not not have it's body consumed.
- * @template FetchImpl - The type of the fetch implementation.
+ * @template ResponseType - The awaited response type of the fetch implementation.
  * @param responseBodyState - The response body state.
  * @param responseBodyState.originalResponse - The original fetch response.
  * @param responseBodyState.clonedResponse - The cloned fetch response.
@@ -38,15 +34,13 @@ export type ResponseBodyState<
  * @returns The response body state with the parsed JSON response body.
  */
 export async function getBody<
-	FetchImpl extends (
-		...arguments_: any[]
-	) => Promise<Pick<Response, 'json' | 'clone'>> = typeof fetch,
+	ResponseType extends Pick<Response, 'json' | 'clone'> = Response,
 >(
-	responseBodyState: ResponseBodyState<FetchImpl>,
-): Promise<ClonedResponseBodyState<FetchImpl>> {
+	responseBodyState: ResponseBodyState<ResponseType>,
+): Promise<ClonedResponseBodyState<ResponseType>> {
 	if (responseBodyState.jsonBody === undefined) {
 		const clonedResponse =
-			responseBodyState.originalResponse.clone() as AwaitedFetchReturns<FetchImpl>;
+			responseBodyState.originalResponse.clone() as unknown as ResponseType;
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const jsonBody = await responseBodyState.originalResponse.json();
 		return {

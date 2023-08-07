@@ -1,9 +1,6 @@
 import {test, describe, vi} from 'vitest';
-import fc from 'fast-check';
 import {MockResponse} from '@windyroad/fetch-fragment';
-import {JsonPointer} from 'json-ptr';
 import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
-import {findMatchingFragments} from './find-matching-fragments';
 
 describe('decorateFetchResponseWithLinks', () => {
 	test('decorateFetchResponseWithLinks adds links method to response', async ({

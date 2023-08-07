@@ -1,7 +1,7 @@
-import fc from 'fast-check';
 import {describe, test, vi, beforeEach} from 'vitest';
 import {MockResponse} from './mock-response';
 import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch';
+import {FragmentResponse} from './fragment-response';
 
 describe('fetchFragment', () => {
 	let mockResponseBody: any = {};
@@ -13,7 +13,7 @@ describe('fetchFragment', () => {
 		url: 'https://example.com',
 	};
 	const mockFetchImpl = vi.fn(
-		async (...arguments_: Parameters<typeof fetch>) =>
+		async (...arguments_: Parameters<typeof fetch>): Promise<Response> =>
 			new MockResponse(
 				mockResponseBody ? JSON.stringify(mockResponseBody) : undefined,
 				mockResponseOptions,
@@ -75,6 +75,10 @@ describe('fetchFragment', () => {
 		);
 		expect(await response.json()).toEqual(mockResponseBody.foo);
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
+		expect(response).toBeInstanceOf(FragmentResponse);
+		const fragmentResponse = response as FragmentResponse<Response>;
+		expect(fragmentResponse.parent).toBeInstanceOf(MockResponse);
+		expect(await fragmentResponse.parent?.json()).toEqual(mockResponseBody);
 	});
 
 	test('filters Link headers that do not match the fragment hash', async ({

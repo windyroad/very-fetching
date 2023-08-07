@@ -1,8 +1,10 @@
+import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
+
 /**
  * A custom `Response` class that represents a fragment of a JSON response.
  * @augments Response
  */
-export class FragmentResponse extends Response {
+export class FragmentResponse<ResponseType extends Response> extends Response {
 	/**
 	 * The URL of the response.
 	 * @type {string}
@@ -16,15 +18,26 @@ export class FragmentResponse extends Response {
 	jsonBody: any;
 
 	/**
+	 * The response that this fragment was generated from.
+	 */
+	parent: ResponseType | undefined;
+
+	/**
 	 * Creates a new `FragmentResponse` instance.
 	 * @param {any} [jsonBody] - The JSON body of the response.
 	 * @param {ResponseInit & {url: string}} [init] - The `ResponseInit` options for the response, including the URL.
+	 * @param parent The response that this fragment was generated from.
 	 */
-	constructor(jsonBody?: any, init?: ResponseInit & {url: string}) {
+	constructor(
+		jsonBody?: any,
+		init?: ResponseInit & {url: string},
+		parent?: ResponseType,
+	) {
 		super(null, init);
 		this.url = init?.url ?? '';
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		this.jsonBody = jsonBody;
+		this.parent = parent;
 	}
 
 	/**

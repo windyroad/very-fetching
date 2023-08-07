@@ -3,11 +3,7 @@ import {type FragmentResponse} from './fragment-response';
 
 export type FetchFragmentFunction<
 	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
-	FetchImpl extends (
-		...arguments_: Arguments
-	) => Promise<
-		Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>
-	> = typeof fetch,
+	ResponseType extends Response = Response,
 > = (
 	...arguments_: Arguments
-) => Promise<AwaitedFetchReturns<FetchImpl> | FragmentResponse>;
+) => Promise<ResponseType | FragmentResponse<ResponseType>>;

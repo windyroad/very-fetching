@@ -220,7 +220,7 @@ These examples should provide a good starting point for using `@windyroad/wrap-f
 function wrapFetch<
   WrapInputs extends any[] = Parameters<typeof fetch>,
   WrapReturns = Awaited<ReturnType<typeof fetch>>,
-  FetchImpl extends (...args: any) => Promise<any> = typeof fetch,
+  FetchFunction<Arguments, ResponseType> extends (...args: any) => Promise<any> = typeof fetch,
 >(
   wrapper: (
     fetchImplInner: (
@@ -228,7 +228,7 @@ function wrapFetch<
     ) => Promise<FetchReturns<typeof fetchImpl>>,
     ...args: WrapInputs
   ) => Promise<WrapReturns>,
-  fetchImpl?: FetchImpl,
+  fetchImpl?: FetchFunction<Arguments, ResponseType>,
 ): (...args: WrapInputs) => Promise<WrapReturns>
 ```
 
@@ -243,7 +243,7 @@ Wraps a `fetch` implementation with a wrapper function.
 
 - `WrapInputs`: The type of the input arguments for the wrapper function. Defaults to `Parameters<typeof fetch>`.
 - `WrapReturns`: The return type of the wrapper function. Defaults to `Awaited<ReturnType<typeof fetch>>`.
-- `FetchImpl`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
+- `FetchFunction<Arguments, ResponseType>`: The type of the `fetch` implementation. Defaults to `typeof fetch`.
 
 #### Returns
 

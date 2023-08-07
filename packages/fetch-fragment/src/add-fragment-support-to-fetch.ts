@@ -3,7 +3,10 @@ import {
 	decorateFetchResponseUsingInputs,
 } from '@windyroad/decorate-fetch-response';
 import LinkHeader from 'http-link-header';
-import {type AwaitedFetchReturns} from '@windyroad/wrap-fetch';
+import {
+	type FetchFunction,
+	type AwaitedFetchReturns,
+} from '@windyroad/wrap-fetch';
 import {JsonPointer} from 'json-ptr';
 import {isJsonContent} from './is-json-content';
 import {FragmentResponse} from './fragment-response';
@@ -13,22 +16,20 @@ import {type FetchFragmentFunction} from './fetch-fragment-function';
  * Fetches a fragment from a JSON response based on a URL fragment identifier.
  * If the response is not JSON or the fragment is not found, returns a 404 or 415 response.
  * @template Arguments The type of the input arguments for the `fetch` implementation.
- * @template FetchImpl The type of the `fetch` implementation to use.
- * @param {FetchImpl} [fetchImpl] - The `fetch` implementation to use. Defaults to the global `fetch` function.
- * @returns {FetchFragmentFunction<Arguments, FetchImpl>} - A function that fetches a fragment from a JSON response.
+ * @template ResponseType The awaited type of the `fetch` implementation response.
+ * @param {FetchFunction<Arguments, ResponseType>} [fetchImpl] - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @returns {FetchFragmentFunction<Arguments,ResponseType>} - A function that fetches a fragment from a JSON response.
  */
 export function addFragmentSupportToFetch<
 	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
-	FetchImpl extends (
-		...arguments_: Arguments
-	) => Promise<
-		Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>
-	> = typeof fetch,
->(fetchImpl?: FetchImpl): FetchFragmentFunction<Arguments, FetchImpl> {
+	ResponseType extends Response = Response,
+>(
+	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+): FetchFragmentFunction<Arguments, ResponseType> {
 	return decorateFetchResponseUsingInputs<
 		Arguments,
-		FetchImpl,
-		AwaitedFetchReturns<FetchImpl> | FragmentResponse
+		ResponseType,
+		ResponseType | FragmentResponse<ResponseType>
 	>(async (response, ...arguments_: Arguments) => {
 		let input = arguments_[0];
 		if (typeof input === 'string') {
@@ -49,32 +50,34 @@ export function addFragmentSupportToFetch<
 
 /**
  * Retrieves a JSON fragment from a response and returns a new response with only the fragment.
- * @template FetchImpl The type of the `fetch` implementation to use.
+ * @template ResponseType The type of the `fetch` response.
  * @param {URL} input - The URL of the response.
- * @param {Promise<Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>>} response - The response to extract the fragment from.
- * @returns {Promise<FragmentResponse>} - A new response with only the fragment.
+ * @param {Promise<Response>} response - The response to extract the fragment from.
+ * @returns {Promise<ResponseType | FragmentResponse<ResponseType>>} - A new response with only the fragment.
  */
-async function getFragment<
-	FetchImpl extends (
-		...arguments_: Parameters<typeof fetch>
-	) => Promise<
-		Pick<Response, 'json' | 'body' | 'status' | 'statusText' | 'headers'>
-	> = typeof fetch,
->(input: URL, response: AwaitedFetchReturns<FetchImpl>) {
+async function getFragment<ResponseType extends Response = Response>(
+	input: URL,
+	response: ResponseType,
+): Promise<ResponseType | FragmentResponse<ResponseType>> {
 	const {hash} = input;
 	if (isJsonContent(response)) {
 		if (response.body) {
 			try {
+				const parent = response.clone() as ResponseType;
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				const json = await response.json();
 				const pointer = JsonPointer.create(hash);
 				const fragment = pointer.get(json);
 				if (fragment === undefined) {
-					return new FragmentResponse(undefined, {
-						status: 404,
-						headers: response.headers,
-						url: input.href,
-					});
+					return new FragmentResponse(
+						undefined,
+						{
+							status: 404,
+							headers: response.headers,
+							url: input.href,
+						},
+						parent,
+					);
 				}
 
 				const fragmentString = JSON.stringify(fragment);
@@ -92,22 +95,30 @@ async function getFragment<
 
 				// Update Link-Template headers
 				adjustLinkHeaders({headers, headerName: 'Link-Template', hash});
-				return new FragmentResponse(fragment, {
-					status: response.status,
-					statusText: response.statusText,
-					headers,
-					url: input.href,
-				});
+				return new FragmentResponse(
+					fragment,
+					{
+						status: response.status,
+						statusText: response.statusText,
+						headers,
+						url: input.href,
+					},
+					parent,
+				);
 			} catch (error: unknown) {
 				if (
 					error instanceof ReferenceError &&
 					error.message === 'Invalid JSON Pointer syntax.'
 				) {
-					return new FragmentResponse(error.message, {
-						status: 400,
-						headers: response.headers,
-						url: input.href,
-					});
+					return new FragmentResponse(
+						error.message,
+						{
+							status: 400,
+							headers: response.headers,
+							url: input.href,
+						},
+						response,
+					);
 				}
 
 				throw error;
@@ -115,18 +126,26 @@ async function getFragment<
 			// Else fall through to 404
 		}
 
-		return new FragmentResponse(undefined, {
-			status: 404,
-			headers: response.headers,
-			url: input.href,
-		});
+		return new FragmentResponse(
+			undefined,
+			{
+				status: 404,
+				headers: response.headers,
+				url: input.href,
+			},
+			response,
+		);
 	}
 
-	return new FragmentResponse(undefined, {
-		status: 415,
-		headers: response.headers,
-		url: input.href,
-	});
+	return new FragmentResponse(
+		undefined,
+		{
+			status: 415,
+			headers: response.headers,
+			url: input.href,
+		},
+		response,
+	);
 }
 
 /**

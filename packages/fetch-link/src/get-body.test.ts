@@ -7,7 +7,7 @@ test('getBody clonedResponse boyd can be consumed', async ({expect}) => {
 		JSON.stringify({data: 'Hello, world!'}),
 	);
 
-	const responseBodyState: ResponseBodyState<typeof fetch> = {
+	const responseBodyState: ResponseBodyState<Response> = {
 		originalResponse,
 		clonedResponse: undefined,
 		jsonBody: undefined,
@@ -18,6 +18,7 @@ test('getBody clonedResponse boyd can be consumed', async ({expect}) => {
 	expect(result.originalResponse.bodyUsed).toBeTruthy();
 	expect(result.clonedResponse).not.toBeUndefined();
 	expect(result.clonedResponse?.bodyUsed).toBeFalsy();
+
 	expect(await result.clonedResponse?.json()).toEqual({data: 'Hello, world!'});
 });
 
@@ -26,7 +27,7 @@ test('getBody is idempotent', async ({expect}) => {
 		JSON.stringify({data: 'Hello, world!'}),
 	);
 
-	const responseBodyState: ResponseBodyState<typeof fetch> = {
+	const responseBodyState: ResponseBodyState<Response> = {
 		originalResponse,
 		clonedResponse: undefined,
 		jsonBody: undefined,

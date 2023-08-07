@@ -11,6 +11,11 @@ export class MockResponse extends Response {
 
 	clone() {
 		const cloned = super.clone();
-		return new MockResponse(cloned.body as ReadableStream, cloned);
+		const mockedClone = new MockResponse(cloned.body as ReadableStream, {
+			...cloned,
+			url: this.url,
+			headers: new Headers(this.headers),
+		});
+		return mockedClone;
 	}
 }
