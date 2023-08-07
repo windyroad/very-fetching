@@ -1,5 +1,39 @@
 # @windyroad/fetch-link
 
+## 3.0.0
+
+### Major Changes
+
+- d85098a: BREAKING CHANGE: We have had to modify the the template parameters for `wrapFetch`,
+  `decorateFetchResponse`, `adaptFetchInputs`, `addFragmentSupportToFetch`, `fetchFragment`
+  and `fetchLink`, replacing the `FetchImpl` parameter with and `Arguments` and `ResponseType`
+  parameter. Originally the intention was to try and leverage Typescript's
+  type inference and have it figure out the types based on the passed in fetch implementation,
+  but we couldn't figure out how to make it work properly and we were getting lots of type
+  errors. Replacing the `FetchImpl` parameter with the `Arguments` and `ResponseType` parameters solve those errors.
+
+  `fetchLink` will now check if the link has a `fragment` and use that to return a fragment
+  response instead of fetching the resource and getting the fragment from it. For iterating
+  over items in a collection, this is orders of magnitude faster.
+
+### Minor Changes
+
+- 3e3ea6c: Links for JSON responses that have a fragment identifier now include the matched fragment.
+  For collections, this provides an easy and fast way to iterate over the items on the
+  collection. While it is possible to call `fetchLink` for each fragment link, that is much
+  slower due to network overheads and the serialisation of the json into a `Response`.
+- 6169097: `FragmentResponse` now includes a reference to the related response, in an optional
+  `parent` property, which can be used to access other fragments in the response
+
+### Patch Changes
+
+- Updated dependencies [d85098a]
+- Updated dependencies [6169097]
+  - @windyroad/decorate-fetch-response@3.0.0
+  - @windyroad/adapt-fetch-inputs@3.0.0
+  - @windyroad/fetch-fragment@2.0.0
+  - @windyroad/wrap-fetch@3.0.0
+
 ## 2.3.0
 
 ### Minor Changes

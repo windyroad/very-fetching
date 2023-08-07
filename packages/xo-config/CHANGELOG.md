@@ -1,5 +1,11 @@
 # @windyroad/xo-config
 
+## 1.3.1
+
+### Patch Changes
+
+- 6b0973b: `**/*.bench.ts` files are now treated as development files
+
 ## 1.3.0
 
 ### Minor Changes
