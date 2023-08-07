@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/decorate-fetch-response",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "A library for decorating fetch responses.",
   "type": "module",
   "main": "dist/index.js",
@@ -43,7 +43,7 @@
     "access": "public"
   },
   "dependencies": {
-    "@windyroad/wrap-fetch": "2.0.0"
+    "@windyroad/wrap-fetch": "3.0.0"
   },
   "devDependencies": {
     "fast-check": "^3.10.0",
