@@ -7,11 +7,12 @@
 ---
 
 BREAKING CHANGE: We have had to modify the the template parameters for `wrapFetch`,
-`decorateFetchResponse`, `adaptFetchInputs`, `addFragmentSupportToFetch` and the `fetchLink`,
-adding `Arguments` parameter. Originally the intention was to try and leverage Typescript's
+`decorateFetchResponse`, `adaptFetchInputs`, `addFragmentSupportToFetch`, `fetchFragment`
+and `fetchLink`, replacing the `FetchImpl` parameter with and `Arguments` and `ResponseType`
+parameter. Originally the intention was to try and leverage Typescript's
 type inference and have it figure out the types based on the passed in fetch implementation,
 but we couldn't figure out how to make it work properly and we were getting lots of type
-errors. Adding an `Arguments` parameter solve those errors.
+errors. Replacing the `FetchImpl` parameter with the `Arguments` and `ResponseType` parameters solve those errors.
 
 `fetchLink` will now check if the link has a `fragment` and use that to return a fragment
 response instead of fetching the resource and getting the fragment from it. For iterating
