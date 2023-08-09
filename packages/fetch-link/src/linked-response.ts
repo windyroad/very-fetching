@@ -1,4 +1,4 @@
-import {type Link} from './link';
+import {type Link} from './link.js';
 
 /**
  * A type that extends the `FetchReturns` type with a `links` method that returns an array of RFC8288 Link objects.

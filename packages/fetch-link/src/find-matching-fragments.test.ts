@@ -1,5 +1,5 @@
 import {test, describe} from 'vitest';
-import {findMatchingFragments} from './find-matching-fragments';
+import {findMatchingFragments} from './find-matching-fragments.js';
 
 describe('findMatchingFragments', () => {
 	test('returns an empty array when there are no matches', (t) => {

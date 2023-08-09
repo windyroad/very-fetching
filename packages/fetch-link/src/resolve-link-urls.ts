@@ -1,4 +1,4 @@
-import {type Link} from './link';
+import {type Link} from './link.js';
 
 /**
  * Resolves the URLs of an array of links relative to a base URL.

@@ -7,12 +7,12 @@ import {
 import LinkHeader from 'http-link-header';
 import uriTemplate from 'uri-templates';
 import {JsonPointer} from 'json-ptr';
-import {findMatchingFragments} from './find-matching-fragments';
-import {getBody, type ResponseBodyState} from './get-body';
-import {isFragmentOf} from './is-fragment-of';
-import {type Link, type Fragment} from './link';
-import {type LinkedResponse} from './linked-response';
-import {resolveLinkUrls} from './resolve-link-urls';
+import {findMatchingFragments} from './find-matching-fragments.js';
+import {getBody, type ResponseBodyState} from './get-body.js';
+import {isFragmentOf} from './is-fragment-of.js';
+import {type Link, type Fragment} from './link.js';
+import {type LinkedResponse} from './linked-response.js';
+import {resolveLinkUrls} from './resolve-link-urls.js';
 
 /**
  * Decorates a `fetch`-like function with link parsing and resolution functionality.

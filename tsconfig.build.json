@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "ESNext",
     "target": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "nodeNext",
     "sourceMap": true,
     "declaration": true,
     "declarationMap": true,
@@ -21,7 +21,6 @@
     "strict": true,
   },
   "exclude": [
-    "**/test/**/*.test.ts",
     "**/*.test.ts",
     "**/*.bench.ts",
     "**/node_modules",

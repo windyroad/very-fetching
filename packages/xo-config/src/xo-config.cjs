@@ -8,17 +8,11 @@ const jsdoc = require('eslint-plugin-jsdoc');
  */
 const config = {
 	prettier: true,
-	extensions: ['.json', '.md'],
 	...jsdoc.configs['recommended-typescript-flavor-error'],
-	plugins: ['no-secrets', 'jsdoc', 'jsonc'],
-	extends: [
-		'plugin:jsonc/recommended-with-json',
-		'plugin:import/recommended',
-		'plugin:jsonc/prettier',
-	],
+	plugins: ['no-secrets', 'jsdoc'],
+	extends: [],
 	rules: {
 		'no-secrets/no-secrets': ['error', {ignoreContent: '^glowUp'}],
-		'n/file-extension-in-import': 'off',
 		'jsdoc/no-undefined-types': 'off',
 		...jsdoc.configs['recommended-typescript-flavor-error'].rules,
 		'jsdoc/require-param-type': 'off',
@@ -37,7 +31,6 @@ const config = {
 				peerDependencies: true,
 			},
 		],
-		'import/no-unresolved': 'off', // Need to find why this is failing
 		'unicorn/prevent-abbreviations': [
 			'error',
 			{
@@ -54,7 +47,6 @@ const config = {
 				},
 			},
 		],
-		'import/extensions': ['error', 'never'],
 	},
 };
 

@@ -1,7 +1,7 @@
 import {test} from 'vitest';
 import fc from 'fast-check';
 import {JsonPointer} from 'json-ptr';
-import {isFragmentOf} from './is-fragment-of';
+import {isFragmentOf} from './is-fragment-of.js';
 
 test('isFragmentOf with same URL', (t) => {
 	const url = new URL('http://example.com/#/foo/1');

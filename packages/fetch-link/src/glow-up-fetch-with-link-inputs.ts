@@ -1,7 +1,7 @@
 import {wrapFetch, type FetchFunction} from '@windyroad/wrap-fetch';
 import {FragmentResponse} from '@windyroad/fetch-fragment';
-import {isLink, type Link} from './link';
-import {type DropFirst} from './drop-first';
+import {isLink, type Link} from './link.js';
+import {type DropFirst} from './drop-first.js';
 
 /**
  * Checks if a Headers object is empty.

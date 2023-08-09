@@ -8,9 +8,9 @@ import {
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
 import {JsonPointer} from 'json-ptr';
-import {isJsonContent} from './is-json-content';
-import {FragmentResponse} from './fragment-response';
-import {type FetchFragmentFunction} from './fetch-fragment-function';
+import {isJsonContent} from './is-json-content.js';
+import {FragmentResponse} from './fragment-response.js';
+import {type FetchFragmentFunction} from './fetch-fragment-function.js';
 
 /**
  * Fetches a fragment from a JSON response based on a URL fragment identifier.

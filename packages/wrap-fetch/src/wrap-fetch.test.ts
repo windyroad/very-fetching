@@ -1,8 +1,9 @@
 import fc from 'fast-check';
 import {describe, test, it, vi, expect, beforeAll, afterAll} from 'vitest';
+// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {wrapFetch} from './wrap-fetch';
+import {wrapFetch} from './wrap-fetch.js';
 
 it('wraps fetch with a custom wrapper function', async () => {
 	const fetchImpl = vi.fn(async () => new Response());

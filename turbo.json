@@ -57,5 +57,11 @@
       "cache": false
     }
   },
-  "globalDependencies": ["tsconfig.json", "vite.config.ts"]
+  "globalDependencies": [
+    "tsconfig.json",
+    "tsconfig.build.json",
+    "vite.config.ts",
+    "vite.config.ci.ts",
+    "vite.workspace.ts"
+  ]
 }

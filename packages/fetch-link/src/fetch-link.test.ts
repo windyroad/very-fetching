@@ -1,8 +1,9 @@
 import {test, beforeAll, afterAll} from 'vitest';
+// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {fetchLink} from './fetch-link';
-import {type Link} from './link';
+import {fetchLink} from './fetch-link.js';
+import {type Link} from './link.js';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {

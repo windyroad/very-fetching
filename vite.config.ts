@@ -1,6 +1,7 @@
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import process from 'node:process';
+// eslint-disable-next-line n/file-extension-in-import
 import {defineConfig, configDefaults} from 'vitest/config';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));

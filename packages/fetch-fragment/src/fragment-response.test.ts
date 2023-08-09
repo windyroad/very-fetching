@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {describe, it, expect} from 'vitest';
-import {FragmentResponse} from './fragment-response';
+import {FragmentResponse} from './fragment-response.js';
 
 describe('FragmentResponse', () => {
 	describe('constructor', () => {

@@ -1,7 +1,7 @@
 import {describe, test, vi, beforeEach} from 'vitest';
-import {MockResponse} from './mock-response';
-import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch';
-import {FragmentResponse} from './fragment-response';
+import {MockResponse} from './mock-response.js';
+import {addFragmentSupportToFetch} from './add-fragment-support-to-fetch.js';
+import {FragmentResponse} from './fragment-response.js';
 
 describe('fetchFragment', () => {
 	let mockResponseBody: any = {};

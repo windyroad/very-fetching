@@ -4,13 +4,14 @@ import {
 } from '@windyroad/wrap-fetch';
 import {
 	addFragmentSupportToFetch,
+	type FetchFragmentFunction,
 	type FragmentResponse,
 } from '@windyroad/fetch-fragment';
-import {type Link} from './link';
-import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
-import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs';
-import {type DropFirst} from './drop-first';
-import {type LinkedResponse} from './linked-response';
+import {type Link} from './link.js';
+import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links.js';
+import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs.js';
+import {type DropFirst} from './drop-first.js';
+import {type LinkedResponse} from './linked-response.js';
 
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.
@@ -27,13 +28,13 @@ export function glowUpFetchWithLinks<
 ): (
 	...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
 ) => Promise<LinkedResponse<ResponseType | FragmentResponse<ResponseType>>> {
-	const fetchWithFragmentSupport = addFragmentSupportToFetch<
+	const fetchWithFragmentSupport: FetchFragmentFunction<
 		Arguments,
 		ResponseType
-	>(fetchImpl);
+	> = addFragmentSupportToFetch<Arguments, ResponseType>(fetchImpl);
 	const glowedUp = glowUpFetchWithLinkInputs<
 		Arguments,
-		AwaitedFetchReturns<typeof fetchWithFragmentSupport>
+		ResponseType | FragmentResponse<ResponseType>
 	>(fetchWithFragmentSupport);
 	const fetchWithResponseLinks = decorateFetchResponseWithLinks<
 		Parameters<typeof glowedUp>,

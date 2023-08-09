@@ -1,4 +1,4 @@
-import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
+import {glowUpFetchWithLinks} from './glow-up-fetch-with-links.js';
 
 /**
  * An enhanced fetch that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and

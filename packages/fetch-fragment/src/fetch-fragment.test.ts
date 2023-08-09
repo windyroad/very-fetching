@@ -1,7 +1,8 @@
 import {test, beforeAll, afterAll, afterEach} from 'vitest';
+// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import {fetchFragment} from './fetch-fragment';
+import {fetchFragment} from './fetch-fragment.js';
 
 const server = setupServer(
 	rest.get(

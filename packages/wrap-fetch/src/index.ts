@@ -1,1 +1,1 @@
-export * from './wrap-fetch';
+export * from './wrap-fetch.js';

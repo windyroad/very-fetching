@@ -1,5 +1,6 @@
+/* eslint-disable n/file-extension-in-import */
 import {defineConfig, mergeConfig} from 'vitest/config';
-import commonConfig from './vite.config';
+import commonConfig from './vite.config.js';
 
 export default mergeConfig(
 	commonConfig,

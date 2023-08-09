@@ -1,6 +1,6 @@
 import {test, vi} from 'vitest';
 import fc from 'fast-check';
-import {getBody, type ResponseBodyState} from './get-body';
+import {getBody, type ResponseBodyState} from './get-body.js';
 
 test('getBody clonedResponse boyd can be consumed', async ({expect}) => {
 	const originalResponse = new Response(

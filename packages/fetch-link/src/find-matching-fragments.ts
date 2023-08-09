@@ -1,5 +1,5 @@
 import {JsonPointer, type PathSegment, type PathSegments} from 'json-ptr';
-import {type Fragment} from './link';
+import {type Fragment} from './link.js';
 
 /**
  * Finds all fragments in the given object that match the given template.

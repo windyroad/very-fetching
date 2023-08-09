@@ -35,7 +35,7 @@
         "editor.formatOnSave": true
     },
     "typescript.format.semicolons": "insert",
-    "javascript.preferences.importModuleSpecifierEnding": "minimal",
+    "javascript.preferences.importModuleSpecifierEnding": "js",
     "typescript.updateImportsOnFileMove.enabled": "always",
-    "typescript.preferences.importModuleSpecifierEnding": "minimal"
+    "typescript.preferences.importModuleSpecifierEnding": "js"
 }

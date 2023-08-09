@@ -1,6 +1,6 @@
 import {test, describe, vi} from 'vitest';
 import {MockResponse} from '@windyroad/fetch-fragment';
-import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links';
+import {decorateFetchResponseWithLinks} from './decorate-fetch-response-with-links.js';
 
 describe('decorateFetchResponseWithLinks', () => {
 	test('decorateFetchResponseWithLinks adds links method to response', async ({

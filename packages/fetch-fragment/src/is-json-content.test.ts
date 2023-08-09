@@ -1,6 +1,6 @@
 import {test} from 'vitest';
 import fc from 'fast-check';
-import {isJsonContent} from './is-json-content';
+import {isJsonContent} from './is-json-content.js';
 
 test('isJsonContent returns true for application/json', ({expect}) => {
 	const response = {headers: new Headers({'Content-Type': 'application/json'})};

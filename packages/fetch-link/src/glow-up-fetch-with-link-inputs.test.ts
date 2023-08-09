@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import {describe, test, vi} from 'vitest';
-import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs';
-import {type Link} from './link';
+import {glowUpFetchWithLinkInputs} from './glow-up-fetch-with-link-inputs.js';
+import {type Link} from './link.js';
 
 describe('fetchLink', () => {
 	// Use case 1: Fetching a resource with a Link object that specifies a custom HTTP method and headers.

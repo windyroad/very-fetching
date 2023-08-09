@@ -3,7 +3,7 @@ import {describe, test, vi} from 'vitest';
 import {
 	decorateFetchResponse,
 	decorateFetchResponseUsingInputs,
-} from './decorate-fetch-response';
+} from './decorate-fetch-response.js';
 
 describe('decorateFetch', () => {
 	test('returns an ExtendedResponse object', () => {
@@ -99,6 +99,7 @@ describe('decorateFetch', () => {
 		const fetchWithCustomBody = decorateFetchResponseUsingInputs(
 			async (response, ...arguments_) => {
 				const body = await response.text();
+
 				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				return new Response(arguments_[0].toString(), {
 					status: response.status,

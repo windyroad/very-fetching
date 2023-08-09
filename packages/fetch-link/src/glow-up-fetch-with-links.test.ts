@@ -1,10 +1,11 @@
 import {test, vi, beforeAll, afterAll, beforeEach, describe} from 'vitest';
 import fc from 'fast-check';
+// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {type FragmentResponse, MockResponse} from '@windyroad/fetch-fragment';
-import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
-import {type LinkedResponse} from './linked-response';
+import {glowUpFetchWithLinks} from './glow-up-fetch-with-links.js';
+import {type LinkedResponse} from './linked-response.js';
 
 const server = setupServer(
 	rest.get('https://example.com', async (request, response, context) => {

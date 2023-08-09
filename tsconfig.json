@@ -7,16 +7,15 @@
           "packages/*/src"
         ]
       },
-      "noEmit": true,
-      "allowImportingTsExtensions": true
+      "noEmit": false,
     },
     "include": [
       "./*.ts",
       "./*.tsx"
     ],
     "exclude": [
-      "**/apps/**/*",
-      "**/packages/**/*",
+      // "**/apps/**/*",
+      // "**/packages/**/*",
       "**/dist/**/*"
     ]  
 }

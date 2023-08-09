@@ -3,7 +3,7 @@ import {test, describe, vi, bench, expect} from 'vitest';
 import fc from 'fast-check';
 import {MockResponse} from '@windyroad/fetch-fragment';
 import {JsonPointer} from 'json-ptr';
-import {glowUpFetchWithLinks} from './glow-up-fetch-with-links';
+import {glowUpFetchWithLinks} from './glow-up-fetch-with-links.js';
 
 describe('glowUpFetchWithLinks', () => {
 	describe('fetching fragments can be done quickly', () => {
