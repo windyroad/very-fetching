@@ -14,6 +14,10 @@
     "compile": "tsc -p tsconfig.build.json",
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
+    "test:browser:chrome": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless=true",
+    "test:browser:edge": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:firefox": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:safari": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
     "lint": "xo --fix --prettier"
   },
@@ -47,6 +51,6 @@
   },
   "devDependencies": {
     "fast-check": "^3.10.0",
-    "vitest": "^0.32.4"
+    "vitest": "^0.34.2"
   }
 }

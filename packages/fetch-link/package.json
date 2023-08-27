@@ -15,6 +15,10 @@
     "prepublishOnly": "npm run build",
     "test": "vitest --run",
     "test:watch": "vitest --watch",
+    "test:browser:chrome": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:edge": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:firefox": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:safari": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
     "ci:test": "vitest run --config vite.config.ci.ts --coverage",
     "lint": "xo --fix --prettier"
   },
@@ -45,19 +49,20 @@
     "access": "public"
   },
   "dependencies": {
-    "@windyroad/wrap-fetch": "3.0.1",
     "@windyroad/adapt-fetch-inputs": "3.0.1",
     "@windyroad/decorate-fetch-response": "3.0.1",
     "@windyroad/fetch-fragment": "2.0.1",
+    "@windyroad/wrap-fetch": "3.0.1",
     "http-link-header": "^1.1.1",
-    "uri-templates": "^0.2.0",
-    "json-ptr": "^3.1.1"
+    "json-ptr": "^3.1.1",
+    "uri-templates": "^0.2.0"
   },
   "devDependencies": {
     "@types/http-link-header": "^1.0.3",
     "@types/uri-templates": "^0.1.31",
     "fast-check": "^3.10.0",
+    "is-where": "^1.0.2",
     "msw": "^1.2.2",
-    "vitest": "^0.32.4"
+    "vitest": "^0.34.2"
   }
 }

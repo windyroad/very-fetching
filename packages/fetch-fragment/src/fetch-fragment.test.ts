@@ -1,32 +1,35 @@
-import {test, beforeAll, afterAll, afterEach} from 'vitest';
+import {test, beforeAll, afterAll, afterEach, describe} from 'vitest';
 // eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {fetchFragment} from './fetch-fragment.js';
+import { isNode } from 'is-where';
 
-const server = setupServer(
-	rest.get(
-		'http://example.com/data.json',
-		async (request, response, context) => {
-			return response(context.json({foo: 'bar'}));
-		},
-	),
-);
+describe.runIf(isNode())('fetchFragment', () => {
+	const server = setupServer(
+		rest.get(
+			'http://example.com/data.json',
+			async (request, response, context) => {
+				return response(context.json({foo: 'bar'}));
+			},
+		),
+	);
 
-beforeAll(() => {
-	server.listen();
-});
+	beforeAll(() => {
+		server.listen();
+	});
 
-afterEach(() => {
-	server.resetHandlers();
-});
+	afterEach(() => {
+		server.resetHandlers();
+	});
 
-afterAll(() => {
-	server.close();
-});
+	afterAll(() => {
+		server.close();
+	});
 
-test('should fetch a JSON fragment', async ({expect}) => {
-	const response = await fetchFragment('http://example.com/data.json#/foo');
+	test('should fetch a JSON fragment', async ({expect}) => {
+		const response = await fetchFragment('http://example.com/data.json#/foo');
 
-	expect(await response.json()).toEqual('bar');
+		expect(await response.json()).toEqual('bar');
+	});
 });

@@ -3,6 +3,7 @@ import {describe, test, it, vi, expect, beforeAll, afterAll} from 'vitest';
 // eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
+import {isNode} from 'is-where';
 import {wrapFetch} from './wrap-fetch.js';
 
 it('wraps fetch with a custom wrapper function', async () => {
@@ -213,7 +214,7 @@ test('wrapFetch should wrap the global fetch function by default', async () => {
 	expect(wrapper).toBeCalledWith(globalThis.fetch, 'https://example.com');
 });
 
-describe('wrapFetch intercept', () => {
+describe.runIf(isNode())('wrapFetch intercept', () => {
 	const server = setupServer(
 		rest.get(
 			'https://jsonplaceholder.typicode.com/posts',

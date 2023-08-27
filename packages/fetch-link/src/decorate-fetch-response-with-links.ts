@@ -4,7 +4,7 @@ import {
 	type FetchFunction,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
-import LinkHeader from 'http-link-header';
+import * as LinkHeader from 'http-link-header';
 import uriTemplate from 'uri-templates';
 import {JsonPointer} from 'json-ptr';
 import {findMatchingFragments} from './find-matching-fragments.js';
@@ -142,10 +142,12 @@ function filterLinks({
 async function decorateResponseWithLinks<
 	ResponseType extends Response = Response,
 >(response: ResponseType): Promise<LinkedResponse<ResponseType>> {
-	const linkHeader = new LinkHeader();
-	linkHeader.parse(response?.headers?.get('link') ?? '');
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+	const linkHeader = LinkHeader.parse(response?.headers?.get('link') ?? '');
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
 	linkHeader.parse(response?.headers?.get('link-template') ?? '');
 	const resolvedLinks = resolveLinkUrls({
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		links: linkHeader.refs,
 		baseUrl: response.url,
 	});

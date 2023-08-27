@@ -2,7 +2,7 @@ import {
 	decorateFetchResponse,
 	decorateFetchResponseUsingInputs,
 } from '@windyroad/decorate-fetch-response';
-import LinkHeader from 'http-link-header';
+import * as LinkHeader from 'http-link-header';
 import {
 	type FetchFunction,
 	type AwaitedFetchReturns,

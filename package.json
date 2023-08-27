@@ -20,6 +20,10 @@
     "lint:markdown:watch": "nodemon -V -e \"*.md\" -x npm -- run ${npm_lifecycle_event%:watch}",
     "spellcheck": "cspell lint --gitignore --dot --show-suggestions -e \".git/**\" \"**\"",
     "test": "vitest --run",
+    "test:browser:chrome": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:edge": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:firefox": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:safari": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
     "test:watch": "vitest --watch",
     "bench": "vitest bench --run",
     "bench:watch": "vitest bench --watch",
@@ -50,6 +54,7 @@
   "devDependencies": {
     "@changesets/cli": "^2.26.2",
     "@typescript-eslint/eslint-plugin": "^5.61.0",
+    "@vitest/browser": "^0.34.2",
     "@vitest/coverage-v8": "^0.32.2",
     "@windyroad/xo-config": "*",
     "adr": "^1.4.5",
@@ -61,7 +66,8 @@
     "nodemon": "^3.0.1",
     "turbo": "1.10.5",
     "typescript": "^5.1.6",
-    "vitest": "^0.32.4",
+    "vitest": "^0.34.2",
+    "webdriverio": "^8.15.6",
     "xo": "^0.54.2"
   },
   "dependencies": {
