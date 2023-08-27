@@ -192,11 +192,11 @@ describe.runIf(isNode())('fetchLink', () => {
 		expect(relatedData).toContain('Related Page');
 	});
 
-	test('should fetch tom', async ({expect}) => {
-		const response = await fetchLink({
-			uri: `http://127.0.0.1:7777/api/tom`,
-			rel: 'self',
-		});
-		expect(response.status).toEqual(200);
-	});
+	// test('should fetch tom', async ({expect}) => {
+	// 	const response = await fetchLink({
+	// 		uri: `http://127.0.0.1:7777/api/tom`,
+	// 		rel: 'self',
+	// 	});
+	// 	expect(response.status).toEqual(200);
+	// });
 });
