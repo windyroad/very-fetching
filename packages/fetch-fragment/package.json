@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/fetch-fragment",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A fetch library that can retrieve json fragments",
   "type": "module",
   "main": "dist/index.js",
@@ -50,7 +50,7 @@
   "dependencies": {
     "@windyroad/decorate-fetch-response": "3.0.1",
     "@windyroad/wrap-fetch": "3.0.1",
-    "@windyroad/link-header": "0.0.0",
+    "@windyroad/link-header": "1.0.0",
     "json-ptr": "^3.1.1"
   },
   "devDependencies": {
