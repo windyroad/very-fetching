@@ -71,8 +71,10 @@ describe('glowUpFetchWithLinks', () => {
 		expect,
 	}) => {
 		const fetchImpl = async (...arguments_: Parameters<typeof fetch>) => {
-			const rval = new Response(null, {
+			const rval = new MockResponse(undefined, {
 				headers: {link: '<https://example.com>; rel="resource"'},
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				url: arguments_[0].toString(),
 			});
 			return rval;
 		};
@@ -88,12 +90,14 @@ describe('glowUpFetchWithLinks', () => {
 		expect,
 	}) => {
 		const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
-			new Response(null, {
+			new MockResponse(undefined, {
 				headers: {
 					link: '<https://example.com>; rel="resource"',
 					'link-template':
 						'<https://example.com/{id}>; rel="resource-template"',
 				},
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				url: arguments_[0].toString(),
 			});
 		const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 		const response = await fetchWithLinks('https://example.com');
@@ -105,7 +109,11 @@ describe('glowUpFetchWithLinks', () => {
 
 	test('glowUpFetchWithLinks handles empty link header', async ({expect}) => {
 		const fetchImpl = async (...arguments_: Parameters<typeof fetch>) =>
-			new Response(null, {headers: {link: ''}});
+			new MockResponse(undefined, {
+				headers: {link: ''},
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				url: arguments_[0].toString(),
+			});
 		const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
 		const response = await fetchWithLinks('https://example.com');
 		expect(response.links()).toEqual([]);
@@ -126,7 +134,9 @@ describe('glowUpFetchWithLinks', () => {
 		expect,
 	}) => {
 		const mockFetch = vi.fn(
-			async (...arguments_: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) =>
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				new MockResponse(undefined, {url: arguments_[0].toString()}),
 		);
 		const decoratedFetch = glowUpFetchWithLinks(mockFetch);
 		await decoratedFetch('https://example.com', {
@@ -141,7 +151,9 @@ describe('glowUpFetchWithLinks', () => {
 		expect,
 	}) => {
 		const mockFetch = vi.fn(
-			async (...arguments_: Parameters<typeof fetch>) => new Response(),
+			async (...arguments_: Parameters<typeof fetch>) =>
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+				new MockResponse(undefined, {url: arguments_[0].toString()}),
 		);
 		const decoratedFetch = glowUpFetchWithLinks(mockFetch);
 		await decoratedFetch('https://example.com');
@@ -151,26 +163,29 @@ describe('glowUpFetchWithLinks', () => {
 	test('glowUpFetchWithLinks follows RFC8288 links', async ({expect}) => {
 		const fetchImpl = async (...arguments_: Parameters<typeof fetch>) => {
 			if (arguments_[0] === 'https://example.com') {
-				return new Response(null, {
+				return new MockResponse(undefined, {
 					headers: {
 						link: '<https://example.com/related>; rel="related"',
 					},
+					url: arguments_[0].toString(),
 				});
 			}
 
 			if (arguments_[0] === 'https://example.com/related') {
-				return new Response(null, {
+				return new MockResponse(undefined, {
 					headers: {
 						link: '<https://example.com/related/2>; rel="related"',
 					},
+					url: arguments_[0],
 				});
 			}
 
 			if (arguments_[0] === 'https://example.com/related/2') {
-				return new Response('hello, world!', {
+				return new MockResponse('hello, world!', {
 					headers: {
 						'content-type': 'text/plain',
 					},
+					url: arguments_[0],
 				});
 			}
 
@@ -293,6 +308,46 @@ describe('glowUpFetchWithLinks', () => {
 			]);
 			const fragment = await decoratedFetch(links[2]);
 			expect(await fragment.json()).toEqual(json.bar[0]);
+		});
+	});
+
+	test('should fetch tom', async ({expect}) => {
+		const fetchImpl = async (...arguments_: Parameters<typeof fetch>) => {
+			const rval = new MockResponse(
+				JSON.stringify({
+					data: {
+						created: '2023-08-19T21:33:28.077Z',
+						updated: '2023-08-19T21:33:28.943Z',
+						count: 32_768,
+						eventCount: 32_767,
+					},
+					metaData: {
+						created: '2023-08-19T21:33:28.077Z',
+						updated: '2023-08-19T21:33:28.943Z',
+						version: 32_768,
+					},
+					nextAddress: {
+						stream: 'tom',
+						page: {lastId: '1692480808943-12'},
+						event: {index: 1},
+					},
+				}),
+				{
+					headers: {
+						// eslint-disable-next-line no-secrets/no-secrets
+						link: `</api/tom>; rel=self, </api/tom>; rel="https://i-spent.io/rels/clear-events"; method=DELETE, </api/tom>; rel="https://i-spent.io/rels/add-event"; method=POST; params*=UTF-8'en'%7B%22event%22%3A%7B%7D%7D; accept*=UTF-8'en'application%2Fjson`,
+					},
+					url: 'http://127.0.0.1:7777/api/tom',
+				},
+			);
+			return rval;
+		};
+
+		const fetchWithLinks = glowUpFetchWithLinks(fetchImpl);
+		const response = await fetchWithLinks('http://127.0.0.1:7777/api/tom`');
+		expect(response.links()[0]).toEqual({
+			uri: 'http://127.0.0.1:7777/api/tom',
+			rel: 'self',
 		});
 	});
 });

@@ -67,6 +67,35 @@ describe.runIf(isNode())('fetchLink', () => {
 				return response(context.status(200), context.text('Related Page'));
 			},
 		),
+		rest.get(
+			'http://127.0.0.1:7777/api/tom',
+			async (request, response, context) => {
+				// eslint-disable-next-line no-secrets/no-secrets
+				const linkHeader = `</api/tom>; rel=self, </api/tom>; rel="https://i-spent.io/rels/clear-events"; method=DELETE, </api/tom>; rel="https://i-spent.io/rels/add-event"; method=POST; params*=UTF-8'en'%7B%22event%22%3A%7B%7D%7D; accept*=UTF-8'en'application%2Fjson`;
+				return response(
+					context.status(200),
+					context.json({
+						data: {
+							created: '2023-08-19T21:33:28.077Z',
+							updated: '2023-08-19T21:33:28.943Z',
+							count: 32_768,
+							eventCount: 32_767,
+						},
+						metaData: {
+							created: '2023-08-19T21:33:28.077Z',
+							updated: '2023-08-19T21:33:28.943Z',
+							version: 32_768,
+						},
+						nextAddress: {
+							stream: 'tom',
+							page: {lastId: '1692480808943-12'},
+							event: {index: 1},
+						},
+					}),
+					context.set('Link', linkHeader),
+				);
+			},
+		),
 	);
 
 	beforeAll(async () => {
@@ -192,11 +221,8 @@ describe.runIf(isNode())('fetchLink', () => {
 		expect(relatedData).toContain('Related Page');
 	});
 
-	// Test('should fetch tom', async ({expect}) => {
-	// 	const response = await fetchLink({
-	// 		uri: `http://127.0.0.1:7777/api/tom`,
-	// 		rel: 'self',
-	// 	});
-	// 	expect(response.status).toEqual(200);
-	// });
+	test('should fetch tom', async ({expect}) => {
+		const response = await fetchLink(`http://127.0.0.1:7777/api/tom`);
+		expect(response.status).toEqual(200);
+	});
 });

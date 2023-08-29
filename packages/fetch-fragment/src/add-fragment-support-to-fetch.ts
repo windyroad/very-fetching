@@ -33,11 +33,11 @@ export function addFragmentSupportToFetch<
 	>(async (response, ...arguments_: Arguments) => {
 		let input = arguments_[0];
 		if (typeof input === 'string') {
-			input = new URL(input);
+			input = new URL(input, response.url);
 		}
 
 		if (!(input instanceof URL)) {
-			input = new URL(input.url);
+			input = new URL(input.url, response.url);
 		}
 
 		if (input.hash) {
