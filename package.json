@@ -31,7 +31,8 @@
     "ci:test": "vitest --config vite.config.ci.ts --run --coverage",
     "ci:version": "[ \"$CI\" = true ] && changeset version || echo \"Dry run: changeset version\"",
     "ci:publish": "[ \"$CI\" = true ] && changeset publish || echo \"Dry run: changeset publish\"",
-    "add-changeset": "changeset add"
+    "add-changeset": "changeset add",
+    "clean": "git clean -f -x"
   },
   "engines": {
     "node": "18"
