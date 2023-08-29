@@ -2,12 +2,12 @@ import {
 	decorateFetchResponse,
 	decorateFetchResponseUsingInputs,
 } from '@windyroad/decorate-fetch-response';
-import * as LinkHeader from 'http-link-header';
 import {
 	type FetchFunction,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
 import {JsonPointer} from 'json-ptr';
+import {LinkHeader} from '@windyroad/link-header';
 import {isJsonContent} from './is-json-content.js';
 import {FragmentResponse} from './fragment-response.js';
 import {type FetchFragmentFunction} from './fetch-fragment-function.js';
@@ -170,7 +170,7 @@ function adjustLinkHeaders({
 
 	if (linkHeaders) {
 		headers.delete(headerName);
-		const links = LinkHeader.parse(linkHeaders);
+		const links = new LinkHeader(linkHeaders);
 
 		links.refs = links.refs.filter((link) => {
 			if (link.anchor?.startsWith(hash)) {
@@ -185,7 +185,6 @@ function adjustLinkHeaders({
 			return false;
 		});
 		if (links.refs.length > 0) {
-			// eslint-disable-next-line @typescript-eslint/no-base-to-string
 			headers.set(headerName, links.toString());
 		}
 	}

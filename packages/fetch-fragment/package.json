@@ -50,11 +50,10 @@
   "dependencies": {
     "@windyroad/decorate-fetch-response": "3.0.1",
     "@windyroad/wrap-fetch": "3.0.1",
-    "http-link-header": "^1.1.1",
+    "@windyroad/link-header": "0.0.0",
     "json-ptr": "^3.1.1"
   },
   "devDependencies": {
-    "@types/http-link-header": "^1.0.3",
     "fast-check": "^3.10.0",
     "is-where": "^1.0.2",
     "msw": "^1.2.2",

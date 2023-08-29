@@ -1,4 +1,4 @@
-import {type Link} from './link.js';
+import {type Link} from '@windyroad/link-header';
 
 /**
  * Resolves the URLs of an array of links relative to a base URL.

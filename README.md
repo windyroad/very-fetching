@@ -11,15 +11,17 @@ it can use links and request inputs, allowing call chaining.
 
 ## Packages
 
-- [`packages/adapt-fetch-input`](./packages/adapt-fetch-inputs/README.md) A library
+- [`@windyroad/adapt-fetch-input`](./packages/adapt-fetch-inputs/README.md) A library
    for adapting fetch inputs
-- [`packages/decorate-fetch-response`](./packages/decorate-fetch-response/README.md): A library for decorating fetch responses.
-- [`packages/fetch-fragment`](./packages/fetch-fragment/README.md): A fetch library that can retrieve json fragments
-- [`packages/fetch-link`](./packages/fetch-link/README.md): A library that adapts the fetch
+- [`@windyroad/decorate-fetch-response`](./packages/decorate-fetch-response/README.md): A library for decorating fetch responses.
+- [`@windyroad/fetch-fragment`](./packages/fetch-fragment/README.md): A fetch library that can retrieve json fragments
+- [`@windyroad/fetch-link`](./packages/fetch-link/README.md): A library that adapts the fetch
   API to work with [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
-- [`packages/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so
+- [`@windyroad/link-header`](./packages/link-header/README.md): Parse & format HTTP link headers according to
+  [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288)
+- [`@windyroad/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so
    requests and responses can be modified.
-- [`packages/x-config`](./packages/wrap-fetch/README.md): XO config for the Windy Road style
+- [`@windyroad/xo-config`](./packages/xo-config/README.md): XO config for the Windy Road style
    guide.
 
 <p align="center">

@@ -7,15 +7,13 @@
           "packages/*/src"
         ]
       },
-      "noEmit": false,
+      "noEmit": true,
     },
     "include": [
       "./*.ts",
       "./*.tsx"
     ],
     "exclude": [
-      // "**/apps/**/*",
-      // "**/packages/**/*",
       "**/dist/**/*"
     ]  
 }

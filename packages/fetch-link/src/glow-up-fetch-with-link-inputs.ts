@@ -1,7 +1,8 @@
 import {wrapFetch, type FetchFunction} from '@windyroad/wrap-fetch';
 import {FragmentResponse} from '@windyroad/fetch-fragment';
-import {isLink, type Link} from './link.js';
+import {type Link, isLink} from '@windyroad/link-header';
 import {type DropFirst} from './drop-first.js';
+import {type FragmentLink, isFragmentLink} from './fragment.js';
 
 /**
  * Checks if a Headers object is empty.
@@ -32,7 +33,7 @@ export function glowUpFetchWithLinkInputs<
 >(
 	fetchImpl?: FetchFunction<Arguments, ResponseType>,
 ): (
-	...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
+	...arguments_: [Arguments[0] | Link | FragmentLink, ...DropFirst<Arguments>]
 ) => Promise<ResponseType | FragmentResponse<ResponseType>> {
 	/**
 	 * Currently the code just adapts the input from a link to a url.
@@ -44,16 +45,19 @@ export function glowUpFetchWithLinkInputs<
 	return wrapFetch<
 		Arguments,
 		ResponseType,
-		Arguments | [Link, ...DropFirst<Arguments>],
+		[Arguments[0] | Link | FragmentLink, ...DropFirst<Arguments>],
 		ResponseType | FragmentResponse<ResponseType>
 	>(
 		async (
 			fetchImplInner: FetchFunction<Arguments, ResponseType>,
-			...arguments_: Arguments | [Link, ...DropFirst<Arguments>]
+			...arguments_: [
+				Arguments[0] | Link | FragmentLink,
+				...DropFirst<Arguments>,
+			]
 		) => {
 			const [target, init, ...other] = arguments_;
 			if (isLink(target)) {
-				if (target.fragment) {
+				if (isFragmentLink(target)) {
 					return new FragmentResponse(target.fragment.value, {
 						status: 200,
 						url: target.uri,
@@ -69,7 +73,11 @@ export function glowUpFetchWithLinkInputs<
 				}
 
 				if (link.hreflang) {
-					headers.append('Accept-Language', link.hreflang);
+					if (typeof link.hreflang === 'string') {
+						headers.append('Accept-Language', link.hreflang);
+					} else {
+						headers.append('Accept-Language', link.hreflang.join(', '));
+					}
 				}
 
 				const fetchParameters = [

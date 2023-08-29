@@ -1,4 +1,4 @@
-import {type Link} from './link.js';
+import {type Link} from '@windyroad/link-header';
 
 /**
  * A type that extends the `FetchReturns` type with a `links` method that returns an array of RFC8288 Link objects.

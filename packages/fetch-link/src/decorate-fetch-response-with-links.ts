@@ -4,15 +4,15 @@ import {
 	type FetchFunction,
 	type AwaitedFetchReturns,
 } from '@windyroad/wrap-fetch';
-import * as LinkHeader from 'http-link-header';
+import {LinkHeader, type Link} from '@windyroad/link-header';
 import uriTemplate from 'uri-templates';
 import {JsonPointer} from 'json-ptr';
 import {findMatchingFragments} from './find-matching-fragments.js';
 import {getBody, type ResponseBodyState} from './get-body.js';
 import {isFragmentOf} from './is-fragment-of.js';
-import {type Link, type Fragment} from './link.js';
 import {type LinkedResponse} from './linked-response.js';
 import {resolveLinkUrls} from './resolve-link-urls.js';
+import {type FragmentLink, type Fragment} from './fragment.js';
 
 /**
  * Decorates a `fetch`-like function with link parsing and resolution functionality.
@@ -46,7 +46,7 @@ function matchToLink({
 	link: Link;
 	url: URL;
 	match: Fragment;
-}): Link {
+}): FragmentLink {
 	return {
 		...link,
 		uri: new URL(match.path, url).href,
@@ -142,12 +142,9 @@ function filterLinks({
 async function decorateResponseWithLinks<
 	ResponseType extends Response = Response,
 >(response: ResponseType): Promise<LinkedResponse<ResponseType>> {
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-	const linkHeader = LinkHeader.parse(response?.headers?.get('link') ?? '');
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	const linkHeader = new LinkHeader(response?.headers?.get('link') ?? '');
 	linkHeader.parse(response?.headers?.get('link-template') ?? '');
 	const resolvedLinks = resolveLinkUrls({
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		links: linkHeader.refs,
 		baseUrl: response.url,
 	});
@@ -155,23 +152,40 @@ async function decorateResponseWithLinks<
 		originalResponse: response,
 	};
 
-	let links: Link[];
+	let links: Array<Link | FragmentLink>;
 
 	if (isJsonContent(response)) {
 		const responseUrl = new URL(response.url);
-		const resolvedLinksAreHashed = resolvedLinks.map((urlAndLink) => {
-			const {url, link} = urlAndLink;
-			if (isFragmentOf(url, responseUrl)) {
-				/**
-				 * See if the hash is a template and if so, generate the range of
-				 * matching hashes and add them to the links array
-				 */
-				const hashTemplate = uriTemplate(url.hash);
-				return {url, link, isTemplatedHash: hashTemplate.varNames.length};
-			}
+		const resolvedLinksAreHashed = resolvedLinks.map<{
+			url: URL;
+			link: Link;
+			isTemplatedHash: boolean;
+		}>(
+			(urlAndLink: {
+				url: URL;
+				link: Link;
+			}): {
+				url: URL;
+				link: Link;
+				isTemplatedHash: boolean;
+			} => {
+				const {url, link} = urlAndLink;
+				if (isFragmentOf(url, responseUrl)) {
+					/**
+					 * See if the hash is a template and if so, generate the range of
+					 * matching hashes and add them to the links array
+					 */
+					const hashTemplate = uriTemplate(url.hash);
+					return {
+						url,
+						link,
+						isTemplatedHash: hashTemplate.varNames.length > 0,
+					};
+				}
 
-			return {url, link, isTemplatedHash: false};
-		});
+				return {url, link, isTemplatedHash: false};
+			},
+		);
 
 		// If the links are templated hashes, then we'll need to iterated
 		// over the matching parts of the body, but we still want the body
@@ -183,21 +197,32 @@ async function decorateResponseWithLinks<
 			responseBodyState = await getBody(responseBodyState);
 		}
 
-		links = resolvedLinksAreHashed.flatMap<Link>((urlAndLink) => {
-			const {url, link, isTemplatedHash} = urlAndLink;
-			if (isTemplatedHash) {
-				const {jsonBody} = responseBodyState;
-				const matches = findMatchingFragments(jsonBody, url.hash);
-				const templatedLinks = matches.map((match) => {
-					return matchToLink({link, url, match});
-				});
-				return templatedLinks;
-			}
+		links = resolvedLinksAreHashed.flatMap<FragmentLink | Link>(
+			(urlAndLink: {
+				url: URL;
+				link: Link;
+				isTemplatedHash: boolean;
+			}): FragmentLink | FragmentLink[] | Link => {
+				const {url, link, isTemplatedHash} = urlAndLink;
+				if (isTemplatedHash) {
+					const {jsonBody} = responseBodyState;
+					const matches = findMatchingFragments(jsonBody, url.hash);
+					const templatedLinks = matches.map(
+						(match: Fragment): FragmentLink => {
+							return matchToLink({link, url, match});
+						},
+					);
+					return templatedLinks;
+				}
 
-			return link;
-		});
+				return link;
+			},
+		);
 	} else {
-		links = resolvedLinks.map((urlAndLink) => urlAndLink.link);
+		// Not json content
+		links = resolvedLinks.map<Link>(
+			(urlAndLink: {url: URL; link: Link}): Link => urlAndLink.link,
+		);
 	}
 
 	if (response instanceof FragmentResponse && response.parent) {

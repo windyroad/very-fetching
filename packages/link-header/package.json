@@ -1,7 +1,7 @@
 {
-  "name": "@windyroad/fetch-link",
-  "version": "3.0.1",
-  "description": "A library that adapts the fetch API to work with RFC8288 Link objects.",
+  "name": "@windyroad/link-header",
+  "version": "0.0.0",
+  "description": "Parse & format HTTP link headers according to RFC 8288",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.js",
@@ -27,42 +27,41 @@
     "url": "git+https://github.com/windyroad/very-fetching.git"
   },
   "keywords": [
-    "fetch",
-    "link",
     "rfc5988",
     "rfc8288",
-    "web linking",
-    "hypermedia"
+    "rfc",
+    "5988",
+    "8288",
+    "http",
+    "link",
+    "header"
   ],
   "author": {
     "name": "Windy Road Technology",
     "url": "https://windyroad.com.au"
   },
   "contributors": [
+    "Jonas Hermsmeier <jhermsmeier@gmail.com>",
+    "Dale Hui <dhui@users.noreply.github.com>",
+    "Angelo Veltens <angelo.veltens@codecentric.de>",
+    "Mark S. Everitt <mark.s.everitt@gmail.com>",
+    "Matteo Brancaleoni <mbrancaleoni@gmail.com>",
+    "Yamagishi Kazutoshi <ykzts@desire.sh>",
     "Tom Howard <tom@windyroad.com.au>"
   ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/fetch-link/README.md",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/link-header/README.md",
   "publishConfig": {
     "access": "public"
   },
-  "dependencies": {
-    "@windyroad/adapt-fetch-inputs": "3.0.1",
-    "@windyroad/decorate-fetch-response": "3.0.1",
-    "@windyroad/fetch-fragment": "2.0.1",
-    "@windyroad/wrap-fetch": "3.0.1",
-    "@windyroad/link-header": "0.0.0",
-    "json-ptr": "^3.1.1",
-    "uri-templates": "^0.2.0"
-  },
   "devDependencies": {
-    "@types/uri-templates": "^0.1.31",
-    "fast-check": "^3.10.0",
-    "is-where": "^1.0.2",
-    "msw": "^1.2.2",
+    "@types/node": "^20.5.7",
     "vitest": "^0.34.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

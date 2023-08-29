@@ -2,8 +2,8 @@ import {test, beforeAll, afterAll, afterEach, describe} from 'vitest';
 // eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
+import {isNode} from 'is-where';
 import {fetchFragment} from './fetch-fragment.js';
-import { isNode } from 'is-where';
 
 describe.runIf(isNode())('fetchFragment', () => {
 	const server = setupServer(

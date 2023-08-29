@@ -2,9 +2,9 @@ import {test, beforeAll, afterAll, describe} from 'vitest';
 // eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
-import { isNode } from 'is-where';
+import {isNode} from 'is-where';
+import {type Link} from '@windyroad/link-header';
 import {fetchLink} from './fetch-link.js';
-import {type Link} from './link.js';
 
 describe.runIf(isNode())('fetchLink', () => {
 	const server = setupServer(
@@ -160,7 +160,7 @@ describe.runIf(isNode())('fetchLink', () => {
 		const linksToItems = collectionResponse.links('item');
 		expect(linksToItems).toBeDefined();
 		expect(linksToItems).toHaveLength(2);
-
+		const linkToItem = linksToItems[0];
 		// Fetch the item using the item link
 		const itemResponse = await fetchLink(linksToItems[0]);
 		const linksToCollections = itemResponse.links('collection');
@@ -192,7 +192,7 @@ describe.runIf(isNode())('fetchLink', () => {
 		expect(relatedData).toContain('Related Page');
 	});
 
-	// test('should fetch tom', async ({expect}) => {
+	// Test('should fetch tom', async ({expect}) => {
 	// 	const response = await fetchLink({
 	// 		uri: `http://127.0.0.1:7777/api/tom`,
 	// 		rel: 'self',
