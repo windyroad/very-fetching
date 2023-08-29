@@ -1,5 +1,12 @@
 # @windyroad/fetch-link
 
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies [8c9d160]
+  - @windyroad/fetch-fragment@2.0.3
+
 ## 3.0.2
 
 ### Patch Changes
