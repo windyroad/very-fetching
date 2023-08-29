@@ -1,5 +1,11 @@
 # @windyroad/fetch-link
 
+## 2.0.3
+
+### Patch Changes
+
+- 8c9d160: Fixed error handling links with relative URLs
+
 ## 2.0.2
 
 ### Patch Changes
