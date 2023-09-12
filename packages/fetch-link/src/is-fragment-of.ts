@@ -4,7 +4,6 @@ import {getUrlFragment} from '@windyroad/fetch-fragment';
  * Checks if URL A points to a fragment within URL B.
  * @param options The options object.
  * @param options.urlToCheck The first URL to check.
- * @param options.urlToCheckHash The first URL to check's hash.
  * @param options.urlToCompare The second URL to check.
  * @returns True if URL A points to a fragment within URL B, false otherwise.
  */

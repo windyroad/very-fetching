@@ -187,6 +187,7 @@ async function decorateResponseWithLinks<
 				const url = link.uri;
 				const hash = getUrlFragment(url);
 				if (
+					hash &&
 					isFragmentOf({
 						urlToCheck: url,
 						urlToCompare: response.url,

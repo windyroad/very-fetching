@@ -1,7 +1,6 @@
 import {test} from 'vitest';
-import fc from 'fast-check';
+import {type Link} from '@windyroad/link-header';
 import {resolveLinkUrls} from './resolve-link-urls.js';
-import {type Link} from './link.js';
 
 test('resolveLinkUrls resolves links relative to base URL', async ({
 	expect,
