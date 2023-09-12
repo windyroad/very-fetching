@@ -1,5 +1,13 @@
 # @windyroad/fetch-link
 
+## 3.0.5
+
+### Patch Changes
+
+- e7b3f4b: fixed issues handling relative urls when the response.url is undefined or not a valid URL.
+- Updated dependencies [e7b3f4b]
+  - @windyroad/fetch-fragment@2.1.0
+
 ## 3.0.4
 
 ### Patch Changes

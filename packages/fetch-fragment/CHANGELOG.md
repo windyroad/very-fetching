@@ -1,5 +1,11 @@
 # @windyroad/fetch-link
 
+## 2.1.0
+
+### Minor Changes
+
+- e7b3f4b: Additional `getUrlFragment` utility function is exported
+
 ## 2.0.4
 
 ### Patch Changes
