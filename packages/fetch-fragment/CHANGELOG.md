@@ -1,5 +1,11 @@
 # @windyroad/fetch-link
 
+## 2.0.4
+
+### Patch Changes
+
+- ce5a4e8: fixed issues handling relative urls when the response.url is undefined or not a valid URL.
+
 ## 2.0.3
 
 ### Patch Changes
