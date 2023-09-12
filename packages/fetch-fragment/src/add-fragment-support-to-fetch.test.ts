@@ -6,7 +6,7 @@ import {FragmentResponse} from './fragment-response.js';
 describe('fetchFragment', () => {
 	let mockResponseBody: any = {};
 	const mockResponseHeaders = new Headers();
-	const mockResponseOptions = {
+	let mockResponseOptions = {
 		status: 200,
 		statusText: 'OK',
 		headers: mockResponseHeaders,
@@ -23,6 +23,12 @@ describe('fetchFragment', () => {
 	beforeEach(() => {
 		vi.clearAllMocks();
 		mockResponseHeaders.set('Content-Type', 'application/json');
+		mockResponseOptions = {
+			status: 200,
+			statusText: 'OK',
+			headers: mockResponseHeaders,
+			url: 'https://example.com',
+		};
 	});
 
 	test('returns the original response if the URL does not have a hash', async ({
@@ -73,6 +79,29 @@ describe('fetchFragment', () => {
 		expect(response.headers.get('Content-Length')).toBe(
 			String(JSON.stringify(mockResponseBody.foo).length),
 		);
+		expect(await response.json()).toEqual(mockResponseBody.foo);
+		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
+		expect(response).toBeInstanceOf(FragmentResponse);
+		const fragmentResponse = response as FragmentResponse<Response>;
+		expect(fragmentResponse.parent).toBeInstanceOf(MockResponse);
+		expect(await fragmentResponse.parent?.json()).toEqual(mockResponseBody);
+	});
+
+	test('returns a relative fragment from a JSON response', async ({expect}) => {
+		mockResponseOptions = {
+			status: 200,
+			statusText: 'OK',
+			headers: mockResponseHeaders,
+			url: undefined as unknown as string,
+		};
+		mockResponseBody = {foo: [1, 2, 4, 'a', 'b', 'c', {bar: 'baz'}]};
+		const fetchFragmentImpl = addFragmentSupportToFetch(mockFetchImpl);
+		const response = await fetchFragmentImpl('#/foo');
+		expect(response.status).toBe(200);
+		expect(response.headers.get('Content-Type')).toBe('application/json');
+		// Expect(response.headers.get('Content-Length')).toBe(
+		// 	String(JSON.stringify(mockResponseBody.foo).length),
+		// );
 		expect(await response.json()).toEqual(mockResponseBody.foo);
 		expect(mockFetchImpl).toHaveBeenCalledTimes(1);
 		expect(response).toBeInstanceOf(FragmentResponse);

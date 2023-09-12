@@ -32,16 +32,20 @@ export function addFragmentSupportToFetch<
 		ResponseType | FragmentResponse<ResponseType>
 	>(async (response, ...arguments_: Arguments) => {
 		let input = arguments_[0];
+		if (typeof input === 'object' && 'url' in input) {
+			input = input.url;
+		}
+
+		// NOTE: We cannot reply on response.url
+		// in many situations it is not set
 		if (typeof input === 'string') {
-			input = new URL(input, response.url);
-		}
-
-		if (!(input instanceof URL)) {
-			input = new URL(input.url, response.url);
-		}
-
-		if (input.hash) {
-			return getFragment(input, response);
+			const hashIndex = input.indexOf('#');
+			const hash = hashIndex >= 0 ? input.slice(hashIndex) : undefined;
+			if (hash) {
+				return getFragment({url: input, hash, response});
+			}
+		} else if (input.hash) {
+			return getFragment({url: input.href, hash: input.hash, response});
 		}
 
 		return response;
@@ -50,16 +54,22 @@ export function addFragmentSupportToFetch<
 
 /**
  * Retrieves a JSON fragment from a response and returns a new response with only the fragment.
+ * @param options options for retrieving the fragment.
+ * @param options.url - The URL of the response.
+ * @param options.response - The response to extract the fragment from.
+ * @param options.hash - the hash part of the URL
  * @template ResponseType The type of the `fetch` response.
- * @param {URL} input - The URL of the response.
- * @param {Promise<Response>} response - The response to extract the fragment from.
  * @returns {Promise<ResponseType | FragmentResponse<ResponseType>>} - A new response with only the fragment.
  */
-async function getFragment<ResponseType extends Response = Response>(
-	input: URL,
-	response: ResponseType,
-): Promise<ResponseType | FragmentResponse<ResponseType>> {
-	const {hash} = input;
+async function getFragment<ResponseType extends Response = Response>({
+	url,
+	hash,
+	response,
+}: {
+	url: string;
+	hash: string;
+	response: ResponseType;
+}): Promise<ResponseType | FragmentResponse<ResponseType>> {
 	if (isJsonContent(response)) {
 		if (response.body) {
 			try {
@@ -74,7 +84,7 @@ async function getFragment<ResponseType extends Response = Response>(
 						{
 							status: 404,
 							headers: response.headers,
-							url: input.href,
+							url,
 						},
 						parent,
 					);
@@ -101,7 +111,7 @@ async function getFragment<ResponseType extends Response = Response>(
 						status: response.status,
 						statusText: response.statusText,
 						headers,
-						url: input.href,
+						url,
 					},
 					parent,
 				);
@@ -115,7 +125,7 @@ async function getFragment<ResponseType extends Response = Response>(
 						{
 							status: 400,
 							headers: response.headers,
-							url: input.href,
+							url,
 						},
 						response,
 					);
@@ -131,7 +141,7 @@ async function getFragment<ResponseType extends Response = Response>(
 			{
 				status: 404,
 				headers: response.headers,
-				url: input.href,
+				url,
 			},
 			response,
 		);
@@ -140,9 +150,9 @@ async function getFragment<ResponseType extends Response = Response>(
 	return new FragmentResponse(
 		undefined,
 		{
-			status: 415,
+			status: 415, // Unsupported Media Type
 			headers: response.headers,
-			url: input.href,
+			url,
 		},
 		response,
 	);
