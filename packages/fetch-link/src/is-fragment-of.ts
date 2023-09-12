@@ -1,27 +1,46 @@
+import {getUrlFragment} from '@windyroad/fetch-fragment';
+
 /**
  * Checks if URL A points to a fragment within URL B.
- * @param urlToCheck The first URL to check.
- * @param urlToCompare The second URL to check.
+ * @param options The options object.
+ * @param options.urlToCheck The first URL to check.
+ * @param options.urlToCheckHash The first URL to check's hash.
+ * @param options.urlToCompare The second URL to check.
  * @returns True if URL A points to a fragment within URL B, false otherwise.
  */
-export function isFragmentOf(urlToCheck: URL, urlToCompare: URL): boolean {
-	if (urlToCheck.hash.length === 0) {
+export function isFragmentOf({
+	urlToCheck,
+	urlToCompare,
+}: {
+	urlToCheck: string;
+	urlToCompare: string;
+}): boolean {
+	const urlToCheckHash = getUrlFragment(urlToCheck);
+	if (urlToCheckHash === undefined || urlToCheckHash.length === 0) {
 		return false;
 	}
 
-	const urlToCheckWithoutHash = new URL(urlToCheck.href);
-	urlToCheckWithoutHash.hash = '';
-	const urlToCompareWithoutHash = new URL(urlToCompare.href);
-	urlToCompareWithoutHash.hash = '';
-	if (urlToCheckWithoutHash.href !== urlToCompareWithoutHash.href) {
-		return false;
-	}
-
-	if (urlToCompare.hash.length === 0) {
+	if (urlToCheck.startsWith('#')) {
 		return true;
 	}
 
-	if (urlToCheck.hash.startsWith(urlToCompare.hash)) {
+	const urlToCheckHashIndex = urlToCheck.indexOf('#');
+	const urlToCheckWithoutHash = urlToCheck.slice(0, urlToCheckHashIndex);
+	const urlToCompareHashIndex = urlToCompare.indexOf('#');
+	const urlToCompareWithoutHash =
+		urlToCompareHashIndex >= 0
+			? urlToCompare.slice(0, urlToCompareHashIndex)
+			: urlToCompare;
+	if (urlToCheckWithoutHash !== urlToCompareWithoutHash) {
+		return false;
+	}
+
+	const urlToCompareHash = getUrlFragment(urlToCompare);
+	if (!urlToCompareHash || urlToCompareHash.length === 0) {
+		return true;
+	}
+
+	if (urlToCheckHash.startsWith(urlToCompareHash)) {
 		return true;
 	}
 

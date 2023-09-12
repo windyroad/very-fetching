@@ -28,7 +28,7 @@ describe('decorateFetchResponseWithLinks', () => {
 		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
 		const response = await decoratedFetch('https://example.com');
 		expect(response.links()).toEqual([
-			{uri: 'https://example.com/', rel: 'resource'},
+			{uri: 'https://example.com', rel: 'resource'},
 			{uri: 'https://example.com/{id}', rel: 'resource-template'},
 		]);
 	});
@@ -196,6 +196,49 @@ describe('decorateFetchResponseWithLinks', () => {
 			},
 			{
 				uri: 'http://example.com/#/foo/1',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/1',
+					value: json.foo[1],
+					variables: {index: '1'},
+				},
+			},
+		]);
+	});
+
+	test('should add links with variables for a template hash without response.url', async ({
+		expect,
+	}) => {
+		const json = {
+			foo: [
+				{id: 1, name: 'Alice'},
+				{id: 2, name: 'Bob'},
+			],
+		};
+		const fetchImpl = vi.fn().mockResolvedValue(
+			new MockResponse(JSON.stringify(json), {
+				headers: new Headers({
+					link: '<#/foo/{index}>; rel="item"',
+					'Content-Type': 'application/json',
+				}),
+				url: undefined as unknown as string,
+			}),
+		);
+		const decoratedFetch = decorateFetchResponseWithLinks(fetchImpl);
+		const response = await decoratedFetch('http://example.com');
+		const links = response.links();
+		expect(links).toEqual([
+			{
+				uri: '#/foo/0',
+				rel: 'item',
+				fragment: {
+					path: '#/foo/0',
+					value: json.foo[0],
+					variables: {index: '0'},
+				},
+			},
+			{
+				uri: '#/foo/1',
 				rel: 'item',
 				fragment: {
 					path: '#/foo/1',

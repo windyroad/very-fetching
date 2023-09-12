@@ -1,5 +1,9 @@
 import {decorateFetchResponse} from '@windyroad/decorate-fetch-response';
-import {FragmentResponse, isJsonContent} from '@windyroad/fetch-fragment';
+import {
+	FragmentResponse,
+	isJsonContent,
+	getUrlFragment,
+} from '@windyroad/fetch-fragment';
 import {
 	type FetchFunction,
 	type AwaitedFetchReturns,
@@ -13,6 +17,7 @@ import {isFragmentOf} from './is-fragment-of.js';
 import {type LinkedResponse} from './linked-response.js';
 import {resolveLinkUrls} from './resolve-link-urls.js';
 import {type FragmentLink, type Fragment} from './fragment.js';
+import {resolveUrl} from './resolve-url.js';
 
 /**
  * Decorates a `fetch`-like function with link parsing and resolution functionality.
@@ -34,22 +39,22 @@ export function decorateFetchResponseWithLinks<
  * Converts a `Link` object and a `URL` to a `FragmentLink` object by filling in the URI template with the variables from the `Fragment`.
  * @param {object} options - The options object.
  * @param {Link} options.link - The `Link` object to convert.
- * @param {URL} options.url - The `URL` object to use for filling in the URI template.
+ * @param {URL} options.templatedHash - The templated Hash of the link
  * @param {Fragment} options.match - The `Fragment` object containing the variables to use for filling in the URI template.
  * @returns {Link} - The resulting `FragmentLink` object.
  */
 function matchToLink({
 	link,
-	url,
+	templatedHash,
 	match,
 }: {
 	link: Link;
-	url: URL;
+	templatedHash: string;
 	match: Fragment;
 }): FragmentLink {
 	return {
 		...link,
-		uri: new URL(match.path, url).href,
+		uri: link.uri.replace(templatedHash, match.path),
 		...(link.anchor && {
 			anchor: interpolateAnchor(link.anchor, match),
 		}),
@@ -144,10 +149,11 @@ async function decorateResponseWithLinks<
 >(response: ResponseType): Promise<LinkedResponse<ResponseType>> {
 	const linkHeader = new LinkHeader(response?.headers?.get('link') ?? '');
 	linkHeader.parse(response?.headers?.get('link-template') ?? '');
-	const resolvedLinks = resolveLinkUrls({
-		links: linkHeader.refs,
-		baseUrl: response.url,
-	});
+	// Can't resolvedLinks, because response.url might be relative or undefined
+	// const resolvedLinks = resolveLinkUrls({
+	// 	links: linkHeader.refs,
+	// 	baseUrl: response.url,
+	// });
 	let responseBodyState: ResponseBodyState<ResponseType> = {
 		originalResponse: response,
 	};
@@ -155,35 +161,50 @@ async function decorateResponseWithLinks<
 	let links: Array<Link | FragmentLink>;
 
 	if (isJsonContent(response)) {
-		const responseUrl = new URL(response.url);
-		const resolvedLinksAreHashed = resolvedLinks.map<{
-			url: URL;
-			link: Link;
-			isTemplatedHash: boolean;
-		}>(
-			(urlAndLink: {
-				url: URL;
-				link: Link;
-			}): {
-				url: URL;
-				link: Link;
-				isTemplatedHash: boolean;
-			} => {
-				const {url, link} = urlAndLink;
-				if (isFragmentOf(url, responseUrl)) {
+		const linksAreHashed = linkHeader.refs.map<
+			| {
+					link: Link;
+					hash: string;
+					isTemplatedHash: boolean;
+			  }
+			| {
+					link: Link;
+					isTemplatedHash: false;
+			  }
+		>(
+			(
+				link: Link,
+			):
+				| {
+						link: Link;
+						hash: string;
+						isTemplatedHash: boolean;
+				  }
+				| {
+						link: Link;
+						isTemplatedHash: false;
+				  } => {
+				const url = link.uri;
+				const hash = getUrlFragment(url);
+				if (
+					isFragmentOf({
+						urlToCheck: url,
+						urlToCompare: response.url,
+					})
+				) {
 					/**
 					 * See if the hash is a template and if so, generate the range of
 					 * matching hashes and add them to the links array
 					 */
-					const hashTemplate = uriTemplate(url.hash);
+					const hashTemplate = uriTemplate(hash);
 					return {
-						url,
 						link,
+						hash,
 						isTemplatedHash: hashTemplate.varNames.length > 0,
 					};
 				}
 
-				return {url, link, isTemplatedHash: false};
+				return {link, isTemplatedHash: false};
 			},
 		);
 
@@ -191,25 +212,30 @@ async function decorateResponseWithLinks<
 		// over the matching parts of the body, but we still want the body
 		// to be readable, so we'll clone the response, read the body from
 		// the original and return the clone
-		if (
-			resolvedLinksAreHashed.some((urlAndLink) => urlAndLink.isTemplatedHash)
-		) {
+		if (linksAreHashed.some((urlAndLink) => urlAndLink.isTemplatedHash)) {
 			responseBodyState = await getBody(responseBodyState);
 		}
 
-		links = resolvedLinksAreHashed.flatMap<FragmentLink | Link>(
-			(urlAndLink: {
-				url: URL;
-				link: Link;
-				isTemplatedHash: boolean;
-			}): FragmentLink | FragmentLink[] | Link => {
-				const {url, link, isTemplatedHash} = urlAndLink;
+		links = linksAreHashed.flatMap<FragmentLink | Link>(
+			(
+				urlAndLink:
+					| {
+							link: Link;
+							hash: string;
+							isTemplatedHash: boolean;
+					  }
+					| {
+							link: Link;
+							isTemplatedHash: false;
+					  },
+			): FragmentLink | FragmentLink[] | Link => {
+				const {link, isTemplatedHash} = urlAndLink;
 				if (isTemplatedHash) {
 					const {jsonBody} = responseBodyState;
-					const matches = findMatchingFragments(jsonBody, url.hash);
+					const matches = findMatchingFragments(jsonBody, urlAndLink.hash);
 					const templatedLinks = matches.map(
 						(match: Fragment): FragmentLink => {
-							return matchToLink({link, url, match});
+							return matchToLink({link, templatedHash: urlAndLink.hash, match});
 						},
 					);
 					return templatedLinks;
@@ -220,9 +246,7 @@ async function decorateResponseWithLinks<
 		);
 	} else {
 		// Not json content
-		links = resolvedLinks.map<Link>(
-			(urlAndLink: {url: URL; link: Link}): Link => urlAndLink.link,
-		);
+		links = linkHeader.refs;
 	}
 
 	if (response instanceof FragmentResponse && response.parent) {
@@ -253,7 +277,12 @@ async function decorateResponseWithLinks<
 				filter?: Partial<Link> | string,
 				parameters?: Record<string, string | Record<string, string>>,
 			): Link[] {
-				const filtered = filterLinks({filter, links});
+				const filtered = filterLinks({filter, links}).map((link) => {
+					return {
+						...link,
+						uri: resolveUrl({url: link.uri, baseUrl: response.url}),
+					};
+				});
 				fillLinks({parameters, links: filtered});
 				return filtered;
 			},

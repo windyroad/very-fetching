@@ -11,6 +11,7 @@ import {LinkHeader} from '@windyroad/link-header';
 import {isJsonContent} from './is-json-content.js';
 import {FragmentResponse} from './fragment-response.js';
 import {type FetchFragmentFunction} from './fetch-fragment-function.js';
+import {getUrlFragment} from './get-url-fragment.js';
 
 /**
  * Fetches a fragment from a JSON response based on a URL fragment identifier.
@@ -39,8 +40,7 @@ export function addFragmentSupportToFetch<
 		// NOTE: We cannot reply on response.url
 		// in many situations it is not set
 		if (typeof input === 'string') {
-			const hashIndex = input.indexOf('#');
-			const hash = hashIndex >= 0 ? input.slice(hashIndex) : undefined;
+			const hash = getUrlFragment(input);
 			if (hash) {
 				return getFragment({url: input, hash, response});
 			}
