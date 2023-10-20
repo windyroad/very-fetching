@@ -51,6 +51,6 @@
   },
   "devDependencies": {
     "fast-check": "^3.10.0",
-    "vitest": "^0.34.2"
+    "vitest": "^0.34.6"
   }
 }
