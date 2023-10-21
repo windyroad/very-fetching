@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/xo-config",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "XO config for the Windy Road style guide",
   "type": "commonjs",
   "main": "src/xo-config.cjs",
