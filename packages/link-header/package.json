@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/link-header",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Parse & format HTTP link headers according to RFC 8288",
   "type": "module",
   "main": "dist/index.js",

@@ -1,5 +1,16 @@
 # @windyroad/fetch-link
 
+## 2.1.1
+
+### Patch Changes
+
+- 7faa107: build(deps-dev): bump eslint-plugin-jsdoc from 46.5.0 to 46.8.2
+  build(deps-dev): bump vitest from 0.33.0 to 0.34.6
+- Updated dependencies [7faa107]
+  - @windyroad/decorate-fetch-response@3.0.2
+  - @windyroad/link-header@1.0.1
+  - @windyroad/wrap-fetch@3.0.2
+
 ## 2.1.0
 
 ### Minor Changes

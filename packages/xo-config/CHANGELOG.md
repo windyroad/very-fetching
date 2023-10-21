@@ -1,5 +1,14 @@
 # @windyroad/xo-config
 
+## 2.0.1
+
+### Patch Changes
+
+- 1033519: build(deps-dev): bump markdownlint from 0.29.0 to 0.31.1
+- 7faa107: build(deps-dev): bump eslint-plugin-jsdoc from 46.5.0 to 46.8.2
+  build(deps-dev): bump vitest from 0.33.0 to 0.34.6
+- 7231435: build(deps-dev): bump markdownlint-cli2 from 0.8.1 to 0.10.0
+
 ## 2.0.0
 
 ### Major Changes
