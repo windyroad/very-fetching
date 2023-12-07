@@ -1,5 +1,11 @@
 # @windyroad/xo-config
 
+## 2.0.2
+
+### Patch Changes
+
+- db2b939: build(deps-dev): bump eslint from 8.47.0 to 8.55.0
+
 ## 2.0.1
 
 ### Patch Changes
