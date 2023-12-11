@@ -68,7 +68,7 @@
     "globby": "^13.2.2",
     "markdownlint-cli2": "^0.10.0",
     "nodemon": "^3.0.1",
-    "turbo": "1.10.5",
+    "turbo": "1.11.1",
     "typescript": "^5.1.6",
     "vitest": "^0.34.6",
     "webdriverio": "^8.15.6",
