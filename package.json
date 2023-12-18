@@ -60,7 +60,7 @@
     "@types/node": "18.11.9",
     "@vitest/browser": "^0.34.2",
     "@vitest/coverage-v8": "^0.32.2",
-    "@windyroad/xo-config": "*",
+    "@windyroad/eslint-config": "2.0.0",
     "adr": "^1.4.5",
     "cspell": "^7.3.8",
     "eslint-plugin-jsdoc": "^46.8.2",
@@ -72,7 +72,7 @@
     "typescript": "^5.1.6",
     "vitest": "^0.34.6",
     "webdriverio": "^8.15.6",
-    "xo": "^0.54.2"
+    "xo": "^0.56.0"
   },
   "dependencies": {
     "json-ptr": "^3.1.1"

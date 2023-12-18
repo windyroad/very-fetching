@@ -1,4 +1,4 @@
 'use strict';
-const config = require("@windyroad/xo-config")
+const config = require("./packages/eslint-config/xo-config.cjs")
 module.exports = config
 

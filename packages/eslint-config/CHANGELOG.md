@@ -1,4 +1,4 @@
-# @windyroad/xo-config
+# @windyroad/eslint-config
 
 ## 2.0.2
 

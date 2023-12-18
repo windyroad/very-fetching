@@ -38,9 +38,9 @@ export function formatAttribute(
 		let encodedValue = encodeURIComponent(value);
 		// We don't need to escape <SP> <,> <;> within quotes
 		encodedValue = encodedValue
-			.replace(/%20/g, ' ')
-			.replace(/%2C/g, ',')
-			.replace(/%3B/g, ';');
+			.replaceAll('%20', ' ')
+			.replaceAll('%2C', ',')
+			.replaceAll('%3B', ';');
 
 		value = `"${encodedValue}"`;
 	}

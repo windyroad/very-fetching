@@ -4,5 +4,5 @@
  * @returns the string with quotes escaped
  */
 export function escapeQuotes(value: string) {
-	return value.replace(/"/g, '\\"');
+	return value.replaceAll('"', '\\"');
 }

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "NodeNext",
     "target": "ESNext",
     "moduleResolution": "nodeNext",
     "sourceMap": true,
@@ -14,11 +14,12 @@
     "noEmit": false,
     "downlevelIteration": true,
     "lib": [
-      "es2020",
+      "esnext.string",
+      "esnext",
       "DOM",
       "DOM.Iterable"
     ],
-    "strict": true,
+    "strict": true
   },
   "exclude": [
     "**/*.test.ts",
@@ -27,6 +28,6 @@
     "**/dist",
     "**/public",
     "**/build",
-    "**/coverage",
+    "**/coverage"
   ]
 }

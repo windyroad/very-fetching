@@ -1,7 +1,7 @@
 import fc from 'fast-check';
 import {test} from 'vitest';
 import markdownlint from 'markdownlint';
-import config from './markdownlint-cli2.cjs';
+import config from '../markdownlint-cli2.cjs';
 
 test('markdownlint should pass with valid markdown', ({expect}) => {
 	const result = markdownlint.sync({

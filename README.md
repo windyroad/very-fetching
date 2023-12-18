@@ -21,7 +21,7 @@ it can use links and request inputs, allowing call chaining.
   [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288)
 - [`@windyroad/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so
    requests and responses can be modified.
-- [`@windyroad/xo-config`](./packages/xo-config/README.md): XO config for the Windy Road style
+- [`@windyroad/eslint-config`](./packages/eslint-config/README.md): XO config for the Windy Road style
    guide.
 
 <p align="center">

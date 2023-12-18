@@ -7,7 +7,7 @@
           "packages/*/src"
         ]
       },
-      "noEmit": true,
+      "noEmit": true
     },
     "include": [
       "./*.ts",

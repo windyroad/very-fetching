@@ -134,7 +134,7 @@ function filterLinks({
 				}
 
 				return true;
-		  })
+			})
 		: links;
 }
 

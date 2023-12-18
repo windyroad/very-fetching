@@ -4,5 +4,5 @@
  * @returns the value with the whitespace removed
  */
 export function trim(value: string) {
-	return value.replace(/^[\s\uFEFF\u00A0]+|[\s\uFEFF\u00A0]+$/g, '');
+	return value.replaceAll(/^[\s\uFEFF\u00A0]+|[\s\uFEFF\u00A0]+$/g, '');
 }

@@ -1,6 +1,5 @@
 import fc from 'fast-check';
 import {describe, test, it, vi, expect, beforeAll, afterAll} from 'vitest';
-// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {isNode} from 'is-where';

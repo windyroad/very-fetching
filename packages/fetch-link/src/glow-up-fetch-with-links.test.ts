@@ -1,6 +1,5 @@
 import {test, vi, beforeAll, afterAll, beforeEach, describe} from 'vitest';
 import fc from 'fast-check';
-// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {type FragmentResponse, MockResponse} from '@windyroad/fetch-fragment';

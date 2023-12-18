@@ -1,4 +1,3 @@
-// eslint-disable-next-line n/file-extension-in-import
 import {defineWorkspace} from 'vitest/config';
 
 // DefineWorkspace provides a nice type hinting DX

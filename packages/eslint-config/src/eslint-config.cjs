@@ -1,16 +1,11 @@
 const jsdoc = require('eslint-plugin-jsdoc');
 /**
- * @typedef {import('eslint').Linter.Config & { prettier?: boolean, extensions?: string[] }} ESLintConfig
- */
-
-/**
  * @type {ESLintConfig}
  */
 const config = {
-	prettier: true,
 	...jsdoc.configs['recommended-typescript-flavor-error'],
 	plugins: ['no-secrets', 'jsdoc'],
-	extends: [],
+	extends: ['plugin:json/recommended'],
 	rules: {
 		'no-secrets/no-secrets': ['error', {ignoreContent: '^glowUp'}],
 		'jsdoc/no-undefined-types': 'off',

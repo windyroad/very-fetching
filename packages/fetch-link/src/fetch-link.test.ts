@@ -1,5 +1,4 @@
 import {test, beforeAll, afterAll, describe} from 'vitest';
-// eslint-disable-next-line n/file-extension-in-import
 import {setupServer} from 'msw/node';
 import {rest} from 'msw';
 import {isNode} from 'is-where';

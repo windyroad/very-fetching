@@ -104,7 +104,7 @@ export class LinkHeader {
 	parse(value: string) {
 		// Trim & unfold folded lines
 		// eslint-disable-next-line no-control-regex
-		value = trim(value).replace(/\r?\n[ \u0009]+/g, '');
+		value = trim(value).replaceAll(/\r?\n[ \u0009]+/g, '');
 
 		enum State {
 			Idle,

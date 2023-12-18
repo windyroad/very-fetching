@@ -1,12 +1,13 @@
 {
-  "name": "@windyroad/xo-config",
-  "version": "2.0.2",
-  "description": "XO config for the Windy Road style guide",
+  "name": "@windyroad/eslint-config",
+  "version": "2.0.0",
+  "description": "Lint configuration for the Windy Road style",
   "type": "commonjs",
-  "main": "src/xo-config.cjs",
+  "main": "src/eslint-config.cjs",
   "files": [
-    "src/xo-config.cjs",
-    "src/markdownlint-cli2.cjs"
+    "src/eslint-config.cjs",
+    "xo-config.cjs",
+    "markdownlint-cli2.cjs"
   ],
   "scripts": {
     "test": "vitest --run",
@@ -35,7 +36,7 @@
   "bugs": {
     "url": "https://github.com/windyroad/very-fetching/issues"
   },
-  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/xo-config/README.md",
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/eslint-config/README.md",
   "publishConfig": {
     "access": "public"
   },
@@ -43,23 +44,25 @@
     "@typescript-eslint/eslint-plugin": "^5.61.0",
     "eslint": "^8.55.0",
     "eslint-plugin-jsdoc": "^46.8.2",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-jsonc": "^2.9.0",
     "eslint-plugin-no-secrets": "^0.8.9",
-    "eslint-plugin-import": "^2.27.5",
     "fast-check": "^3.11.0",
     "is-plain-obj": "^4.1.0",
     "markdownlint": "^0.31.1",
     "markdownlint-cli2": "^0.10.0",
     "vitest": "^0.34.6",
-    "xo": "^0.55.0"
+    "xo": "^0.56.0"
   },
   "peerDependencies": {
+    "xo": ">=0.56.0",
     "@typescript-eslint/eslint-plugin": ">=5.61.0",
     "eslint": ">=8.44.0",
+    "eslint-plugin-import": ">=2.27.5",
     "eslint-plugin-jsdoc": ">=46.4.3",
     "eslint-plugin-jsonc": ">=2.9.0",
     "eslint-plugin-no-secrets": ">=0.8.9",
-    "eslint-plugin-import": ">=2.27.5",
     "markdownlint-cli2": ">=0.8.1"
   }
 }

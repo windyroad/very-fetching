@@ -1,7 +1,8 @@
-# @windyroad/xo-config
+# @windyroad/eslint-config
 
 This package provides a shareable configurations for:
 
+- [ESLint](https://eslint.org/), which is a wrapper around [ESLint](https://eslint.org/), and
 - [XO](https://github.com/xojs/xo), which is a wrapper around [ESLint](https://eslint.org/), and
 - [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2)
 
@@ -12,7 +13,7 @@ It provides a consistent and opinionated set of rules for JavaScript and TypeScr
 To use this configuration in your project, you can install it via npm:
 
 ```sh
-npm install --save-dev @windyroad/xo-config
+npm install --save-dev @windyroad/eslint-config
 ```
 
 ## Usage
@@ -23,7 +24,7 @@ To use this configuration in your project, you can add it to your `package.json`
 
 ```json
 {
-  "xo": "@windyroad/xo-config"
+  "xo": "@windyroad/eslint-config/xo-config.cjs"
 }
 ```
 
@@ -31,8 +32,44 @@ Alternatively, you can create an `.xo-config.js` file in the root of your projec
 
 ```javascript
 'use strict';
-const config = require("@windyroad/xo-config")
+const config = require("@windyroad/eslint-config/xo-config.cjs")
 module.exports = config
+```
+
+#### Extending
+
+You can also extend the shared configuration by creating an `.xo-config.js` file in the root of
+your project and export the configuration as follows:
+
+```javascript
+'use strict';
+const config = require("@windyroad/eslint-config/xo-config.cjs")
+module.exports = {
+  ...config
+  extends: ["@windyroad", 'some-other-shareable-configuration']
+}
+```
+
+### ESLint
+
+Add ESLint config to your `package.json`:
+
+```json
+ "eslintConfig": {
+  "extends": [
+   "@windyroad",
+  ]
+ }
+```
+
+Or to .eslintrc:
+
+```json
+{
+ "extends": [
+  "@windyroad",
+ ]
+}
 ```
 
 ### markdownlint-cli2
@@ -43,7 +80,7 @@ also use the shared configuration provided by this package. To use it, create a
 
 ```javascript
 'use strict';
-const config = require("@windyroad/xo-config/src/markdownlint-cli2.cjs")
+const config = require("@windyroad/eslint-config/markdownlint-cli2.cjs")
 module.exports = config
 ```
 
@@ -71,4 +108,4 @@ Contributions are welcome! Please read the [contributing guidelines](../../CONTR
 
 ## License
 
-`@windyroad/xo-config` is lovingly licensed under the [MIT License](../../LICENSE). ❤️
+`@windyroad/eslint-config` is lovingly licensed under the [MIT License](../../LICENSE). ❤️

@@ -7,7 +7,7 @@ import path from 'node:path';
 import {describe, it} from 'vitest';
 import {ESLint} from 'eslint';
 import xo from 'xo';
-import config from './xo-config.cjs';
+import config from './eslint-config.cjs';
 
 // Const execAsync = promisify(exec);
 
@@ -15,12 +15,11 @@ import config from './xo-config.cjs';
 
 // const __dirname = path.join(path.dirname(thisFile), 'xo-config.cjs');
 
-const {prettier, extensions, ...remainder} = config;
 const eslint = new ESLint({
 	useEslintrc: false,
 	overrideConfig: {
-		...remainder,
-		extends: [...(remainder.extends ?? []), 'xo', 'prettier'],
+		...config,
+		extends: [...(config.extends ?? []), 'xo', 'prettier'],
 	},
 });
 

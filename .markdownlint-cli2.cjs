@@ -1,6 +1,6 @@
 // @ts-check
 
 "use strict";
-const config = require("@windyroad/xo-config/src/markdownlint-cli2.cjs")
+const config = require("@windyroad/eslint-config/markdownlint-cli2.cjs")
 
 module.exports = config

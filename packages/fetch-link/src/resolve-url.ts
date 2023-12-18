@@ -23,7 +23,7 @@ export function resolveUrl({
 	// RFC8288 allows for URI templates, which are not supported by the URL class.
 	const resolvedString = resolved
 		.toString()
-		.replace(/%7B/g, '{')
-		.replace(/%7D/g, '}');
+		.replaceAll('%7B', '{')
+		.replaceAll('%7D', '}');
 	return resolvedString;
 }

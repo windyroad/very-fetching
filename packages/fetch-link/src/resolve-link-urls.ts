@@ -22,7 +22,9 @@ export function resolveLinkUrls({
 		// RFC8288 allows for URI templates, which are not supported by the URL class.
 		const resolvedString = resolved
 			.toString()
+			// eslint-disable-next-line unicorn/prefer-string-replace-all
 			.replace(/%7B/g, '{')
+			// eslint-disable-next-line unicorn/prefer-string-replace-all
 			.replace(/%7D/g, '}');
 		link.uri = resolvedString;
 		return {url: new URL(resolvedString), link};
