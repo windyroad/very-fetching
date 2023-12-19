@@ -1,5 +1,11 @@
 # @windyroad/eslint-config
 
+## 3.1.0
+
+### Minor Changes
+
+- da3fe28: Added linting for turbo.json
+
 ## 3.0.1
 
 ### Patch Changes
