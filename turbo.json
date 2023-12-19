@@ -1,5 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": [
+    "VSCODE_INSPECTOR_OPTIONS",
+    "VITEST_JUNIT_SUITE_NAME",
+    "npm_package_name"
+  ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
