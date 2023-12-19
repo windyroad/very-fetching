@@ -1,5 +1,12 @@
 # @windyroad/eslint-config
 
+## 3.0.1
+
+### Patch Changes
+
+- b944fce: build(deps-dev): bump eslint-plugin-import from 2.27.5 to 2.29.1
+- ca17499: build(deps-dev): bump eslint-plugin-jsonc from 2.9.0 to 2.11.1
+
 ## 3.0.0
 
 ### Major Changes
