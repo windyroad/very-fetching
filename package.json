@@ -65,7 +65,7 @@
     "cspell": "^7.3.8",
     "eslint-plugin-jsdoc": "^46.8.2",
     "eslint": "^8.55.0",
-    "globby": "^13.2.2",
+    "globby": "^14.0.0",
     "markdownlint-cli2": "^0.10.0",
     "nodemon": "^3.0.1",
     "turbo": "1.11.2",
