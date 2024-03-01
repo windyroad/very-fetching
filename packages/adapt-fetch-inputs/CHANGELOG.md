@@ -1,5 +1,12 @@
 # @windyroad/adapt-fetch-inputs
 
+## 3.0.3
+
+### Patch Changes
+
+- Updated dependencies [5e95863]
+  - @windyroad/wrap-fetch@3.1.0
+
 ## 3.0.2
 
 ### Patch Changes
