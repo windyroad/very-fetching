@@ -2,6 +2,7 @@ import {
 	wrapFetch,
 	type AwaitedFetchReturns,
 	type FetchFunction,
+	type WrapFetchOptions,
 } from '@windyroad/wrap-fetch';
 
 /**
@@ -10,7 +11,7 @@ import {
  * @template ResponseType The awaited type of the `fetch` implementation response.
  * @template DecoratorReturns The return type of the decorator function.
  * @param decorator - The decorator function to apply to the response.
- * @param fetchImpl - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @param fetchImplOrOptions - The `fetch` implementation to wrap or an object with either the `fetch` implementation to wrap or a function that returns a fetch implementation. Defaults to the global `fetch` function.
  * @returns - A decorated version of the `fetch` implementation.
  */
 export function decorateFetchResponse<
@@ -21,7 +22,7 @@ export function decorateFetchResponse<
 	decorator: (
 		response: ResponseType,
 	) => Promise<DecoratorReturns> | DecoratorReturns,
-	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+	fetchImplOrOptions?: WrapFetchOptions<Arguments, ResponseType>,
 ): (...arguments_: Arguments) => Promise<DecoratorReturns> {
 	return decorateFetchResponseUsingInputs<
 		Arguments,
@@ -30,7 +31,7 @@ export function decorateFetchResponse<
 	>(async (response, ...arguments_) => {
 		const result = await decorator(response);
 		return result;
-	}, fetchImpl);
+	}, fetchImplOrOptions);
 }
 
 /**
@@ -39,7 +40,7 @@ export function decorateFetchResponse<
  * @template ResponseType The awaited type of the `fetch` implementation response.
  * @template DecoratorReturns The return type of the decorator function.
  * @param decorator - The decorator function to apply to the response.
- * @param fetchImpl - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @param fetchImplOrOptions - The `fetch` implementation to wrap or an object with either the `fetch` implementation to wrap or a function that returns a fetch implementation. Defaults to the global `fetch` function.
  * @returns - A decorated version of the `fetch` implementation.
  */
 export function decorateFetchResponseUsingInputs<
@@ -51,7 +52,7 @@ export function decorateFetchResponseUsingInputs<
 		response: ResponseType,
 		...arguments_: Arguments
 	) => Promise<DecoratorReturns> | DecoratorReturns,
-	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+	fetchImplOrOptions?: WrapFetchOptions<Arguments, ResponseType>,
 ): (...arguments_: Arguments) => Promise<DecoratorReturns> {
 	return wrapFetch<Arguments, ResponseType, Arguments, DecoratorReturns>(
 		async (fetchImpl, ...arguments_) => {
@@ -60,6 +61,6 @@ export function decorateFetchResponseUsingInputs<
 			const modified = await decorator(response, ...arguments_);
 			return modified;
 		},
-		fetchImpl,
+		fetchImplOrOptions,
 	);
 }

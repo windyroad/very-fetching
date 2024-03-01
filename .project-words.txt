@@ -31,6 +31,7 @@ nächstes
 nopush
 nuxt
 Nygard
+ofetch
 refs
 samverschueren
 sencrypt

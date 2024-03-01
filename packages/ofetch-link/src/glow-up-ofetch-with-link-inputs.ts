@@ -1,25 +1,44 @@
 import {wrapFetch, type FetchFunction} from '@windyroad/wrap-fetch';
-import {FragmentResponse} from '@windyroad/fetch-fragment';
+import {
+	type DropFirst,
+	type FragmentLink,
+	isFragmentLink,
+	isHeadersEmpty,
+} from '@windyroad/fetch-link';
 import {type Link, isLink} from '@windyroad/link-header';
-import {type DropFirst} from './drop-first.js';
-import {type FragmentLink, isFragmentLink} from './fragment.js';
-import {isHeadersEmpty} from './is-headers-empty.js';
+import {
+	type ofetch,
+	FetchRequest,
+	FetchOptions,
+	type FetchResponse,
+} from 'ofetch';
+import {
+	FragmentOfetchResponse,
+	type MappedType,
+	type ResponseType,
+} from './fragment-ofetch-response.js';
 
 /**
  * Adapts the fetch API to work with RFC8288 Link objects.
  * @template Arguments - The argument types of the original fetch function.
- * @template ResponseType - The awaited response type of the original fetch function to adapt.
+ * @template FetchResponseType - The awaited response type of the original fetch function to adapt.
  * @param {Function} fetchImpl - The original fetch function to adapt.
  * @returns {Function} An adapted fetch function that supports passing in a Link object.
  */
-export function glowUpFetchWithLinkInputs<
-	Arguments extends any[] = Parameters<typeof fetch>,
-	ResponseType extends Response = Awaited<ReturnType<typeof fetch>>,
+export function glowUpOfetchWithLinkInputs<
+	T = unknown,
+	R extends ResponseType = 'json',
+	Arguments extends Parameters<(typeof ofetch)['raw']> = Parameters<
+		(typeof ofetch)['raw']
+	>,
+	FetchResponseType extends FetchResponse<MappedType<R, T>> = FetchResponse<
+		MappedType<R, T>
+	>,
 >(
-	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+	fetchImpl?: FetchFunction<Arguments, FetchResponseType>,
 ): (
 	...arguments_: [Arguments[0] | Link | FragmentLink, ...DropFirst<Arguments>]
-) => Promise<ResponseType | FragmentResponse<ResponseType>> {
+) => Promise<FetchResponseType | FragmentOfetchResponse<T, R>> {
 	/**
 	 * Currently the code just adapts the input from a link to a url.
 	 * For performance reasons, if the link is a fragment, it should
@@ -29,12 +48,12 @@ export function glowUpFetchWithLinkInputs<
 	 */
 	return wrapFetch<
 		Arguments,
-		ResponseType,
+		FetchResponseType,
 		[Arguments[0] | Link | FragmentLink, ...DropFirst<Arguments>],
-		ResponseType | FragmentResponse<ResponseType>
+		FetchResponseType | FragmentOfetchResponse<T, R>
 	>(
 		async (
-			fetchImplInner: FetchFunction<Arguments, ResponseType>,
+			fetchImplInner: FetchFunction<Arguments, FetchResponseType>,
 			...arguments_: [
 				Arguments[0] | Link | FragmentLink,
 				...DropFirst<Arguments>,
@@ -43,7 +62,8 @@ export function glowUpFetchWithLinkInputs<
 			const [target, init, ...other] = arguments_;
 			if (isLink(target)) {
 				if (isFragmentLink(target)) {
-					return new FragmentResponse(target.fragment.value, {
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+					return new FragmentOfetchResponse<T, R>(target.fragment.value, {
 						status: 200,
 						url: target.uri,
 					});
@@ -51,10 +71,7 @@ export function glowUpFetchWithLinkInputs<
 
 				const link = target;
 
-				const headers =
-					init && typeof init === 'object' && 'headers' in init
-						? new Headers(init.headers as HeadersInit)
-						: new Headers();
+				const headers = new Headers(init?.headers ?? {});
 				// Only set the 'Accept' header if link.type is defined.
 				if (link.type) {
 					headers.append('Accept', link.type);
@@ -71,7 +88,7 @@ export function glowUpFetchWithLinkInputs<
 				const fetchParameters = [
 					link.uri,
 					{
-						...(init as any),
+						...init,
 						...(link.method && {method: link.method}),
 						...(!isHeadersEmpty(headers) && {headers}),
 					},

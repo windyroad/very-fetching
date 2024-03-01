@@ -18,10 +18,10 @@
       "dependsOn": []
     },
     "//#lint": {
-      "dependsOn": ["//#lint:xo"]
+      "dependsOn": ["//#lint:xo", "//#lint:markdown"]
     },
     "//#lint:xo": {
-      "dependsOn": ["//#lint:markdown"]
+      "dependsOn": []
     },
     "//#lint:markdown": {
       "dependsOn": [],

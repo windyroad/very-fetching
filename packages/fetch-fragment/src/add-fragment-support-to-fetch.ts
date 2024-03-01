@@ -5,6 +5,7 @@ import {
 import {
 	type FetchFunction,
 	type AwaitedFetchReturns,
+	type WrapFetchOptions,
 } from '@windyroad/wrap-fetch';
 import {JsonPointer} from 'json-ptr';
 import {LinkHeader} from '@windyroad/link-header';
@@ -18,23 +19,23 @@ import {getUrlFragment} from './get-url-fragment.js';
  * If the response is not JSON or the fragment is not found, returns a 404 or 415 response.
  * @template Arguments The type of the input arguments for the `fetch` implementation.
  * @template ResponseType The awaited type of the `fetch` implementation response.
- * @param {FetchFunction<Arguments, ResponseType>} [fetchImpl] - The `fetch` implementation to use. Defaults to the global `fetch` function.
+ * @param fetchImplOrOptions - The `fetch` implementation to wrap or an object with either the `fetch` implementation to wrap or a function that returns a fetch implementation. Defaults to the global `fetch` function.
  * @returns {FetchFragmentFunction<Arguments,ResponseType>} - A function that fetches a fragment from a JSON response.
  */
 export function addFragmentSupportToFetch<
-	Arguments extends Parameters<typeof fetch> = Parameters<typeof fetch>,
+	Arguments extends any[] = Parameters<typeof fetch>,
 	ResponseType extends Response = Response,
 >(
-	fetchImpl?: FetchFunction<Arguments, ResponseType>,
+	fetchImplOrOptions?: WrapFetchOptions<Arguments, ResponseType>,
 ): FetchFragmentFunction<Arguments, ResponseType> {
 	return decorateFetchResponseUsingInputs<
 		Arguments,
 		ResponseType,
 		ResponseType | FragmentResponse<ResponseType>
 	>(async (response, ...arguments_: Arguments) => {
-		let input = arguments_[0];
+		let input = arguments_[0]; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 		if (typeof input === 'object' && 'url' in input) {
-			input = input.url;
+			input = input.url; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
 		}
 
 		// NOTE: We cannot reply on response.url
@@ -45,11 +46,12 @@ export function addFragmentSupportToFetch<
 				return getFragment({url: input, hash, response});
 			}
 		} else if (input.hash) {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			return getFragment({url: input.href, hash: input.hash, response});
 		}
 
 		return response;
-	}, fetchImpl);
+	}, fetchImplOrOptions);
 }
 
 /**

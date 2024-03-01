@@ -1,9 +1,9 @@
-# @windyroad/fetch-link
+# @windyroad/ofetch-link
 
 We believe that hypermedia APIs, APIs who's responses include links and forms, significantly
 reduces to coupling between the client and server, making them easier to evolve.
 
-This library that adapts the fetch API to work with
+This library that adapts the [ofetch](https://github.com/unjs/ofetch) library to work with
 [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Links. It parses `Link` and
 `Link-Template` headers, providing them via `links()` method on the `Response`, and
 it can use links as request inputs, allowing call chaining.
@@ -13,50 +13,67 @@ it can use links as request inputs, allowing call chaining.
 You can install this library using npm:
 
 ```bash
-npm install @windyroad/fetch-link
+npm install @windyroad/ofetch-link
 ```
 
 ## Usage
 
-### `fetchLink`
+### `ofetchLink.raw`
 
-`fetchLink` is an enhanced fetch function that allows requests to RFC8288 Link objects. It
-takes in a `Link`, `URL`, or `RequestInfo` object and any custom settings that you want to
+`ofetchLink.raw` is an enhanced [ofetch.raw](https://github.com/unjs/ofetch) function that allows requests to RFC8288
+Link objects. It takes in a `Link`, `URL`, or `RequestInfo` object and any custom settings that you want to
 apply to the request. It returns a `Promise` that resolves to the `Response` object
 representing the response to the request.
 
 ```typescript
-import { fetchLink } from '@windyroad/fetch-link';
+import { ofetchLink } from '@windyroad/ofetch-link';
 
 // Fetch the collection using a URL
-const collectionResponse = await fetchLink(
+const collectionResponse = await ofetchLink.raw(
   'https://jsonplaceholder.typicode.com/posts',
 );
 // Fetch the first item linked by the collection
-const itemResponse = await fetchLink(collectionResponse.links('item')[0]);
+const itemResponse = await ofetchLink.raw(collectionResponse.links('item')[0]);
 // Fetch the collection from the item
-const collectionResponse2 = await fetchLink(itemResponse.links('collection')[0]);
+const collectionResponse2 = await ofetchLink.raw(itemResponse.links('collection')[0]);
 ```
 
 ## API
 
-### `fetchLink(target: string | Link | RequestInfo, init?: RequestInit): Promise<Response>`
+### `fetchLink<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<T>`
 
-An enhanced fetch that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
+An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
  returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
 
 #### Parameters
 
-- `target` - The Link, URL or RequestInfo to fetch from.
+- `target` - The `Link`, `URL` or `RequestInfo` to fetch from.
+- `init` - Any custom settings that you want to apply to the request.
+
+#### Returns
+
+A Promise that resolves to the data returned by the request.
+
+### `fetchLink.raw<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<FetchResponse<MappedType<R,T>>>`
+
+An enhanced [ofetch.raw](### `fetchLink<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<T>`
+
+An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
+ returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
+
+#### Parameters
+
+- `target` - The `Link`, `URL` or `RequestInfo` to fetch from.
 - `init` - Any custom settings that you want to apply to the request.
 
 #### Returns
 
 A Promise that resolves to the Response object representing the response to the request.
 
-### `glowUpFetchWithLinks(): (target: string | Link | RequestInfo, init?: RequestInit) => Promise<Response>`
+### `glowUpOfetchWithLinks(): (target: string | Link | RequestInfo, init?: RequestInit) => Promise<Response>`
 
-A function that returns an enhanced fetch function that allows requests to
+A function that returns an enhanced
+[ofetch.raw](https://github.com/unjs/ofetch?tab=readme-ov-file#-access-to-raw-response) function that allows requests to
 [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and returns a Response
 object with a `links` method that returns an array of RFC8288 Link objects.
 
@@ -105,14 +122,10 @@ An RFC8288 Link object, which represents a hyperlink from one resource to anothe
 - `method` (string, optional): The HTTP method to use when accessing the resource that the
  link refers to. See [RFC8288 Section 3.8](https://tools.ietf.org/html/rfc8288#section-3.8).
 
-#### Functions
-
-- `isLink(input: any): input is Link`: Determines whether the given input is a Link object.
-
 ## Contributing
 
 Contributions are welcome! Please read the [contributing guidelines](../../CONTRIBUTING.md) for more information.
 
 ## License
 
-`@windyroad/fetch-link` is lovingly licensed under the [MIT License](../../LICENSE). ❤️
+`@windyroad/ofetch-link` is lovingly licensed under the [MIT License](../../LICENSE). ❤️

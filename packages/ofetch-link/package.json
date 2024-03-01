@@ -1,0 +1,73 @@
+{
+  "name": "@windyroad/ofetch-link",
+  "version": "0.0.0",
+  "description": "A library that adapts the ofetch library to work with RFC8288 Link objects.",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.js",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "npm run compile",
+    "clean": "rimraf -rf ./dist",
+    "compile": "tsc -p tsconfig.build.json",
+    "prepublishOnly": "npm run build",
+    "test": "vitest --run",
+    "test:watch": "vitest --watch",
+    "test:browser:chrome": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:edge": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:firefox": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "test:browser:safari": "vitest --run --browser.name=${npm_lifecycle_event#test:browser:} --browser.headless",
+    "ci:test": "vitest run --config vite.config.ci.ts --coverage",
+    "lint": "xo --fix --prettier"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/windyroad/very-fetching.git"
+  },
+  "keywords": [
+    "fetch",
+    "link",
+    "rfc5988",
+    "rfc8288",
+    "web linking",
+    "hypermedia"
+  ],
+  "author": {
+    "name": "Windy Road Technology",
+    "url": "https://windyroad.com.au"
+  },
+  "contributors": [
+    "Tom Howard <tom@windyroad.com.au>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/windyroad/very-fetching/issues"
+  },
+  "homepage": "https://github.com/windyroad/very-fetching/blob/main/packages/fetch-link/README.md",
+  "publishConfig": {
+    "access": "public"
+  },
+  "dependencies": {
+    "@windyroad/fetch-link": "3.0.6",
+    "@windyroad/adapt-fetch-inputs": "3.0.2",
+    "@windyroad/decorate-fetch-response": "3.0.2",
+    "@windyroad/fetch-fragment": "2.1.1",
+    "@windyroad/wrap-fetch": "3.0.2",
+    "@windyroad/link-header": "1.0.1",
+    "json-ptr": "^3.1.1",
+    "uri-templates": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/uri-templates": "^0.1.31",
+    "fast-check": "^3.10.0",
+    "is-where": "^1.0.2",
+    "msw": "^1.2.2",
+    "vitest": "^0.34.6",
+    "ofetch": "^1.3.3"
+  },
+  "peerDependencies": {
+    "ofetch": "^1.3.3"
+  }
+}
