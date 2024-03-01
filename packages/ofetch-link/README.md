@@ -20,7 +20,8 @@ npm install @windyroad/ofetch-link
 
 ### `ofetchLink.raw`
 
-`ofetchLink.raw` is an enhanced [ofetch.raw](https://github.com/unjs/ofetch) function that allows requests to RFC8288
+`ofetchLink.raw` is an enhanced [ofetch.raw](https://github.com/unjs/ofetch#-access-to-raw-response) function that
+allows requests to RFC8288
 Link objects. It takes in a `Link`, `URL`, or `RequestInfo` object and any custom settings that you want to
 apply to the request. It returns a `Promise` that resolves to the `Response` object
 representing the response to the request.
@@ -40,10 +41,11 @@ const collectionResponse2 = await ofetchLink.raw(itemResponse.links('collection'
 
 ## API
 
-### `fetchLink<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<T>`
+### `ofetchLink<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<T>`
 
-An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
- returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
+An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) that allows requests to
+[RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
+returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
 
 #### Parameters
 
@@ -54,12 +56,11 @@ An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) t
 
 A Promise that resolves to the data returned by the request.
 
-### `fetchLink.raw<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<FetchResponse<MappedType<R,T>>>`
+### `ofetchLink.raw<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<FetchResponse<MappedType<R,T>>>`
 
-An enhanced [ofetch.raw](### `fetchLink<T = unknown, ResponseType = 'json'>(target: string | Link | RequestInfo, init?: RequestInit): Promise<T>`
-
-An enhanced [ofetch](https://github.com/unjs/ofetch?tab=readme-ov-file#ofetch) that allows requests to [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
- returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
+An enhanced [ofetch.raw](https://github.com/unjs/ofetch#-access-to-raw-response) that allows requests to
+[RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects and
+returns a Response object with a `links` method that returns an array of RFC8288 Link objects.
 
 #### Parameters
 
