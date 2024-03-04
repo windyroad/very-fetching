@@ -72,7 +72,7 @@
     "turbo": "1.11.2",
     "typescript": "^5.1.6",
     "vitest": "^0.34.6",
-    "webdriverio": "^8.15.6",
+    "webdriverio": "^8.32.4",
     "xo": "^0.56.0"
   },
   "dependencies": {
