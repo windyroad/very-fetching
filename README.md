@@ -17,6 +17,9 @@ it can use links and request inputs, allowing call chaining.
 - [`@windyroad/fetch-fragment`](./packages/fetch-fragment/README.md): A fetch library that can retrieve json fragments
 - [`@windyroad/fetch-link`](./packages/fetch-link/README.md): A library that adapts the fetch
   API to work with [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
+- [`@windyroad/ofetch-link`](./packages/fetch-olink/README.md): A library that adapts the
+  [ofetch](https://github.com/unjs/ofetch) library to work with
+  [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288) Link objects.
 - [`@windyroad/link-header`](./packages/link-header/README.md): Parse & format HTTP link headers according to
   [RFC8288](https://datatracker.ietf.org/doc/html/rfc8288)
 - [`@windyroad/wrap-fetch`](./packages/wrap-fetch/README.md): A library for wrapping fetch, so

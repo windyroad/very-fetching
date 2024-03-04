@@ -1,20 +1,10 @@
 import {decorateFetchResponse} from '@windyroad/decorate-fetch-response';
 import {
-	type FetchFunction,
-	type AwaitedFetchReturns,
-} from '@windyroad/wrap-fetch';
-import {type Link} from '@windyroad/link-header';
-import uriTemplate from 'uri-templates';
-import {JsonPointer} from 'json-ptr';
-import {
-	type LinkedResponse,
 	decorateResponseWithLinks,
+	type LinkedResponse,
 } from '@windyroad/fetch-link';
-import {type ofetch, FetchRequest, FetchOptions, FetchResponse} from 'ofetch';
-import {
-	type FragmentLink,
-	type Fragment,
-} from '../../fetch-link/src/fragment.js';
+import {type FetchFunction} from '@windyroad/wrap-fetch';
+import {type ofetch} from 'ofetch';
 
 /**
  * Decorates a `fetch`-like function with link parsing and resolution functionality.
