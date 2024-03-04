@@ -12,6 +12,7 @@
         "github.vscode-github-actions",
         "davidanson.vscode-markdownlint",
         "samverschueren.linter-xo",
-        "ambar.bundle-size"
+        "ambar.bundle-size",
+        "vitest.explorer"
     ]
 }

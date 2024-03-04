@@ -30,7 +30,7 @@
 				"DavidAnson.vscode-markdownlint",
 				"samverschueren.linter-xo",
 				"ambar.bundle-size",
-				"ZixuanChen.vitest-explorer"
+				"vitest.explorer"
 			]
 		}
 	}}
