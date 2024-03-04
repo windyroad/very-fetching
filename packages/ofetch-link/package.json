@@ -1,6 +1,6 @@
 {
   "name": "@windyroad/ofetch-link",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A library that adapts the ofetch library to work with RFC8288 Link objects.",
   "type": "module",
   "main": "dist/index.js",

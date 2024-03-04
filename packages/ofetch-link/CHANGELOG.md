@@ -1,5 +1,11 @@
 # @windyroad/ofetch-link
 
+## 1.0.1
+
+### Patch Changes
+
+- 6a6a37c: Fixed packaging issue
+
 ## 1.0.0
 
 ### Major Changes
