@@ -5,7 +5,7 @@ const jsdoc = require('eslint-plugin-jsdoc');
 const config = {
 	...jsdoc.configs['recommended-typescript-flavor-error'],
 	plugins: ['no-secrets', 'jsdoc'],
-	extends: ['plugin:json/recommended', 'turbo'],
+	extends: ['plugin:json/recommended-legacy', 'turbo'],
 	rules: {
 		'no-secrets/no-secrets': ['error', {ignoreContent: '^glowUp'}],
 		'jsdoc/no-undefined-types': 'off',
