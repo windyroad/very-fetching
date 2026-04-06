@@ -74,7 +74,6 @@
     "turbo": "2.9.4",
     "typescript": "~5.6.3",
     "vitest": "^0.34.6",
-    "webdriverio": "^8.46.0",
     "xo": "^0.56.0"
   },
   "dependencies": {
