@@ -34,7 +34,9 @@
     "ci:version": "[ \"$CI\" = true ] && changeset version || echo \"Dry run: changeset version\"",
     "ci:publish": "[ \"$CI\" = true ] && changeset publish || echo \"Dry run: changeset publish\"",
     "add-changeset": "changeset add",
-    "clean": "git clean -f -x"
+    "clean": "git clean -f -x",
+    "push:watch": "bash scripts/push-and-watch.sh",
+    "release:watch": "bash scripts/release-watch.sh"
   },
   "engines": {
     "node": ">=20.0.0"
