@@ -5,7 +5,7 @@ type ResponseMap = {
 	blob: Blob;
 	text: string;
 	arrayBuffer: ArrayBuffer;
-	stream: ReadableStream<Uint8Array<ArrayBuffer>>;
+	stream: ReadableStream<Uint8Array>;
 };
 export type ResponseType = keyof ResponseMap | 'json';
 export type MappedType<
@@ -94,10 +94,10 @@ export class FragmentOfetchResponse<
 
 	/**
 	 * Returns a `ReadableStream` of the JSON body of the response.
-	 * @returns {ReadableStream<Uint8Array<ArrayBuffer>> | null} - A `ReadableStream` of the JSON body of the response, or `null` if the JSON body is undefined.
+	 * @returns {ReadableStream<Uint8Array> | null} - A `ReadableStream` of the JSON body of the response, or `null` if the JSON body is undefined.
 	 */
 	// eslint-disable-next-line @typescript-eslint/ban-types
-	get body(): ReadableStream<Uint8Array<ArrayBuffer>> | null {
+	get body(): ReadableStream<Uint8Array> | null {
 		if (this.jsonBody === undefined) return null;
 		const encoder = new TextEncoder();
 		const uint8Array = encoder.encode(JSON.stringify(this.jsonBody));

@@ -14,7 +14,6 @@
     "noEmit": false,
     "downlevelIteration": true,
     "lib": [
-      "esnext.string",
       "esnext",
       "DOM",
       "DOM.Iterable"
