@@ -5,7 +5,7 @@
     "VITEST_JUNIT_SUITE_NAME",
     "npm_package_name"
   ],
-  "pipeline": {
+  "tasks": {
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["src/**/*"],
