@@ -1,10 +1,9 @@
-import fc from 'fast-check';
 import {test} from 'vitest';
-import markdownlint from 'markdownlint';
+import {lint} from 'markdownlint/promise';
 import config from '../markdownlint-cli2.cjs';
 
-test('markdownlint should pass with valid markdown', ({expect}) => {
-	const result = markdownlint.sync({
+test('markdownlint should pass with valid markdown', async ({expect}) => {
+	const result = await lint({
 		strings: {
 			valid: '# Valid Markdown\n\nThis is a paragraph.',
 		},
@@ -15,8 +14,8 @@ test('markdownlint should pass with valid markdown', ({expect}) => {
 	expect(result.invalid).toBeUndefined();
 });
 
-test('markdownlint should fail with invalid markdown', ({expect}) => {
-	const result = markdownlint.sync({
+test('markdownlint should fail with invalid markdown', async ({expect}) => {
+	const result = await lint({
 		strings: {
 			invalid:
 				'# Invalid Markdown\n\nThis is a paragraph that is too long. '.repeat(
