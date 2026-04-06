@@ -5,7 +5,7 @@ export default mergeConfig(
 	commonConfig,
 	defineConfig({
 		test: {
-			reporters: ['basic', 'junit', 'json'],
+			reporters: ['default', 'junit', 'json'],
 			outputFile: {
 				junit: `test-results/TEST-result.xml`,
 				json: `test-results/TEST-result.json`,
