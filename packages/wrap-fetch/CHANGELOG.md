@@ -1,5 +1,13 @@
 # @windyroad/wrap-fetch
 
+## 3.1.1
+
+### Patch Changes
+
+- 4a014cb: Apply lint auto-fixes from xo 1.x migration: consistent-type-exports,
+  prefer-object-has-own, String.raw, and remove obsolete eslint-disable comments.
+  No behavioral changes.
+
 ## 3.1.0
 
 ### Minor Changes

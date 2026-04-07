@@ -1,5 +1,13 @@
 # @windyroad/link-header
 
+## 1.0.2
+
+### Patch Changes
+
+- 4a014cb: Apply lint auto-fixes from xo 1.x migration: consistent-type-exports,
+  prefer-object-has-own, String.raw, and remove obsolete eslint-disable comments.
+  No behavioral changes.
+
 ## 1.0.1
 
 ### Patch Changes
