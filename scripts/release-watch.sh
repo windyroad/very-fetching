@@ -27,7 +27,7 @@ echo ""
 echo "Checking CI status..."
 BUILD_STATUS=""
 for i in $(seq 1 30); do
-  BUILD_STATUS=$(gh pr checks "$PR_NUMBER" --json name,state --jq '.[] | select(.name == "build") | .state' 2>/dev/null)
+  BUILD_STATUS=$(gh pr checks "$PR_NUMBER" --json name,state --jq '.[] | select(.name == "build") | .state' 2>/dev/null || true)
   case "$BUILD_STATUS" in
     SUCCESS) echo "Build check passed."; break ;;
     FAILURE|ERROR) echo "Build check failed." >&2; exit 1 ;;
