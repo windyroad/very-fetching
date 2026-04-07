@@ -5,6 +5,6 @@
  */
 export function getUrlFragment(input: string) {
 	const hashIndex = input.indexOf('#');
-	const hash = hashIndex >= 0 ? input.slice(hashIndex) : undefined;
+	const hash = hashIndex === -1 ? undefined : input.slice(hashIndex);
 	return hash;
 }

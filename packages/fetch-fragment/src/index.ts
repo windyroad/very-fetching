@@ -1,5 +1,5 @@
 export * from './add-fragment-support-to-fetch.js';
-export * from './fetch-fragment-function.js';
+export type * from './fetch-fragment-function.js';
 export * from './fetch-fragment.js';
 export * from './fragment-response.js';
 export * from './get-url-fragment.js';

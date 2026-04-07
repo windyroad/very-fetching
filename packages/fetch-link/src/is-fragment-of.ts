@@ -27,9 +27,9 @@ export function isFragmentOf({
 	const urlToCheckWithoutHash = urlToCheck.slice(0, urlToCheckHashIndex);
 	const urlToCompareHashIndex = urlToCompare.indexOf('#');
 	const urlToCompareWithoutHash =
-		urlToCompareHashIndex >= 0
-			? urlToCompare.slice(0, urlToCompareHashIndex)
-			: urlToCompare;
+		urlToCompareHashIndex === -1
+			? urlToCompare
+			: urlToCompare.slice(0, urlToCompareHashIndex);
 	if (urlToCheckWithoutHash !== urlToCompareWithoutHash) {
 		return false;
 	}

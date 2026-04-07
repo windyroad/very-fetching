@@ -31,7 +31,7 @@ export function findMatchingFragments(
 			// We've reached the end of the template; add the current object to the matches
 			matches.push({
 				path: JsonPointer.create(path).uriFragmentIdentifier,
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 				value: subObject,
 				variables,
 			});
@@ -47,14 +47,14 @@ export function findMatchingFragments(
 			const variableName = part.slice(1, -1);
 			// This part is a wildcard; recurse into all properties
 			for (const key in subObject) {
-				if (Object.prototype.hasOwnProperty.call(subObject, key)) {
+				if (Object.hasOwn(subObject, key)) {
 					recurse(subObject[key], subParts.slice(1), [...path, key], {
 						...variables,
 						[variableName]: key,
 					});
 				}
 			}
-		} else if (Object.prototype.hasOwnProperty.call(subObject, part)) {
+		} else if (Object.hasOwn(subObject, part)) {
 			recurse(subObject[part], subParts.slice(1), [...path, part], variables);
 		}
 	}

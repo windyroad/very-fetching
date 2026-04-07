@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {describe, it, expect} from 'vitest';
 import {FragmentResponse} from './fragment-response.js';
 
@@ -54,14 +53,13 @@ describe('FragmentResponse', () => {
  * @returns {Promise<string | undefined>} - A promise that resolves to the string representation of the ReadableStream, or `undefined` if the stream is `null`.
  */
 async function streamToString(
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	stream: ReadableStream<Uint8Array> | null,
 ): Promise<string | undefined> {
 	if (!stream) return undefined;
 	const reader = stream.getReader();
 	const decoder = new TextDecoder();
 	let chunks = '';
-	// eslint-disable-next-line no-constant-condition
+
 	while (true) {
 		// eslint-disable-next-line no-await-in-loop
 		const {done, value} = await reader.read();

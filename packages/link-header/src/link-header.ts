@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable complexity */
 /* eslint-disable @typescript-eslint/prefer-for-of */
 

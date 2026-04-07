@@ -56,7 +56,7 @@ it('adds custom headers to requests', async () => {
 			input: Parameters<typeof fetch>[0],
 			options: Parameters<typeof fetch>[1],
 		) => {
-			options = options ?? {};
+			options ??= {};
 			options.headers = {
 				...options.headers,
 				authorization: 'Bearer token',

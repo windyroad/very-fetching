@@ -16,7 +16,7 @@ export function interpolateAnchor(anchor: string, match: Fragment): string {
 			segment.endsWith('}')
 		) {
 			const variableName = segment.slice(1, -1);
-			if (Object.prototype.hasOwnProperty.call(match.variables, variableName)) {
+			if (Object.hasOwn(match.variables, variableName)) {
 				return match.variables[variableName];
 			}
 		}

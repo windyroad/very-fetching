@@ -18,9 +18,9 @@ export type MappedType<
  * @augments Response
  */
 export class FragmentOfetchResponse<
-		T = unknown,
-		R extends ResponseType = 'json',
-	>
+	T = unknown,
+	R extends ResponseType = 'json',
+>
 	extends Response
 	implements FetchResponse<MappedType<R, T>>
 {
@@ -96,7 +96,6 @@ export class FragmentOfetchResponse<
 	 * Returns a `ReadableStream` of the JSON body of the response.
 	 * @returns {ReadableStream<Uint8Array> | null} - A `ReadableStream` of the JSON body of the response, or `null` if the JSON body is undefined.
 	 */
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	get body(): ReadableStream<Uint8Array> | null {
 		if (this.jsonBody === undefined) return null;
 		const encoder = new TextEncoder();

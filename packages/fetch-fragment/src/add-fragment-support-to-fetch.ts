@@ -33,9 +33,9 @@ export function addFragmentSupportToFetch<
 		ResponseType,
 		ResponseType | FragmentResponse<ResponseType>
 	>(async (response, ...arguments_: Arguments) => {
-		let input = arguments_[0]; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+		let input = arguments_[0];
 		if (typeof input === 'object' && 'url' in input) {
-			input = input.url; // eslint-disable-line @typescript-eslint/no-unsafe-assignment
+			input = input.url;
 		}
 
 		// NOTE: We cannot reply on response.url
@@ -46,7 +46,6 @@ export function addFragmentSupportToFetch<
 				return getFragment({url: input, hash, response});
 			}
 		} else if (input.hash) {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			return getFragment({url: input.href, hash: input.hash, response});
 		}
 
@@ -76,7 +75,7 @@ async function getFragment<ResponseType extends Response = Response>({
 		if (response.body) {
 			try {
 				const parent = response.clone() as ResponseType;
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 				const json = await response.json();
 				const pointer = JsonPointer.create(hash);
 				const fragment = pointer.get(json);

@@ -29,7 +29,7 @@ import {
  */
 export const ofetchLinkRaw: <T2 = unknown, R2 extends ResponseType = 'json'>(
 	arguments__0: RequestInfo | Link | FragmentLink,
-	options?: FetchOptions<ResponseType> | undefined,
+	options?: FetchOptions<ResponseType>,
 ) => Promise<
 	LinkedResponse<
 		FetchResponse<MappedType<R2, T2>> | FragmentOfetchResponse<T2, R2>

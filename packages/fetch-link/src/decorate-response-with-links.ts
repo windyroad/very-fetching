@@ -128,13 +128,11 @@ export async function decorateResponseWithLinks<
 	}
 
 	if (response instanceof FragmentResponse && response.parent) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 		const parent = await decorateResponseWithLinks(response.parent);
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-return
+
 		return Object.assign(
 			responseBodyState.clonedResponse ?? responseBodyState.originalResponse,
 			{
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				...(parent && {parent}),
 				links(
 					filter?: Partial<Link> | string,

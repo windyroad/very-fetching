@@ -1,10 +1,7 @@
 export class MockResponse extends Response {
 	url: string;
 
-	constructor(
-		body?: BodyInit | undefined,
-		init?: ResponseInit & {url: string},
-	) {
+	constructor(body?: BodyInit, init?: ResponseInit & {url: string}) {
 		super(body, init);
 		this.url = init?.url ?? '';
 	}

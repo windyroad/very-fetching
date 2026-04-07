@@ -77,7 +77,7 @@ describe('glowUpOfetchWithLinks', () => {
 		) => {
 			const rval = new MockResponse(undefined, {
 				headers: {link: '<https://example.com>; rel="resource"'},
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+
 				url: arguments_[0].toString(),
 			});
 			return rval;
@@ -102,7 +102,7 @@ describe('glowUpOfetchWithLinks', () => {
 					'link-template':
 						'<https://example.com/{id}>; rel="resource-template"',
 				},
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+
 				url: arguments_[0].toString(),
 			});
 		const fetchWithLinks = glowUpOfetchWithLinks(fetchImpl);
@@ -119,7 +119,7 @@ describe('glowUpOfetchWithLinks', () => {
 		) =>
 			new MockResponse(undefined, {
 				headers: {link: ''},
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
+
 				url: arguments_[0].toString(),
 			});
 		const fetchWithLinks = glowUpOfetchWithLinks(fetchImpl);
@@ -147,7 +147,6 @@ describe('glowUpOfetchWithLinks', () => {
 	}) => {
 		const mockFetch = vi.fn(
 			async (...arguments_: Parameters<(typeof ofetch)['raw']>) =>
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				new MockResponse(undefined, {url: arguments_[0].toString()}),
 		);
 		const decoratedFetch = glowUpOfetchWithLinks(mockFetch);
@@ -164,7 +163,6 @@ describe('glowUpOfetchWithLinks', () => {
 	}) => {
 		const mockFetch = vi.fn(
 			async (...arguments_: Parameters<(typeof ofetch)['raw']>) =>
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				new MockResponse(undefined, {url: arguments_[0].toString()}),
 		);
 		const decoratedFetch = glowUpOfetchWithLinks(mockFetch);
@@ -227,7 +225,6 @@ describe('glowUpOfetchWithLinks', () => {
 		};
 		const mockFetchImpl = vi.fn(
 			async (...arguments_: Parameters<(typeof ofetch)['raw']>) => {
-				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				const url = new URL(arguments_[0].toString());
 				url.hash = '';
 				return new MockResponse(

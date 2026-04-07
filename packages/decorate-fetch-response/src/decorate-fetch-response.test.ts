@@ -14,12 +14,13 @@ describe('decorateFetch', () => {
 
 			const fetchImpl = async (
 				input: RequestInfo | URL,
-				init?: RequestInit | undefined,
+				init?: RequestInit,
 			): Promise<Response> => {
 				return new Response();
 			};
 
 			const decoratedFetch = decorateFetchResponse(decorator, fetchImpl);
+			// eslint-disable-next-line promise/prefer-await-to-then
 			return decoratedFetch('https://example.com').then((result) => {
 				return (
 					typeof result === 'object' &&

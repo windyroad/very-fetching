@@ -62,7 +62,6 @@ export function glowUpOfetchWithLinkInputs<
 			const [target, init, ...other] = arguments_;
 			if (isLink(target)) {
 				if (isFragmentLink(target)) {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 					return new FragmentOfetchResponse<T, R>(target.fragment.value, {
 						status: 200,
 						url: target.uri,

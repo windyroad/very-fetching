@@ -29,10 +29,9 @@ describe('glowUpFetchWithLinks', () => {
 		bench('iterate', async () => {
 			for (let index = 0; index < executions; index++) {
 				const response = await fetchImpl('http://example.com');
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 				const json = await response.json();
 				for (let index = 0; index < length; index++) {
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 					const item = json.foo[index];
 
 					expect(item).toHaveProperty('firstName');
@@ -43,7 +42,7 @@ describe('glowUpFetchWithLinks', () => {
 		bench('json-ptr', async () => {
 			for (let index = 0; index < executions; index++) {
 				const response = await fetchImpl('http://example.com');
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 				const json = await response.json();
 				for (let index = 0; index < length; index++) {
 					const item = JsonPointer.get(json, `#/foo/${index}`);

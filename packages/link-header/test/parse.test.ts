@@ -57,7 +57,7 @@ describe('HTTP Link Header', function () {
 
 	test('link with backslash escape in attribute', function () {
 		const link = parseLinkHeader(
-			'<example.com>; rel="example"; title="Something of \\"importance\\"',
+			String.raw`<example.com>; rel="example"; title="Something of \"importance\"`,
 		);
 		const references = [
 			{uri: 'example.com', rel: 'example', title: 'Something of "importance"'},
@@ -85,7 +85,7 @@ describe('HTTP Link Header', function () {
 				rel: 'example',
 				anchor: '/#anch"00"',
 			});
-			const expected = '<example.com>; rel=example; anchor="/#anch\\"00\\""';
+			const expected = String.raw`<example.com>; rel=example; anchor="/#anch\"00\""`;
 			const actual = link.toString();
 			expect(actual).toEqual(expected);
 		});

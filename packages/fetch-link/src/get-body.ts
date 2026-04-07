@@ -41,12 +41,12 @@ export async function getBody<
 	if (responseBodyState.jsonBody === undefined) {
 		const clonedResponse =
 			responseBodyState.originalResponse.clone() as unknown as ResponseType;
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 		const jsonBody = await responseBodyState.originalResponse.json();
 		return {
 			clonedResponse,
 			originalResponse: responseBodyState.originalResponse,
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
 			jsonBody,
 		};
 	}
