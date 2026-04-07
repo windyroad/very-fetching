@@ -8,6 +8,10 @@ REPO=$(gh repo view --json nameWithOwner -q .nameWithOwner)
 
 PR_JSON=$(gh pr list --base main --state open --search "Version Packages in:title" --limit 1 --json number,url,title 2>/dev/null)
 PR_NUMBER=$(echo "$PR_JSON" | jq -r '.[0].number // empty')
+if [ -z "$PR_NUMBER" ]; then
+  PR_JSON=$(gh pr list --base main --state open --search "chore: release in:title" --limit 1 --json number,url,title 2>/dev/null)
+  PR_NUMBER=$(echo "$PR_JSON" | jq -r '.[0].number // empty')
+fi
 PR_URL=$(echo "$PR_JSON" | jq -r '.[0].url // empty')
 PR_TITLE=$(echo "$PR_JSON" | jq -r '.[0].title // empty')
 
