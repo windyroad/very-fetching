@@ -1,5 +1,19 @@
 # @windyroad/fetch-link
 
+## 3.1.1
+
+### Patch Changes
+
+- 4a014cb: Apply lint auto-fixes from xo 1.x migration: consistent-type-exports,
+  prefer-object-has-own, String.raw, and remove obsolete eslint-disable comments.
+  No behavioral changes.
+- Updated dependencies [4a014cb]
+  - @windyroad/fetch-fragment@2.2.1
+  - @windyroad/link-header@1.0.2
+  - @windyroad/wrap-fetch@3.1.1
+  - @windyroad/decorate-fetch-response@3.1.1
+  - @windyroad/adapt-fetch-inputs@3.0.4
+
 ## 3.1.0
 
 ### Minor Changes
